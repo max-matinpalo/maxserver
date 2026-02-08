@@ -15,17 +15,16 @@
 - **HTTPS** support (when configured)
 
 
----
 
-## Quick Start
+## Usage
 
-```bash
-npx @max-matinpalo/maxserver my-app
-cd my-app
-npm run dev
-```
+### Install
+npm install maxserver
 
----
+### Install with template
+npx maxserver [appname]
+
+
 
 ## Setup
 maxserver(options) forwards options to fastify(options).
