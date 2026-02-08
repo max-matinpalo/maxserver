@@ -9,10 +9,6 @@
 		"maxserver": "bin/init.js",
 		"maxserver-watcher": "bin/watcher.js"
 	},
-	"files": [
-		"src",
-		"README.mde"
-	],
 	"dependencies": {
 		"@fastify/cookie": "^11.0.2",
 		"@fastify/cors": "^11.2.0",
