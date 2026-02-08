@@ -22,8 +22,8 @@ function main() {
 		patchPackageJson(targetDir, projectName);
 
 		process.chdir(targetDir);
-		console.log("📦 Installing dependencies...");
-		execSync("npm install", { stdio: "inherit" });
+		console.log("📦 Installing maxserver...");
+		execSync("npm install maxserver@latest", { stdio: "inherit" });
 
 		console.log("\n✅ Done! Your project is ready. 😊");
 	} catch (err) {
