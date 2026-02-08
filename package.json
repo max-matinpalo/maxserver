@@ -1,0 +1,27 @@
+{
+	"name": "maxserver",
+	"version": "0.0.1",
+	"description": "Node server setup based fastify",
+	"author": "Max Matinpalo",
+	"type": "module",
+	"main": "src/index.js",
+	"bin": {
+		"maxserver": "bin/init.js",
+		"maxserver-watcher": "bin/watcher.js"
+	},
+	"files": [
+		"src",
+		"README.mde"
+	],
+	"dependencies": {
+		"@fastify/cookie": "^11.0.2",
+		"@fastify/cors": "^11.2.0",
+		"@fastify/helmet": "^13.0.2",
+		"@fastify/jwt": "^10.0.0",
+		"@fastify/mongodb": "^9.0.2",
+		"@fastify/static": "^9.0.0",
+		"@fastify/swagger": "^9.6.1",
+		"@scalar/fastify-api-reference": "^1.40.9",
+		"fastify": "^5.7.1"
+	}
+}
