@@ -1,4 +1,4 @@
-import maxserver from "@max-matinpalo/maxserver";
+import maxserver from "maxserver";
 
 const server = await maxserver();
 
