@@ -48,7 +48,7 @@ It returns the fully configured Fastify server instance.
 
 ---
 
-## ⚙️ Configuration (Environment)
+## ⚙️ Configuration
 Configure the server by setting variabels in your .env file.
 
 | Variable | Default | Description |
