@@ -4,6 +4,10 @@
 	"description": "Node server setup based fastify",
 	"author": "Max Matinpalo",
 	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/max-matinpalo/maxserver.git"
+	},
 	"main": "src/index.js",
 	"bin": {
 		"maxserver": "bin/init.js",
@@ -21,4 +25,3 @@
 		"fastify": "^5.7.1"
 	}
 }
-// cors, helmet, 
