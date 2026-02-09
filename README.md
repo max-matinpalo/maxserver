@@ -211,7 +211,7 @@ Use `createError(code, message)` to stop immediately with a clean HTTP error.
 if (!user) throw createError(404, "User not found");
 ```
 
-Rule of thumb: make the message something you would want to see at 02:00 in logs.
+Rule of thumb: make the message something you would want to see at 03:00 in logs.
 
 ---
 
