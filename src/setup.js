@@ -12,18 +12,9 @@ import apiReference from "@scalar/fastify-api-reference";
 
 import { loadRoutes } from "./routeLoader.js";
 
-
-export async function setupCookie(app) {
-	// Use COOKIE_SECRET or fall back to JWT_SECRET so you don't need a new env var immediately
-	const secret = process.env.COOKIE_SECRET || process.env.JWT_SECRET || "change-me-in-prod";
-
-	await app.register(cookie, {
-		secret,
-		hook: "onRequest", // Crucial: Ensures cookies are parsed before your route handlers run
-		parseOptions: {}
-	});
+export async function setupRoutes(app) {
+	await loadRoutes(app);
 }
-
 
 
 export async function setupHelmet(app) {
@@ -35,20 +26,18 @@ export async function setupHelmet(app) {
 	});
 }
 
+
 export async function setupCors(app) {
 	const isProd = process.env.NODE_ENV === "production";
-	const origin = process.env.CORS_ORIGIN || true;
+	const origin = app.maxserver.corsOrigin ?? true;
 
-	if (isProd && !process.env.CORS_ORIGIN) app.log.warn("CORS_ORIGIN not set, allowing all origins");
+	if (isProd && origin === true) {
+		app.log.warn("CORS origin not set, allowing all origins");
+	}
 
 	await app.register(cors, { origin });
 }
 
-
-
-export async function setupRoutes(app) {
-	await loadRoutes(app);
-}
 
 export function getHttpsOptions() {
 	const { TLS_KEY, TLS_CERT } = process.env;
@@ -67,67 +56,63 @@ export function getHttpsOptions() {
 
 
 
-
-function isAuthSkippableUrl(url) {
-	if (!url) return false;
-	if (url.startsWith("/openapi.json")) return true;
-	if (url.startsWith("/docs")) return true;
-	if (url.startsWith("/static/")) return true;
-	return false;
-}
-
-export async function setupJwt(app) {
-	const secret = process.env.JWT_SECRET;
-	if (!secret) return;
-
-	// because we added own cookie setup function above
-	//await app.register(cookie);
-
-	await app.register(jwt, { secret, cookie: { cookieName: "token" } });
-
-	app.addHook("onRequest", async function (req) {
-		if (req.method === "OPTIONS") return;
-
-		const url = req.raw?.url || req.url;
-		if (isAuthSkippableUrl(url)) return;
-		if (req.routeOptions?.config?.public) return;
-
-		await req.jwtVerify();
-
-		const u = req.user;
-		req.userId = u?.sub || u?.userId || u?.userid || u?.id || null;
+export async function setupCookie(app) {
+	await app.register(cookie, {
+		secret: app.maxserver.secret || "supersecret",
+		hook: "onRequest"
 	});
 }
 
+
+export async function setupJwt(app) {
+
+	await app.register(jwt, {
+		secret: app.maxserver.secret || "supersecret",
+		cookie: { cookieName: "token" }
+	});
+
+	app.addHook("preHandler", async function (req) {
+
+		// Let preflight requests pass
+		if (req.method === "OPTIONS") return;
+
+		const auth =
+			req.routeOptions?.config?.auth ??
+			req.routeOptions?.schema?.auth;
+
+		if (!auth) return;
+
+		await req.jwtVerify();
+		const u = req.user;
+		req.userId = u?.sub || u?.userId || u?.userid || u?.id || null;
+	});
+
+}
+
+
 export async function setupMongo(app) {
-
-	const url = process.env.MONGODB_URI;
+	const url = app.maxserver.mongodbUri;
 	if (!url) return;
-
 	await app.register(mongodb, { url });
 
-	// ObjectId is available on app.mongo after registration
 	const { ObjectId, db } = app.mongo;
-
 	global.oid = id => new ObjectId(id ? String(id) : undefined);
 	global.db = db;
 }
 
-export async function setupStatic(app) {
-	const dir = process.env.STATIC_DIR;
-	if (!dir) return;
-
-	await app.register(fastifyStatic, {
-		root: path.resolve(dir),
-		prefix: "/static/",
-	});
-}
 
 export async function setupDocs(app) {
-	const defaultSecurity = [{ bearerAuth: [] }, { cookieAuth: [] }];
+
+	const info = app.maxserver.openapiInfo || {
+		title: "API",
+		version: "1.0.0",
+	};
 
 	await app.register(swagger, {
 		openapi: {
+			info,
+			// OpenAPI 3.x: securitySchemes must be defined globally here not per route
+			// Routes only add `security: [...]` that references these scheme names
 			components: {
 				securitySchemes: {
 					bearerAuth: { type: "http", scheme: "bearer" },
@@ -137,13 +122,29 @@ export async function setupDocs(app) {
 		},
 	});
 
-	app.get("/openapi.json", { config: { public: true } }, () => app.swagger());
 
-	await app.register(apiReference, { routePrefix: "/docs", openapi: true });
+	app.get("/openapi.json", {}, () => app.swagger());
+
+	if (app.maxserver.docs != false)
+		await app.register(apiReference, { routePrefix: "/docs", openapi: true });
 
 	app.addHook("onRoute", (route) => {
-		if (route.config?.public) return;
+		const auth = route.config?.auth ?? route.schema?.auth;
+		if (!auth) return;
 		route.schema ||= {};
-		route.schema.security = defaultSecurity;
+		route.schema.security ||= [{ bearerAuth: [] }, { cookieAuth: [] }];
 	});
 }
+
+
+
+export async function setupStatic(app) {
+	const dir = app.maxserver.staticDir;
+	if (!dir) return;
+
+	await app.register(fastifyStatic, {
+		root: path.resolve(dir),
+		prefix: "/static/",
+	});
+}
+

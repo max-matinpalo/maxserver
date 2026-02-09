@@ -20,7 +20,6 @@ Ready node server setup based on **Fastify** to speedup api development.
 - **Dev server**
 <br><br>
 
-
 - Dependencies: original fastify packages + scalar/fastify-api-reference (doc generator)
 - The source is simple and short. Everyone shall be able to read, understand and modify if needed.
 
@@ -36,23 +35,19 @@ npm install maxserver
 ## Setup
 ```js
 import maxserver from "maxserver";
+
 const server = await maxserver();
-const address = await server.listen({
-	port: Number(process.env.PORT || 3000),
-});
+await server.listen();
 
-console.log("Server running at", address);
+console.log("Server running at ", server.getAddress());
 export default server;
+
 ```
-
-**maxserver(options)** forwards options to fastify(options).  
-It returns the fully configured Fastify server instance.
-
-
 ---
 
-## ⚙️ Configuration
-Configure the server by setting variabels in your .env file.
+## ⚙️ Configure
+Quick configure your server by passing options to the **maxserver()** or define them in your .env file.  
+You can also pass any fastify options.
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
