@@ -27,11 +27,15 @@ maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 
 ## Install
 
-### Setup ready project
+### Setup ready project (recommended)
+```js
 npx maxserver [appname]
+```
 
-### Install 
+### Install as packge
+```js
 npm install maxserver
+```
 
 ## Setup
 ```js
@@ -81,7 +85,7 @@ src/
 
 ## 🛣️ Handlers
 
-### 1) Define method + path
+#### 1) Define method + path
 Start each route file with a comment to define the path.  
 That comment is what the route loader uses to auto-register the route.
 
@@ -89,9 +93,8 @@ That comment is what the route loader uses to auto-register the route.
 // GET /teams/:id
 ```
 
-### 2) Default export handler
+#### 2) Export default handler
 
-### Example
 
 ```js
 // GET /teams/:id
@@ -118,9 +121,10 @@ which will appear in the docs. Mostly you don't need to write schemas yourself, 
 
 ```js
 export default {
-	tags: ["Teams"],
-	summary: "Get team",
-	description: "Returns a single team by identifier.",
+
+	tags: ["Test"],
+	summary: "Post hello",
+	description: "Accepts a name and returns a greeting.",
 
 	body: {
 		type: "object",
@@ -128,22 +132,12 @@ export default {
 		properties: {
 			name: {
 				type: "string",
-				example: "peter",
 			},
 		},
 	},
 
-	response: {
-		200: {
-			type: "object",
-			properties: {
-				message: {
-					type: "string",
-					example: "Hello Max",
-				},
-			},
-		},
-	},
+	...
+};
 ```
 
 **`‼️ Important use export default`**
