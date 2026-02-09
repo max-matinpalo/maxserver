@@ -20,6 +20,7 @@ export default async function maxserver(options = {}) {
 
 	const app = Fastify({
 		trustProxy: true,
+		host: "0.0.0.0",
 		https: getHttpsOptions() || undefined,
 
 		// To allow writing example value fields to schemas for doucumentation 
