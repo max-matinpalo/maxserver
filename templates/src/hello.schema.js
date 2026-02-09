@@ -1,6 +1,10 @@
-export const schema = {
+export default {
+
+	// These 3 fields are for the documentation
+	// Not must have, but your auto generated documentation will be great
+
 	tags: ["Test"],
-	summary: "Create greeting",
+	summary: "Post hello",
 	description: "Accepts a name and returns a greeting.",
 
 	body: {
@@ -22,13 +26,11 @@ export const schema = {
 					type: "string",
 					example: "Hello Max",
 				},
-				user: {
-					type: "object",
-					example: {
-						userId: "64f1c2e9b1a2c3d4e5f67890",
-					},
-				},
 			},
 		},
 	},
 };
+
+// Hint - You don't need to write these ourself
+// Just ask chat gpt or gemini to generate them
+// In docs you will find little instruction for it
