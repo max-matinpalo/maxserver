@@ -64,7 +64,9 @@ Any fastify options can be passed to maxserver() too.
 | `mongodb` | *-* | MongoDB URI, if set auto-connects db |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
-<br><br>
+---
+
+<br>
 
 ## 🗂️ Project Structure 
 Our golden rule: **1 route = 1 handler file + 1 schema file**
@@ -82,21 +84,16 @@ src/
 ```
 <br>
 
-## 🛣️ Handlers
+## 🤖 Auto Routing
 
-#### 1) Define method + path
-Start each route file with a comment to define the path.  
-That comment is what the route loader uses to auto-register the route.
-
-```js
-// GET /teams/:id
-```
-
-#### 2) Export default handler
-
+To auto-register routes, simple add a comment of the form:  
+**// METHOD /path**  
+**// GET /user**  
+**// POST /feedback/something**  
+...
 
 ```js
-// GET /teams/:id
+// GET /example/:id
 
 export default async function (req, res) {
 
@@ -105,8 +102,11 @@ export default async function (req, res) {
 	return team;
 }
 ```
-
+<br>
+  
+And remember to use default export for your handler.
 If you don't want to autoregister some routes, then simply don't add that magic comment 😃
+That's it.
 
 
 <br>
@@ -114,11 +114,11 @@ If you don't want to autoregister some routes, then simply don't add that magic 
 
 
 ## 🧾 Schemas
-Create a sibling file ending with **`.schema.js`**, so it will be auto registered.  
-For example: **hello.js** and **hello.schema.js**  
+Create a sibling file ending with **`.schema.js`**, so it will be auto registered. For example: **hello.js** and **hello.schema.js** 
 
-Besides the basic validation fields we can set fields like summary and description,
-which will appear in the docs. Mostly you don't need to write schemas yourself, chat gpt and gemini do it excelently.
+Besides the basic validation fields we can set fields like summary and description, which will appear in the docs. Mostly you don't need to write schemas yourself, chat gpt and gemini do it excelently.
+
+
 
 
 ```js
@@ -142,7 +142,8 @@ export default {
 };
 ```
 
-**`‼️ Important use export default`**
+**‼️ Important use export default
+**
 
 <br>
 
