@@ -1,7 +1,10 @@
+[![npm version](https://img.shields.io/npm/v/vite-plugin-lint-overlay.svg?style=flat)](https://www.npmjs.com/package/vite-plugin-lint-overlay) [![license](https://img.shields.io/npm/l/vite-plugin-lint-overlay.svg?style=flat)](./LICENSE)
+
 <p align="center" style="margin-top: 20px;" >
   <img src="https://raw.githubusercontent.com/max-matinpalo/maxserver/refs/heads/main/assets/logo.png" alt="Project logo" width="160">
 </p>
 <br>
+
 
 # maxserver
 ‼️ **ATTENTION** ‼️ - Not download yet, check out few days later 😉  

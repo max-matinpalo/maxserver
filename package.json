@@ -1,12 +1,17 @@
 {
 	"name": "maxserver",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"description": "Node server setup based fastify",
 	"author": "Max Matinpalo",
 	"type": "module",
+	"license": "MIT",
+	"homepage": "https://github.com/max-matinpalo/maxserver#readme",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/max-matinpalo/maxserver.git"
+	},
+	"bugs": {
+		"url": "https://github.com/max-matinpalo/maxserver/issues"
 	},
 	"main": "src/index.js",
 	"bin": {
@@ -14,14 +19,14 @@
 		"maxserver-watcher": "bin/watcher.js"
 	},
 	"dependencies": {
-		"@fastify/cookie": "^11.0.2",
-		"@fastify/cors": "^11.2.0",
-		"@fastify/helmet": "^13.0.2",
-		"@fastify/jwt": "^10.0.0",
-		"@fastify/mongodb": "^9.0.2",
-		"@fastify/static": "^9.0.0",
-		"@fastify/swagger": "^9.6.1",
-		"@scalar/fastify-api-reference": "^1.40.9",
-		"fastify": "^5.7.1"
+		"@fastify/cookie": "^11",
+		"@fastify/cors": "^11",
+		"@fastify/helmet": "^13",
+		"@fastify/jwt": "^10",
+		"@fastify/mongodb": "^9",
+		"@fastify/static": "^9",
+		"@fastify/swagger": "^9",
+		"@scalar/fastify-api-reference": "^1",
+		"fastify": "^5"
 	}
 }
