@@ -6,13 +6,13 @@ import {
 	setupJwt,
 	setupMongo,
 	setupStatic,
-	setupRoutes,
 	setupDocs,
 	setupCookie,
-	getHttpsOptions,
 } from "./setup.js";
 
+
 import { getAddress } from "./getAddress.js";
+import { setupRoutes } from "./setupRoutes.js";
 
 
 export default async function maxserver(config = {}) {
@@ -26,6 +26,7 @@ export default async function maxserver(config = {}) {
 		docs = process.env.DOCS !== "false",
 		cors = process.env.CORS || "*",
 		env = process.env.NODE_ENV || "development",
+		routesDir = process.env.ROUTESDIR || "src",
 		openapiInfo,
 		static: isStatic = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
@@ -36,18 +37,19 @@ export default async function maxserver(config = {}) {
 	} = config;
 
 	const maxserverConfig = {
-		port, secret, mongodb, docs, cors,
+		port, secret, mongodb, docs, cors, env, openapiInfo, src,
 		static: isStatic,
 		public: isPublic
 	};
+
+	if (!secret)
+		throw new Error("secret is must have");
 
 
 	let app;
 	try {
 		app = Fastify({
-			https: getHttpsOptions() || undefined,
 			trustProxy: true,
-
 			// Required to allow adding doc fields on schema
 			ajv: { customOptions: { strictSchema: false } },
 			...fastifyOpts

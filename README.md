@@ -64,6 +64,7 @@ Any fastify options can be passed to maxserver() too.
 | `mongodb` | *-* | MongoDB URI, if set auto-connects db |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
+| `routesDir` | *src* | Directory to auto collect routes |
 ---
 
 <br>

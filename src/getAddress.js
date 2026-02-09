@@ -1,5 +1,13 @@
 import os from "node:os";
 
+
+/**
+ * When listening on all interfaces (0.0.0.0), Node returns "0.0.0.0".
+ * This is a setting, not a valid URL for other devices.
+ * So we try hunt down the actual LAN IP to print the real address on which server can be accessed
+ */
+
+
 function getLanIp() {
 	const nets = os.networkInterfaces();
 

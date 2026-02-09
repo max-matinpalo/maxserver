@@ -74,9 +74,9 @@ async function importDefault(file) {
 }
 
 
-export async function loadRoutes(fastify) {
+export async function setupRoutes(app) {
 	const seen = new Map();
-	const root = path.join(process.cwd(), "src");
+	const root = path.resolve(app.maxserver.routesDir || "src");
 
 	for (const file of walk(root)) {
 		// Skip schema files; they are loaded alongside their route file
@@ -125,6 +125,6 @@ export async function loadRoutes(fastify) {
 			};
 		}
 
-		fastify[info.method](info.url, { ...routeOptions, schema }, handler);
+		app[info.method](info.url, { ...routeOptions, schema }, handler);
 	}
 }
