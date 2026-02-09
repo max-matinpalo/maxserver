@@ -106,6 +106,9 @@ export default async function (req, res) {
 }
 ```
 
+If you don't want to autoregister some routes, then simply don't add that magic comment 😃
+
+
 <br>
 <br>
 
@@ -143,10 +146,22 @@ export default {
 
 <br>
 
-## Route Options
-Though we don't register routes manually, we don't set route options on the register call. If needed, route options can be set on the schema object.
-For example **schema.auth = true** to enable authentication.
-So the schema holds all configs about a root and handlers the pure logic.
+## 🛠️ Route Options
+Though we don't mostly register routes manually, we don't set route options on the register call.  
+If needed, you can wether register that route manually or just set them on the schema.
+
+```js
+// Inside schema
+
+export default {
+	routeOptions: {
+		config: {
+			preHandler: ...
+		},
+	},
+	...
+```
+
 
 <br>
 

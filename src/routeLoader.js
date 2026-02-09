@@ -1,89 +1,91 @@
-// Scans src/** for files whose first line looks like:
-// POST /teams/create
-// Imports handler + schema and registers them with Fastify.
+/**
+ * 🚀 AUTO-LOADER
+ * Scans src/ for files with "// METHOD /url" comments.
+ * Automatically registers them as Fastify routes.
+ */
 
 import fs from "fs";
 import path from "path";
+import { pathToFileURL } from "url";
 
-const ROUTE_OPTION_KEYS = new Set([
-	"config",
-	"preHandler",
-	"onRequest",
-	"preValidation",
-	"preSerialization",
-	"errorHandler",
-	"logLevel",
-	"bodyLimit",
-	"attachValidation",
-	"exposeHeadRoute",
-	"constraints",
-	"timeout",
-	"websocket",
-	"prefixTrailingSlash",
-]);
 
+// Matches lines like: // GET /api/v1/users
+const ROUTE_REGEX = /^\/\/\s*(GET|POST|PUT|PATCH|DELETE)\s+(.+)$/gm;
+
+
+/**
+ * Recursively finds all .js files in a directory.
+ * Skips node_modules and dotfiles.
+ */
 function walk(dir, out = []) {
 	if (!fs.existsSync(dir)) return out;
-	const entries = fs.readdirSync(dir, { withFileTypes: true });
 
-	for (const entry of entries) {
-		if (entry.name === "node_modules") continue;
-		if (entry.name.startsWith(".")) continue;
-		const full = path.join(dir, entry.name);
+	for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+		if (e.name === "node_modules") continue;
+		if (e.name.startsWith(".")) continue;
 
-		if (entry.isDirectory()) {
+		const full = path.join(dir, e.name);
+		if (e.isDirectory()) {
 			walk(full, out);
-		} else if (entry.name.endsWith(".js")) {
-			out.push(full);
+			continue;
 		}
+
+		if (!e.name.endsWith(".js")) continue;
+		out.push(full);
 	}
+
 	return out;
 }
 
-function getFirstLine(file) {
+
+/**
+ * Extracts method and URL from the file's "magic comment".
+ * Enforces strict "One Route Per File" policy.
+ */
+function getRoute(file) {
 	const text = fs.readFileSync(file, "utf8");
-	const lines = text.split("\n");
-	const firstContent = lines.find((line) => line.trim().length > 0);
+	const matches = [...text.matchAll(ROUTE_REGEX)];
 
-	return (firstContent || "").trim().replace(/^\uFEFF/, "");
-}
+	if (matches.length === 0) return null;
 
-const ROUTE_REGEX = /^\/\/\s*(GET|POST|PUT|PATCH|DELETE)\s+(.+)$/;
-
-function parseRouteComment(file) {
-	const line = getFirstLine(file);
-	const m = line.match(ROUTE_REGEX);
-	if (!m) return null;
-
-	return { method: m[1].toLowerCase(), url: m[2] };
-}
-
-function splitSchemaExport(raw) {
-	const routeOptions = {};
-	const schema = {};
-
-	for (const [key, value] of Object.entries(raw || {})) {
-		if (ROUTE_OPTION_KEYS.has(key)) {
-			routeOptions[key] = value;
-			continue;
-		}
-		schema[key] = value;
+	// Warn if user accidentally defines multiple routes in one file
+	if (matches.length > 1) {
+		console.warn(
+			`⚠️ Ignored "${file}": Found ${matches.length} route comments. ` +
+			`Only 1 allowed per file.`
+		);
+		return null;
 	}
 
-	return { routeOptions, schema };
+	const m = matches[0];
+	const method = m[1].toLowerCase();
+	// Normalize URL: Remove all leading slashes, then add exactly one
+	const url = "/" + m[2].trim().replace(/^\/+/, "");
+
+	return { method, url };
 }
 
-export async function loadRoutes(fastify) {
-	const ROOT = path.join(process.cwd(), "src");
-	const files = walk(ROOT);
-	const seen = new Map();
 
-	for (const file of files) {
+/**
+ * Safe dynamic import that handles Windows paths correctly.
+ */
+async function importDefault(file) {
+	return (await import(pathToFileURL(file).href)).default;
+}
+
+
+export async function loadRoutes(fastify) {
+	const seen = new Map();
+	const root = path.join(process.cwd(), "src");
+
+	for (const file of walk(root)) {
+		// Skip schema files; they are loaded alongside their route file
 		if (file.endsWith(".schema.js")) continue;
 
-		const info = parseRouteComment(file);
+		const info = getRoute(file);
 		if (!info) continue;
 
+		// 🛡️ Collision Detection: Ensure no two files claim the same route
 		const key = info.method + " " + info.url;
 		if (seen.has(key)) {
 			throw new Error(
@@ -94,29 +96,35 @@ export async function loadRoutes(fastify) {
 		}
 		seen.set(key, file);
 
-		const handlerMod = await import("file://" + file);
-		const handler = handlerMod.default;
-
-		const schemaFile = file.replace(/\.js$/, ".schema.js");
-		let raw = null;
-
-		if (fs.existsSync(schemaFile)) {
-			const schemaMod = await import("file://" + schemaFile);
-			raw = schemaMod.default || {};
-		} else {
-			fastify.log.warn(
-				`Route schema missing: ` +
-				`${info.method.toUpperCase()} ${info.url}`
+		// Import the route handler
+		const handler = await importDefault(file);
+		if (typeof handler !== "function") {
+			throw new Error(
+				`Route "${key}" in "${file}" must export a default function.`
 			);
-			raw = {};
 		}
 
-		const parts = splitSchemaExport(raw);
+		// 🤝 Schema Loading: Look for sibling .schema.js file
+		const schemaFile = file.replace(/\.js$/, ".schema.js");
+		let raw = {};
 
-		fastify[info.method](
-			info.url,
-			{ ...parts.routeOptions, schema: parts.schema },
-			handler
-		);
+		if (fs.existsSync(schemaFile)) {
+			const loaded = await importDefault(schemaFile);
+			// 🛡️ Guard: Ensure export is a valid object before using it
+			if (loaded && typeof loaded === "object") raw = loaded;
+		}
+
+		// ✨ Magic: Extract 'auth' and 'routeOptions' specifically
+		let { auth, routeOptions = {}, ...schema } = raw;
+
+		// Inject 'auth' into config if present (Syntactic Sugar)
+		if (auth !== undefined) {
+			routeOptions = {
+				...routeOptions,
+				config: { ...(routeOptions.config || {}), auth: !!auth },
+			};
+		}
+
+		fastify[info.method](info.url, { ...routeOptions, schema }, handler);
 	}
 }

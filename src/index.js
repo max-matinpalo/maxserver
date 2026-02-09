@@ -25,6 +25,7 @@ export default async function maxserver(config = {}) {
 		mongodb = process.env.MONGODB,
 		docs = process.env.DOCS !== "false",
 		cors = process.env.CORS || "*",
+		env = process.env.NODE_ENV || "development",
 		openapiInfo,
 		static: isStatic = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
