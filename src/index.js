@@ -22,7 +22,7 @@ export default async function maxserver(options = {}) {
 		trustProxy: true,
 		https: getHttpsOptions() || undefined,
 
-		// To allow writing example field to schema for doucumentation 
+		// To allow writing example value fields to schemas for doucumentation 
 		ajv: { customOptions: { strictSchema: false } },
 		...options,
 	});

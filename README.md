@@ -3,7 +3,11 @@
 </p>
 <br>
 
-# @max-matinpalo/maxserver
+# maxserver
+‼️ **ATTENTION** ‼️ - Not download yet, check out few days later 😉
+I am simplifying and improving things, that it will work for everyone plugn play.
+
+
 
 -> Node server setup based on **Fastify** with a new simple route loader. 
 
