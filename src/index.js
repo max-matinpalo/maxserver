@@ -37,7 +37,7 @@ export default async function maxserver(config = {}) {
 	} = config;
 
 	const maxserverConfig = {
-		port, secret, mongodb, docs, cors, env, openapiInfo, src,
+		port, secret, mongodb, docs, cors, env, openapiInfo, routesDir,
 		static: isStatic,
 		public: isPublic
 	};

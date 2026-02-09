@@ -15,7 +15,7 @@ function main() {
 	}
 
 	try {
-		console.log(`🚀 Setting up "${projectName}"...`);
+		console.log(`🚀 Setting up "${projectName}"`);
 		fs.cpSync(templateDir, targetDir, { recursive: true });
 
 		fixDotfiles(targetDir);
