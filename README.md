@@ -5,7 +5,7 @@
 
 # @max-matinpalo/maxserver
 
--> Node server setup based on **Fastify** with a great new route loader. 
+-> Node server setup based on **Fastify** with a new simple route loader. 
 
 - **Route loader**: auto-register routes and schemas
 - **JWT auth** (cookie or `Authorization: Bearer ...`)
@@ -31,7 +31,7 @@ maxserver(options) forwards options to fastify(options).
 It returns the fully configured Fastify server instance.
 
 ```js
-import maxserver from "@max-matinpalo/maxserver";
+import maxserver from "maxserver";
 const server = await maxserver();
 const address = await server.listen({
 	port: Number(process.env.PORT || 3000),
@@ -44,6 +44,7 @@ export default server;
 ---
 
 ## ⚙️ Configuration (Environment)
+Configure the server by setting variabels in your .env file.
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
