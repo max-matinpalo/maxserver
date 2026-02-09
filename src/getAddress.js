@@ -1,29 +1,5 @@
 import os from "node:os";
 
-export function setupGetAddress(app) {
-	app.decorate("getAddress", () => {
-		const addr = app.server?.address();
-		const protocol = app.initialConfig?.https ? "https" : "http";
-
-		if (!addr) return null;
-		if (typeof addr === "string") return addr;
-
-		const isPublicBind = addr.address === "0.0.0.0" || addr.address === "::";
-		const isLoopback = addr.address === "127.0.0.1" || addr.address === "::1";
-
-		const envIp = String(process.env.PUBLIC_IP || "").trim() || null;
-		const detectedIp = envIp || getLanIp();
-
-		const ip = (isPublicBind && !isLoopback)
-			? (detectedIp || addr.address)
-			: "localhost";
-
-		const host = ip.includes(":") ? `[${ip}]` : ip;
-
-		return `${protocol}://${host}:${addr.port}`;
-	});
-}
-
 function getLanIp() {
 	const nets = os.networkInterfaces();
 
@@ -35,3 +11,28 @@ function getLanIp() {
 
 	return null;
 }
+
+
+export function getAddress(app) {
+
+	const addr = app.server?.address();
+	const protocol = app.initialConfig?.https ? "https" : "http";
+
+	if (!addr) return null;
+	if (typeof addr === "string") return addr;
+
+	const isPublicBind = addr.address === "0.0.0.0" || addr.address === "::";
+	const isLoopback = addr.address === "127.0.0.1" || addr.address === "::1";
+
+	const envIp = String(process.env.PUBLIC_IP || "").trim() || null;
+	const detectedIp = envIp || getLanIp();
+
+	const ip = (isPublicBind && !isLoopback)
+		? (detectedIp || addr.address)
+		: "localhost";
+
+	const host = ip.includes(":") ? `[${ip}]` : ip;
+
+	return `${protocol}://${host}:${addr.port}`;
+}
+

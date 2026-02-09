@@ -21,21 +21,19 @@ maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 - **Dev server**
 <br><br>
 
-- Dependencies: original fastify packages + scalar/fastify-api-reference (doc generator)
-- The source is simple. Everyone can read, understand and modify if needed.
-
 
 ## Install
 
-### Setup ready project (recommended)
+### Setup ready project
 ```js
 npx maxserver [appname]
 ```
 
-### Install as packge
+### Or install as packge
 ```js
 npm install maxserver
 ```
+<br>
 
 ## Setup
 ```js
@@ -53,22 +51,23 @@ export default server;
 
 ## ⚙️ Configure
 Configs can be passed to the init call to **maxserver()** or set in your .env file.  
+If you define options in env, use all upper case letters.
 Any fastify options can be passed to maxserver() too.
+
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
-| `PORT` | `3000` | Server port |
-| `SECRET` | *-* | Secret used for jwt and cookies |
-| `CORS` | `*` | Allowed CORS origins, default all allowed |
-| `DOCS` | `true` | Set `false` to disable auto generated docs` |
-| `MONGODB` | *-* | MongoDB URI, if set auto-connects db |
-| `PUBLIC` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
-| `STATIC` | *-* | If set, serves this directory statically |
+| `port` | `3000` | Server port |
+| `secret` | *-* | Secret used for jwt and cookies |
+| `cors` | `*` | Allowed CORS origins, default all allowed |
+| `docs` | `true` | Set `false` to disable auto generated docs` |
+| `mongodb` | *-* | MongoDB URI, if set auto-connects db |
+| `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
+| `static` | *-* | If set, serves this directory statically |
 <br><br>
 
-## 🗂️ Project Structure
-**maxserver** stands for maximized simplicity - minimum boilerplate.  
-Our golden rule is: **1 route = 1 handler file + 1 schema file**
+## 🗂️ Project Structure 
+Our golden rule: **1 route = 1 handler file + 1 schema file**
 
 Example:
 
@@ -115,7 +114,7 @@ export default async function (req, res) {
 Create a sibling file ending with **`.schema.js`**, so it will be auto registered.  
 For example: **hello.js** and **hello.schema.js**  
 
-Besides the basic schema fields we can set fields like summary and description,
+Besides the basic validation fields we can set fields like summary and description,
 which will appear in the docs. Mostly you don't need to write schemas yourself, chat gpt and gemini do it excelently.
 
 
@@ -211,6 +210,11 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 
 <br>
 
+## About
+- Dependencies: original fastify packages + scalar/fastify-api-reference
+- The source is simple. Everyone can read, understand and modify if needed.
+
+<br>
 
 ## 🛠️ Tips & Tools
 
@@ -227,5 +231,6 @@ In `.vscode/tasks.json`, enable the task with:
 "runOptions": { "runOn": "folderOpen" }
 ```
 
-### 🤖 AI Assistants (Code Style)
-Copy **`RULES.md`** into your AI tool as system context, then ask it to generate routes + schemas.
+### 🤖 AI Assistants
+Copy **`RULES.md`** into your AI tool as system context,  
+then ask it to generate routes + schemas.

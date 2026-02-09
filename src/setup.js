@@ -31,7 +31,7 @@ export async function setupHelmet(app) {
 
 export async function setupCors(app) {
 	const isProd = process.env.NODE_ENV === "production";
-	const origin = app.maxserver.corsOrigin ?? "*";
+	const origin = app.maxserver.cors ?? "*";
 
 	if (isProd && origin === "*") {
 		app.log.warn("CORS: allowing all origins (*) in production");
@@ -94,7 +94,7 @@ export async function setupJwt(app) {
 
 
 export async function setupMongo(app) {
-	const url = app.maxserver.mongodbUri;
+	const url = app.maxserver.mongodb;
 	if (!url) return;
 	await app.register(mongodb, { url });
 
@@ -142,7 +142,7 @@ export async function setupDocs(app) {
 
 
 export async function setupStatic(app) {
-	const dir = app.maxserver.staticDir;
+	const dir = app.maxserver.static;
 	if (!dir) return;
 
 	await app.register(fastifyStatic, {
