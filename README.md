@@ -11,7 +11,7 @@
 I am simplifying and improving things, that it will work for everyone plugn play.
 
 
-Ready node server setup based on **Fastify** to speed up backend development.
+Ready node server setup based on **Fastify** to speed up backend development.  
 maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 
 - **Auto Routes**: auto imports and registers routes and schemas
@@ -45,10 +45,10 @@ const server = await maxserver({
 await server.start();
 export default server;
 ```
----
+<br>
 
 ## ⚙️ Configure
-Configs can be passed to the init call to **maxserver()** or in your .env file.  
+Configs can be passed to the init call to **maxserver()** or set in your .env file.  
 Any fastify options can be passed to maxserver() too.
 
 | Variable | Default | Description |
@@ -60,11 +60,7 @@ Any fastify options can be passed to maxserver() too.
 | `MONGODB` | *-* | MongoDB URI, if set auto-connects db |
 | `PUBLIC` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `STATIC` | *-* | If set, serves this directory statically |
-
----
-
 <br><br>
-
 
 ## 🗂️ Project Structure
 **maxserver** stands for maximized simplicity - minimum boilerplate.  
@@ -113,13 +109,13 @@ export default async function (req, res) {
 
 
 ## 🧾 Schemas
-Create a sibling file ending with **`.schema.js`**, so it will be auto registered.
+Create a sibling file ending with **`.schema.js`**, so it will be auto registered.  
+For example: **hello.js** and **hello.schema.js**  
+
 Besides the basic schema fields we can set fields like summary and description,
-which will appear in the docs.
+which will appear in the docs. Mostly you don't need to write schemas yourself, chat gpt and gemini do it excelently.
 
-Mostly you don't need to write schemas yourself, chat gpt and gemini do it excelently.
 
-**`Important - use export default`**
 ```js
 export default {
 	tags: ["Teams"],
@@ -150,6 +146,8 @@ export default {
 	},
 ```
 
+**`‼️ Important use export default`**
+
 <br>
 
 ## Route Options
@@ -157,34 +155,33 @@ Though we don't register routes manually, we don't set route options on the regi
 For example **schema.auth = true** to enable authentication.
 So the schema holds all configs about a root and handlers the pure logic.
 
+<br>
 
 ## 📚 API Docs
 
-- Open in your browser **`localhost:3000/docs`**
-- OpenAPI JSON: **`/openapi.json`**
+Open in your browser **`localhost:3000/docs`**  
+OpenAPI JSON: **`/openapi.json`**
 
 <br>
 
 
-## 🔐 Authentication (JWT)
-
-Enable auth by setting:
-
-Behavior:
-- Enable auth for a route by **schema.auth = true**: 
-- Authenticated user is available as **`req.userId`**
+## 🔐 Authentication
+JWT header and cookie based auth is preconfigured.  
+To enable auth for a route set in it's schema **auth = true**  
+The authenticated user is available as **`req.userId`**
 
 ```js
+// Inside schema
+
 export default {
-	config: { public: true },
-	// ...
+	auth: true
 };
 ```
 
 <br>
 
 ## 🍃 MongoDB
-Define in the env **`MONGODB_URI`** and it will auto-connect at server start and you get:
+Set option **`MONGODB`** your mongodbURI and it will auto-connect at server start and you get:
 
 - global **`db`** (connected database handle)
 - global **`oid(string)`** (string → MongoDB `ObjectId`)
@@ -194,8 +191,19 @@ Define in the env **`MONGODB_URI`** and it will auto-connect at server start and
 | `db` | MongoDB database handle | Use it directly in handlers |
 | `oid(id)` | string → `ObjectId` | Avoid importing `ObjectId` everywhere |
 
+### Example
 
----
+```js
+// Inside route handlers
+
+export default async function (req, res) {
+
+	await db.feedback.insert(...)
+}
+```
+
+
+<br>
 
 ## 🧰 Error Handling
 
@@ -207,8 +215,7 @@ if (!user) throw createError(404, "User not found");
 
 Rule of thumb: make the message something you would want to see at 03:00 in logs.
 
----
-
+<br>
 
 
 ## 🛠️ Tips & Tools
