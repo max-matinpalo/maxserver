@@ -1,39 +1,36 @@
-<p align="center">
+<p align="center" style="margin-top: 20px;" >
   <img src="https://raw.githubusercontent.com/max-matinpalo/maxserver/refs/heads/main/assets/logo.png" alt="Project logo" width="160">
 </p>
 <br>
 
 # maxserver
-‼️ **ATTENTION** ‼️ - Not download yet, check out few days later 😉
+‼️ **ATTENTION** ‼️ - Not download yet, check out few days later 😉  
 I am simplifying and improving things, that it will work for everyone plugn play.
 
 
+Ready node server setup based on **Fastify** to speedup api development.
 
--> Node server setup based on **Fastify** with a new simple route loader. 
-
-- **Route loader**: auto-register routes and schemas
-- **JWT auth** (cookie or `Authorization: Bearer ...`)
-- **Autogenerates docs** (`/openapi.json`) + optional UI (`/docs`)
-- **MongoDB** auto-connect + global `db` + `oid()` helper
-- **Dev server** (auto reload on changes)
-- **HTTPS** support (when configured)
-
+- **Auto Routes**: auto imports and registers routes and schemas
+- **Auto Docs**: auto generates docs based on schemas
+- **Preconfigures JWT auth, Cores, Helmet**
+- **Auto Connect MongoDB** (optional)
+- **Dev server**
+<br><br>
 
 
-## Usage
+- Dependencies: original fastify packages + scalar/fastify-api-reference (doc generator)
+- The source is simple and short. Everyone shall be able to read, understand and modify if needed.
 
-### Install
-npm install maxserver
 
-### Install with template
+## Install
+
+### Setup ready project
 npx maxserver [appname]
 
-
+### Install 
+npm install maxserver
 
 ## Setup
-maxserver(options) forwards options to fastify(options).
-It returns the fully configured Fastify server instance.
-
 ```js
 import maxserver from "maxserver";
 const server = await maxserver();
@@ -45,6 +42,10 @@ console.log("Server running at", address);
 export default server;
 ```
 
+**maxserver(options)** forwards options to fastify(options).  
+It returns the fully configured Fastify server instance.
+
+
 ---
 
 ## ⚙️ Configuration (Environment)
@@ -53,8 +54,8 @@ Configure the server by setting variabels in your .env file.
 | Variable | Default | Description |
 | :--- | :--- | :--- |
 | `PORT` | `3000` | Server port |
-| `JWT_SECRET` | *(optional)* | Enables JWT auth (private-by-default routes) |
-| `MONGODB_URI` | *(optional)* | Enables MongoDB auto-connect + global `db` |
+| `JWT_SECRET` | *-* | Enables JWT auth (private-by-default routes) |
+| `MONGODB_URI` | *-* | Enables MongoDB auto-connect + global `db` |
 | `DOCS` | `true` | Set `false` to disable docs UI at `/docs` |
 | `STATIC_DIR` | *(optional)* | Serve static files (example: `./public`) |
 | `CORS_ORIGIN` | `*` | Allowed CORS origins |
@@ -63,7 +64,7 @@ Configure the server by setting variabels in your .env file.
 
 ## 🗂️ Project Structure
 
-**Convention: 1 route = 1 handler file + 1 schema file (siblings).**
+**1 route = 1 handler file + 1 schema file**
 
 Example:
 
@@ -72,33 +73,27 @@ src/
 	users/
 	teams/
 	forms/
-		get.js
-		get.schema.js
+		hello.js
+		hello.schema.js
 	...
 ```
 
 ---
 
-## 🛣️ Writing Route Handlers
+## 🛣️ Handlers
 
 ### 1) Define method + path
-Every route file starts with:
+Start each route file with a comment to define the path.  
+That comment is what the route loader uses to auto-register the route.
 
 ```js
 // GET /teams/:id
 ```
 
-That comment is what the route loader uses to auto-register the route.
+
 
 ### 2) Default export handler
 
-Keep handlers small, and split logic into numbered steps.
-
-If something fails, throw:
-
-```js
-throw createError(code, "Specific failure reason");
-```
 
 ### Example
 
@@ -107,30 +102,26 @@ throw createError(code, "Specific failure reason");
 
 export default async function (req, res) {
 
-	// 1. Read input
 	const id = req.params.id;
-
-	// 2. Load data
-	const team = { id, name: "Team A" };
-
-	// 3. Respond
+	console.log("Example id": id);
 	return team;
 }
 ```
 
 ---
 
-## 🧾 Defining Schemas
+## 🧾 Define Schemas
 Create a sibling file ending in **`.schema.js`**. 
+The schema is offcourse a jsonschema.
 This file will be auto registered.
 
 Schemas:
 - validate inputs
 - generate OpenAPI docs
-- control auth (public/private)
+- control route options for example (public/private)
 
 
-**`src/teams/get.schema.js`**
+**`Important - use default export`**
 ```js
 export default {
 	tags: ["Teams"],
@@ -165,7 +156,18 @@ export default {
 };
 ```
 
----
+<br>
+
+
+## 📚 API Docs
+
+- Open in your browser **`localhost:3000/docs`**
+- OpenAPI JSON: **`/openapi.json`**
+
+<br>
+
+
+
 
 ## 🔐 Authentication (JWT)
 
@@ -185,7 +187,7 @@ export default {
 };
 ```
 
----
+<br>
 
 ## 🍃 MongoDB
 Define in the env **`MONGODB_URI`** and it will auto-connect at server start and you get:
@@ -213,16 +215,13 @@ Rule of thumb: make the message something you would want to see at 02:00 in logs
 
 ---
 
-## 📚 API Docs
 
-- OpenAPI JSON: **`/openapi.json`**
-- Optional UI: **`/docs`** (controlled via `DOCS=true`)
-
----
 
 ## 🛠️ Tips & Tools
 
 ### 🔌 Scalar API Client (Live Testing)
+- Download the great new api client
+- It autosyncs well with the server
 - Add Item → Import from OpenAPI
 - Paste: `http://localhost:3000/openapi.json`
 - Enable watch mode for live updates
