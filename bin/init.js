@@ -25,7 +25,7 @@ function main() {
 		console.log("📦 Installing maxserver");
 		execSync("npm install maxserver@latest", { stdio: "inherit" });
 
-		console.log(`\n✅ Install complete\n\ncd ${projectName}\nnpm run dev\n`);
+		console.log(`\n✅ Install complete\n\n->\n\tcd ${projectName}\n\tnpm run dev\n`);
 	} catch (err) {
 		console.error("❌ Init failed:", err.message);
 		process.exit(1);

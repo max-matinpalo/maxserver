@@ -18,7 +18,12 @@ maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 - **Auto Docs**: auto generates docs based on schemas
 - **Preconfigures essentials**: jwt auth, cors, helmet
 - **Auto Connect MongoDB** (optional)
-- **Dev server**
+
+
+Apologize builtin devserver watcher atm only for macos.  
+I should add chokidar for windows, but i hate Windows and extra packages 😃
+
+
 <br><br>
 
 
