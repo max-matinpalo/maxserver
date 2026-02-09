@@ -27,16 +27,19 @@ export async function setupHelmet(app) {
 }
 
 
+
+
 export async function setupCors(app) {
 	const isProd = process.env.NODE_ENV === "production";
-	const origin = app.maxserver.corsOrigin ?? true;
+	const origin = app.maxserver.corsOrigin ?? "*";
 
-	if (isProd && origin === true) {
-		app.log.warn("CORS origin not set, allowing all origins");
+	if (isProd && origin === "*") {
+		app.log.warn("CORS: allowing all origins (*) in production");
 	}
 
 	await app.register(cors, { origin });
 }
+
 
 
 export function getHttpsOptions() {

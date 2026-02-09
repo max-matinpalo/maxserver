@@ -11,17 +11,18 @@
 I am simplifying and improving things, that it will work for everyone plugn play.
 
 
-Ready node server setup based on **Fastify** to speedup api development.
+Ready node server setup based on **Fastify** to speed up backend development.
+maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 
 - **Auto Routes**: auto imports and registers routes and schemas
 - **Auto Docs**: auto generates docs based on schemas
-- **Preconfigures JWT auth, Cores, Helmet**
+- **Preconfigures essentials**: jwt auth, cors, helmet
 - **Auto Connect MongoDB** (optional)
 - **Dev server**
 <br><br>
 
 - Dependencies: original fastify packages + scalar/fastify-api-reference (doc generator)
-- The source is simple and short. Everyone shall be able to read, understand and modify if needed.
+- The source is simple. Everyone can read, understand and modify if needed.
 
 
 ## Install
@@ -36,33 +37,38 @@ npm install maxserver
 ```js
 import maxserver from "maxserver";
 
-const server = await maxserver();
-await server.listen();
+const server = await maxserver({
+	port: 3000,
+	secret: "your_secret"
+});
 
-console.log("Server running at ", server.getAddress());
+await server.start();
 export default server;
-
 ```
 ---
 
 ## ⚙️ Configure
-Quick configure your server by passing options to the **maxserver()** or define them in your .env file.  
-You can also pass any fastify options.
+Configs can be passed to the init call to **maxserver()** or in your .env file.  
+Any fastify options can be passed to maxserver() too.
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
 | `PORT` | `3000` | Server port |
-| `JWT_SECRET` | *-* | Enables JWT auth (private-by-default routes) |
-| `MONGODB_URI` | *-* | Enables MongoDB auto-connect + global `db` |
-| `DOCS` | `true` | Set `false` to disable docs UI at `/docs` |
-| `STATIC_DIR` | *(optional)* | Serve static files (example: `./public`) |
-| `CORS_ORIGIN` | `*` | Allowed CORS origins |
+| `SECRET` | *-* | Secret used for jwt and cookies |
+| `CORS` | `*` | Allowed CORS origins, default all allowed |
+| `DOCS` | `true` | Set `false` to disable auto generated docs` |
+| `MONGODB` | *-* | MongoDB URI, if set auto-connects db |
+| `PUBLIC` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
+| `STATIC` | *-* | If set, serves this directory statically |
 
 ---
 
-## 🗂️ Project Structure
+<br><br>
 
-**1 route = 1 handler file + 1 schema file**
+
+## 🗂️ Project Structure
+**maxserver** stands for maximized simplicity - minimum boilerplate.  
+Our golden rule is: **1 route = 1 handler file + 1 schema file**
 
 Example:
 
@@ -75,8 +81,7 @@ src/
 		hello.schema.js
 	...
 ```
-
----
+<br>
 
 ## 🛣️ Handlers
 
@@ -88,10 +93,7 @@ That comment is what the route loader uses to auto-register the route.
 // GET /teams/:id
 ```
 
-
-
 ### 2) Default export handler
-
 
 ### Example
 
@@ -106,34 +108,31 @@ export default async function (req, res) {
 }
 ```
 
----
-
-## 🧾 Define Schemas
-Create a sibling file ending in **`.schema.js`**. 
-The schema is offcourse a jsonschema.
-This file will be auto registered.
-
-Schemas:
-- validate inputs
-- generate OpenAPI docs
-- control route options for example (public/private)
+<br>
+<br>
 
 
-**`Important - use default export`**
+## 🧾 Schemas
+Create a sibling file ending with **`.schema.js`**, so it will be auto registered.
+Besides the basic schema fields we can set fields like summary and description,
+which will appear in the docs.
+
+Mostly you don't need to write schemas yourself, chat gpt and gemini do it excelently.
+
+**`Important - use export default`**
 ```js
 export default {
 	tags: ["Teams"],
 	summary: "Get team",
 	description: "Returns a single team by identifier.",
 
-	params: {
+	body: {
 		type: "object",
-		required: ["id"],
+		required: ["name"],
 		properties: {
-			id: {
+			name: {
 				type: "string",
-				minLength: 24,
-				example: "",
+				example: "peter",
 			},
 		},
 	},
@@ -142,19 +141,21 @@ export default {
 		200: {
 			type: "object",
 			properties: {
-				id: {
+				message: {
 					type: "string",
-					example: "507f1f77bcf86cd799439011",
+					example: "Hello Max",
 				},
-				name: { type: "string", example: "Team A" },
 			},
-			required: ["id", "name"],
 		},
 	},
-};
 ```
 
 <br>
+
+## Route Options
+Though we don't register routes manually, we don't set route options on the register call. If needed, route options can be set on the schema object.
+For example **schema.auth = true** to enable authentication.
+So the schema holds all configs about a root and handlers the pure logic.
 
 
 ## 📚 API Docs
@@ -165,18 +166,13 @@ export default {
 <br>
 
 
-
-
 ## 🔐 Authentication (JWT)
 
 Enable auth by setting:
 
-- `JWT_SECRET`
-
 Behavior:
-- **Private by default**: routes require JWT (cookie or Bearer header)
-- Authenticated user identifier is available as **`req.userId`**
-- Make a route **public** by setting `config.public: true` in its schema
+- Enable auth for a route by **schema.auth = true**: 
+- Authenticated user is available as **`req.userId`**
 
 ```js
 export default {

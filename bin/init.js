@@ -15,17 +15,17 @@ function main() {
 	}
 
 	try {
-		console.log(`🚀 Creating "${projectName}"...`);
+		console.log(`🚀 Setting up "${projectName}"...`);
 		fs.cpSync(templateDir, targetDir, { recursive: true });
 
 		fixDotfiles(targetDir);
 		patchPackageJson(targetDir, projectName);
 
 		process.chdir(targetDir);
-		console.log("📦 Installing maxserver...");
+		console.log("📦 Installing maxserver");
 		execSync("npm install maxserver@latest", { stdio: "inherit" });
 
-		console.log("\n✅ Done! Your project is ready. 😊");
+		console.log(`\n✅ Install complete\n\ncd ${projectName}\nnpm run dev\n`);
 	} catch (err) {
 		console.error("❌ Init failed:", err.message);
 		process.exit(1);

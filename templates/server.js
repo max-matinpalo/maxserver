@@ -1,10 +1,9 @@
 import maxserver from "maxserver";
 
-const server = await maxserver();
-
-await server.listen({
-	port: Number(process.env.PORT || 3000),
+const server = await maxserver({
+	port: 3000,
+	secret: "your_secret"
 });
 
-console.log("Server running at ", server.getAddress());
+await server.start();
 export default server;

@@ -20,6 +20,7 @@ export default async function maxserver(config = {}) {
 	const {
 
 		// maxserver options
+		port = Number(process.env.PORT || 3000),
 		secret = process.env.SECRET,
 		cookieSecret = process.env.COOKIE_SECRET,
 		mongodbUri = process.env.MONGODB_URI,
@@ -41,10 +42,6 @@ export default async function maxserver(config = {}) {
 		secret, mongodbUri, docs, staticDir, corsOrigin
 	};
 
-	process.env.NODE_ENV;
-
-
-
 
 	const app = Fastify({
 
@@ -59,6 +56,13 @@ export default async function maxserver(config = {}) {
 	app.decorate("maxserver", maxserverConfig);
 
 
+	app.decorate("start", async function () {
+		const port = this.maxserver.port ?? 3000;
+		const host = this.maxserver.public ? '0.0.0.0' : '127.0.0.1';
+
+		await this.listen({ port, host });
+		console.log('Server running at ', this.server.address());
+	});
 
 	setupGetAddress(app);
 	await setupCookie(app);
