@@ -10,7 +10,6 @@
 ‼️ **ATTENTION** ‼️ - Not download yet, check out few days later 😉  
 I am simplifying and improving things, that it will work for everyone plugn play.
 
-
 Ready node server setup based on **Fastify** to speed up backend development.  
 maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 
@@ -19,22 +18,9 @@ maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 - **Preconfigures essentials**: jwt auth, cors, helmet
 - **Auto Connect MongoDB** (optional)
 
-
-Apologize builtin devserver watcher atm only for macos.  
-I should add chokidar for windows, but i hate Windows and extra packages 😃
-
-
 <br><br>
 
-
 ## Install
-
-### Setup ready project
-```js
-npx maxserver [appname]
-```
-
-### Or install as packge
 ```js
 npm install maxserver
 ```
@@ -99,13 +85,15 @@ To auto-register routes, simple add a comment of the form:
 ...
 
 ```js
-// GET /example/:id
+// GET /hello
 
-export default async function (req, res) {
+export default async function handler(req, rep) {
 
-	const id = req.params.id;
-	console.log("Example id": id);
-	return team;
+	console.log("GET /hello");
+	return {
+		message: "Hello world",
+	};
+
 }
 ```
 <br>
@@ -148,8 +136,8 @@ export default {
 };
 ```
 
-**‼️ Important use export default
-**
+You will find comlete examples in template folder.  
+**‼️ Important use export default**
 
 <br>
 
@@ -204,7 +192,7 @@ Set option **`MONGODB`** your mongodbURI and it will auto-connect at server star
 | Global | What it is | Why it exists |
 | :--- | :--- | :--- |
 | `db` | MongoDB database handle | Use it directly in handlers |
-| `oid(id)` | string → `ObjectId` | Avoid importing `ObjectId` everywhere |
+| `oid(id)` | string → `ObjectId` | Saves you from importing everywhere `ObjectId` |
 
 ### Example
 
@@ -256,3 +244,5 @@ In `.vscode/tasks.json`, enable the task with:
 ### 🤖 AI Assistants
 Copy **`RULES.md`** into your AI tool as system context,  
 then ask it to generate routes + schemas.
+
+
