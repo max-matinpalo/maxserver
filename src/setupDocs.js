@@ -61,33 +61,7 @@ export async function setupDocs(app) {
 			"routePrefix": "/docs",
 			"openapi": true,
 			"configuration": {
-				"layout": "modern",
-				"hideClientButton": true,
-				"hideSearch": true,
-				"defaultOpenAllTags": true,
-				"showSidebar": true,
-				"showDeveloperTools": false,
-				"showToolbar": false,
-				"operationTitleSource": "summary",
-				"theme": "default",
-				"persistAuth": false,
-				"telemetry": false,
-				"isEditable": false,
-				"isLoading": false,
-				"hideModels": false,
-				"documentDownloadType": "both",
-				"hideTestRequestButton": false,
-				"showOperationId": false,
-				"hideDarkModeToggle": false,
-				"withDefaultFonts": true,
-				"expandAllModelSections": false,
-				"expandAllResponses": false,
-				"orderSchemaPropertiesBy": "alpha",
-				"orderRequiredPropertiesFirst": true,
-				"_integration": "fastify",
-				"default": false,
-				"slug": "api-1",
-				"title": "API #1"
+				"layout": "classic"
 			}
 		});
 
