@@ -27,6 +27,7 @@ export default async function maxserver(config = {}) {
 		cors = process.env.CORS || "*",
 		env = process.env.NODE_ENV || "development",
 		routesDir = process.env.ROUTESDIR || "src",
+		scalar = {},
 		openapiInfo,
 		static: isStatic = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
@@ -37,7 +38,7 @@ export default async function maxserver(config = {}) {
 	} = config;
 
 	const maxserverConfig = {
-		port, secret, mongodb, docs, cors, env, openapiInfo, routesDir,
+		port, secret, mongodb, docs, cors, env, openapiInfo, routesDir, scalar,
 		static: isStatic,
 		public: isPublic
 	};

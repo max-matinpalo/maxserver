@@ -61,7 +61,7 @@ export async function setupDocs(app) {
 			"routePrefix": "/docs",
 			"openapi": true,
 			"configuration": {
-				"layout": "classic"
+				...app.maxserver.scalar
 			}
 		});
 
