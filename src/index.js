@@ -6,12 +6,12 @@ import {
 	setupJwt,
 	setupMongo,
 	setupStatic,
-	setupDocs,
 	setupCookie,
 } from "./setup.js";
 
 
 import { getAddress } from "./getAddress.js";
+import { setupDocs } from "./setupDocs.js";
 import { setupRoutes } from "./setupRoutes.js";
 
 

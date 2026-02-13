@@ -7,8 +7,7 @@ import cookie from "@fastify/cookie";
 import mongodb from "@fastify/mongodb";
 import fastifyStatic from "@fastify/static";
 import helmet from "@fastify/helmet";
-import swagger from "@fastify/swagger";
-import apiReference from "@scalar/fastify-api-reference";
+
 
 
 export async function setupHelmet(app) {
@@ -76,42 +75,6 @@ export async function setupJwt(app) {
 }
 
 
-
-
-export async function setupDocs(app) {
-
-	const info = app.maxserver.openapiInfo || {
-		title: "API",
-		version: "1.0.0",
-	};
-
-	await app.register(swagger, {
-		openapi: {
-			info,
-			// OpenAPI 3.x: securitySchemes must be defined globally here not per route
-			// Routes only add `security: [...]` that references these scheme names
-			components: {
-				securitySchemes: {
-					bearerAuth: { type: "http", scheme: "bearer" },
-					cookieAuth: { type: "apiKey", in: "cookie", name: "token" },
-				},
-			},
-		},
-	});
-
-
-	app.get("/openapi.json", {}, () => app.swagger());
-
-	if (app.maxserver.docs !== false)
-		await app.register(apiReference, { routePrefix: "/docs", openapi: true });
-
-	app.addHook("onRoute", (route) => {
-		const auth = route.config?.auth;
-		if (!auth) return;
-		route.schema ||= {};
-		route.schema.security ||= [{ bearerAuth: [] }, { cookieAuth: [] }];
-	});
-}
 
 
 

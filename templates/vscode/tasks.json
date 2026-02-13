@@ -1,9 +1,6 @@
 // Comment task in to autostart server on dir open
-/*
-
-
 {
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"tasks": [
 		{
 			"label": "devserver 📟",
@@ -16,8 +13,18 @@
 			"runOptions": {
 				"runOn": "folderOpen"
 			}
+		},
+		{
+			"label": "openBrowser",
+			"type": "shell",
+			"command": "sleep 1; open http://localhost:3000/docs",
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared"
+			},
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
 		}
 	]
 }
-
-*/

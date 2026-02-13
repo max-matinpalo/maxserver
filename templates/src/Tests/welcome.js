@@ -4,7 +4,7 @@ export default async function handler(req, rep) {
 
 	console.log("GET /welcome");
 	return {
-		message: "Weclome to maxserver 😉",
+		message: "Weclome to maxserver 😉 - Updated",
 	};
 
 }

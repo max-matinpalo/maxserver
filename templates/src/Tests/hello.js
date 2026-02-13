@@ -5,7 +5,7 @@ export default async function handler(req, rep) {
 	console.log("POST /hello");
 
 	return {
-		message: `Hello ${req.body.name} 🙋‍♂️`,
+		message: `Hello ${req.body.name} again 🙋‍♂️`,
 	};
 }
 
