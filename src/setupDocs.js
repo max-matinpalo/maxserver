@@ -61,6 +61,15 @@ export async function setupDocs(app) {
 			"routePrefix": "/docs",
 			"openapi": true,
 			"configuration": {
+				hideSearch: true,
+				hiddenClients: true,
+				hideClientButton: true,
+				telemetry: false,
+				showDeveloperTools: "never",
+				authentication: {
+					preferredSecurityScheme: 'bearerAuth',
+					apiKey: { token: "" }
+				},
 				...app.maxserver.scalar
 			}
 		});
