@@ -1,7 +1,7 @@
 export default {
-	summary: "Test get welcome",
+	summary: "Test welcome",
 	description: "Returns a friendly welcome message to verify the server is operational.",
-	tags: ["Tests"],
+	tags: ["Test"],
 	response: {
 		200: {
 			type: "object",

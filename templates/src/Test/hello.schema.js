@@ -1,7 +1,7 @@
 export default {
-	summary: "Test post hello",
+	summary: "Test hello",
 	description: "Receives a name in the body and returns a personalized hello message.",
-	tags: ["Tests"],
+	tags: ["Test"],
 	body: {
 		type: "object",
 		properties: {

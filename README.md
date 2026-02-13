@@ -1,16 +1,6 @@
-[![npm version](https://img.shields.io/npm/v/vite-plugin-lint-overlay.svg?style=flat)](https://www.npmjs.com/package/vite-plugin-lint-overlay) [![license](https://img.shields.io/npm/l/vite-plugin-lint-overlay.svg?style=flat)](./LICENSE)
-
-<p align="center" style="margin-top: 20px;" >
-  <img src="https://raw.githubusercontent.com/max-matinpalo/maxserver/refs/heads/main/assets/logo.png" alt="Project logo" width="160">
-</p>
-<br>
-
-
 # maxserver
-‼️ **ATTENTION** ‼️ - Not download yet, check out few days later 😉  
-I am simplifying and improving things, that it will work for everyone plugn play.
-
-Ready node server setup based on **Fastify** to speed up backend development.  
+Nothing Special.  
+Just a Node server setup based on **Fastify** to speed up backend development.  
 maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 
 - **Auto Routes**: auto imports and registers routes and schemas
@@ -225,21 +215,3 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 - The source is simple. Everyone can read, understand and modify if needed.
 
 <br>
-
-## 🛠️ Tips & Tools
-
-### 🔌 Scalar API Client (Live Testing)
-- Open: `http://localhost:3000/docs`
-
-
-### ⚡ VS Code Auto-Start
-In `.vscode/tasks.json`, enable the task with:
-```json
-"runOptions": { "runOn": "folderOpen" }
-```
-
-### 🤖 AI Assistants
-Copy **`RULES.md`** into your AI tool as system context,  
-then ask it to generate routes + schemas.
-
-
