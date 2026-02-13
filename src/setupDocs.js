@@ -65,7 +65,12 @@ export async function setupDocs(app) {
 				hiddenClients: true,
 				hideClientButton: true,
 				telemetry: false,
+				persistAuth: true,
 				showDeveloperTools: "never",
+				operationsSorter: "alpha",
+				metaData: {
+					title: "API Docs 👨‍💻",
+				},
 				authentication: {
 					preferredSecurityScheme: 'bearerAuth',
 					apiKey: { token: "" }
