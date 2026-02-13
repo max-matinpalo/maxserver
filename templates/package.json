@@ -8,5 +8,6 @@
 		"dev": "maxserver-watcher"
 	},
 	"type": "module",
+	"private": "true",
 	"dependencies": {}
 }

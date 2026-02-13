@@ -45,10 +45,30 @@ function resolveArgs() {
 }
 
 
+/**
+ * Renames template files to dotfiles and clones vscode settings.
+ */
 function fixDotfiles(dir) {
-	for (const f of ["env", "gitignore", "vscode"]) {
+	// 1. Standard dotfile renames
+	for (const f of ["env", "gitignore"]) {
 		const src = path.join(dir, f);
 		if (fs.existsSync(src)) fs.renameSync(src, path.join(dir, "." + f));
+	}
+
+	// 2. Specialized vscode handling (Root and src)
+	const vscodeSrc = path.join(dir, "vscode");
+
+	if (fs.existsSync(vscodeSrc)) {
+		const srcDir = path.join(dir, "src");
+
+		// Ensure src/ exists before cloning settings into it
+		if (!fs.existsSync(srcDir)) fs.mkdirSync(srcDir);
+
+		// Copy to src/.vscode
+		fs.cpSync(vscodeSrc, path.join(srcDir, ".vscode"), { recursive: true });
+
+		// Rename root vscode to .vscode
+		fs.renameSync(vscodeSrc, path.join(dir, ".vscode"));
 	}
 }
 
