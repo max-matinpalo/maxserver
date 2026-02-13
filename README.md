@@ -229,11 +229,8 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 ## 🛠️ Tips & Tools
 
 ### 🔌 Scalar API Client (Live Testing)
-- Download the great new api client
-- It autosyncs well with the server
-- Add Item → Import from OpenAPI
-- Paste: `http://localhost:3000/openapi.json`
-- Enable watch mode for live updates
+- Open: `http://localhost:3000/docs`
+
 
 ### ⚡ VS Code Auto-Start
 In `.vscode/tasks.json`, enable the task with:

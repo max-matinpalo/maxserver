@@ -2,6 +2,42 @@ import swagger from "@fastify/swagger";
 import apiReference from "@scalar/fastify-api-reference";
 
 
+
+const schema = {
+	summary: "OpenAPI Specification",
+	description: "Returns the full OpenAPI 3.0 specification for this API in JSON format.",
+	tags: ["Docs"],
+	response: {
+		200: {
+			type: "object",
+			additionalProperties: true,
+			properties: {
+				openapi: {
+					type: "string",
+					example: "3.0.3"
+				},
+				info: {
+					type: "object",
+					properties: {
+						title: { type: "string", example: "maxserver API" },
+						version: { type: "string", example: "1.0.0" }
+					},
+					required: ["title", "version"]
+				},
+				paths: {
+					type: "object",
+					example: {}
+				}
+			},
+			required: ["openapi", "info", "paths"]
+		}
+	}
+};
+
+
+
+
+
 export async function setupDocs(app) {
 
 	const info = app.maxserver.openapiInfo || {
@@ -20,15 +56,11 @@ export async function setupDocs(app) {
 					cookieAuth: { type: "apiKey", in: "cookie", name: "token" },
 				},
 			},
-
-			// This replaces your manual app.get line
-			exposeRoute: true,
-			routePrefix: "/openapi.json"
 		},
 	});
 
 
-	//app.get("/openapi.json", {}, () => app.swagger());
+	app.get("/openapi.json", { schema }, () => app.swagger());
 
 	if (app.maxserver.docs !== false)
 		await app.register(apiReference, { routePrefix: "/docs", openapi: true });
@@ -44,42 +76,3 @@ export async function setupDocs(app) {
 
 
 
-export default {
-	summary: "OpenAPI Documentation",
-	description: "Returns the OpenAPI 3.0.0 specification for the entire API.",
-	tags: ["Documentation"],
-	response: {
-		200: {
-			type: "object",
-			properties: {
-				openapi: {
-					type: "string",
-					example: "3.0.0"
-				},
-				info: {
-					type: "object",
-					properties: {
-						title: {
-							type: "string",
-							example: "maxserver API"
-						},
-						version: {
-							type: "string",
-							example: "1.0.0"
-						}
-					},
-					required: ["title", "version"]
-				},
-				paths: {
-					type: "object",
-					example: {}
-				},
-				components: {
-					type: "object",
-					example: {}
-				}
-			},
-			required: ["openapi", "info", "paths"]
-		}
-	}
-};
