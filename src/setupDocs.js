@@ -5,31 +5,25 @@ import apiReference from "@scalar/fastify-api-reference";
 
 const schema = {
 	summary: "OpenAPI Specification",
-	description: "Returns the full OpenAPI 3.0 specification for this API in JSON format.",
+	description: "Returns the full OpenAPI 3.0 specification.",
 	tags: ["Docs"],
 	response: {
 		200: {
 			type: "object",
 			additionalProperties: true,
+			required: ["openapi", "info", "paths"],
 			properties: {
-				openapi: {
-					type: "string",
-					example: "3.0.3"
-				},
+				openapi: { type: "string", example: "3.0.3" },
 				info: {
 					type: "object",
+					required: ["title", "version"],
 					properties: {
-						title: { type: "string", example: "maxserver API" },
+						title: { type: "string", example: "API" },
 						version: { type: "string", example: "1.0.0" }
-					},
-					required: ["title", "version"]
+					}
 				},
-				paths: {
-					type: "object",
-					example: {}
-				}
-			},
-			required: ["openapi", "info", "paths"]
+				paths: { type: "object", example: {} }
+			}
 		}
 	}
 };
@@ -63,7 +57,37 @@ export async function setupDocs(app) {
 	app.get("/openapi.json", { schema }, () => app.swagger());
 
 	if (app.maxserver.docs !== false)
-		await app.register(apiReference, { routePrefix: "/docs", openapi: true });
+		await app.register(apiReference, {
+			"routePrefix": "/docs",
+			"openapi": true,
+			"layout": "modern",
+			"hideClientButton": true,
+			"hideSearch": true,
+			"defaultOpenAllTags": true,
+			"showSidebar": true,
+			"showDeveloperTools": false,
+			"showToolbar": false,
+			"operationTitleSource": "summary",
+			"theme": "default",
+			"persistAuth": false,
+			"telemetry": false,
+			"isEditable": false,
+			"isLoading": false,
+			"hideModels": false,
+			"documentDownloadType": "both",
+			"hideTestRequestButton": false,
+			"showOperationId": false,
+			"hideDarkModeToggle": false,
+			"withDefaultFonts": true,
+			"expandAllModelSections": false,
+			"expandAllResponses": false,
+			"orderSchemaPropertiesBy": "alpha",
+			"orderRequiredPropertiesFirst": true,
+			"_integration": "fastify",
+			"default": false,
+			"slug": "api-1",
+			"title": "API #1"
+		});
 
 	app.addHook("onRoute", (route) => {
 		const auth = route.config?.auth;
