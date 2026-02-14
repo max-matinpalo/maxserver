@@ -22,7 +22,7 @@ export async function setupDevSounds(app) {
 
 		// Test fix, that sound not plays for static served 😃
 		const ct = String(reply.getHeader('content-type') || '').toLowerCase();
-		if (ct && ct.includes('application/json')) return;
+		if (ct && !ct.includes('application/json')) return;
 
 		const code = reply.statusCode;
 		if (code < 400) play(ok);
