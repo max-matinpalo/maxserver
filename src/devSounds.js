@@ -17,7 +17,7 @@ export async function setupDevSounds(app) {
 
 	app.addHook('onResponse', async (req, reply) => {
 		const code = reply.statusCode;
-		if (code >= 500) play(err);
-		else if (code < 400) play(ok);
+		if (code < 400) play(ok);
+		else play(err);
 	});
 }
