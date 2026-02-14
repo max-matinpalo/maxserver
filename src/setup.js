@@ -13,6 +13,7 @@ import helmet from "@fastify/helmet";
 export async function setupHelmet(app) {
 	await app.register(helmet, {
 		contentSecurityPolicy: false,
+		frameguard: false,
 		crossOriginResourcePolicy: {
 			policy: "cross-origin"
 		}
