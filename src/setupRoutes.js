@@ -65,6 +65,9 @@ export async function setupRoutes(app) {
 	const root = path.resolve(app.maxserver.routesDir || "src");
 	const files = walk(root);
 
+	/*
+	// Old one which only graps default exports
+
 	// 1. Pass One: Register Global Schemas (Lonely .schema.js files)
 	for (const file of files) {
 		if (file.endsWith(".schema.js")) {
@@ -74,6 +77,20 @@ export async function setupRoutes(app) {
 				const schema = await importDefault(file);
 				if (schema?.$id) app.addSchema(schema);
 			}
+		}
+	}
+	*/
+
+
+	// 1. Pass One: Register Global Schemas (Lonely .schema.js files)
+	for (const file of files) {
+		// Only process if no matching handler file exists
+		if (file.endsWith(".schema.js") && !fs.existsSync(file.replace(".schema.js", ".js"))) {
+			const mod = await import(pathToFileURL(file).href);
+
+			// Register default export + all named exports if they have an $id
+			for (const schema of Object.values(mod))
+				if (schema?.$id) app.addSchema(schema);
 		}
 	}
 

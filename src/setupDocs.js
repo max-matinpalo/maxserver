@@ -68,6 +68,7 @@ export async function setupDocs(app) {
 				persistAuth: true,
 				showDeveloperTools: "never",
 				operationsSorter: "alpha",
+				orderSchemaPropertiesBy: "preserve",
 				metaData: {
 					title: "API Docs 👨‍💻",
 				},
