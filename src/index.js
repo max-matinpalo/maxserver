@@ -13,7 +13,7 @@ import {
 import { getAddress } from "./getAddress.js";
 import { setupDocs } from "./setupDocs.js";
 import { setupRoutes } from "./setupRoutes.js";
-
+import { setupDevSounds } from "./devSounds.js";
 
 export default async function maxserver(config = {}) {
 
@@ -29,6 +29,7 @@ export default async function maxserver(config = {}) {
 		routesDir = process.env.ROUTESDIR || "src",
 		scalar = {},
 		openapiInfo,
+		sounds,
 		static: isStatic = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
 
@@ -38,7 +39,7 @@ export default async function maxserver(config = {}) {
 	} = config;
 
 	const maxserverConfig = {
-		port, secret, mongodb, docs, cors, env, openapiInfo, routesDir, scalar,
+		port, secret, mongodb, docs, cors, env, openapiInfo, routesDir, scalar, sounds,
 		static: isStatic,
 		public: isPublic
 	};
@@ -78,6 +79,7 @@ export default async function maxserver(config = {}) {
 	await setupStatic(app);
 	await setupDocs(app);
 	await setupRoutes(app);
+	await setupDevSounds(app);
 
 	global.createError = function (code, message) {
 		const err = new Error(message);
