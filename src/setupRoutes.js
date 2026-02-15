@@ -65,23 +65,6 @@ export async function setupRoutes(app) {
 	const root = path.resolve(app.maxserver.routesDir || "src");
 	const files = walk(root);
 
-	/*
-	// Old one which only graps default exports
-
-	// 1. Pass One: Register Global Schemas (Lonely .schema.js files)
-	for (const file of files) {
-		if (file.endsWith(".schema.js")) {
-			const hasHandler = fs.existsSync(file.replace(".schema.js", ".js"));
-
-			if (!hasHandler) {
-				const schema = await importDefault(file);
-				if (schema?.$id) app.addSchema(schema);
-			}
-		}
-	}
-	*/
-
-
 	// 1. Pass One: Register Global Schemas (Lonely .schema.js files)
 	for (const file of files) {
 		// Only process if no matching handler file exists
@@ -94,7 +77,14 @@ export async function setupRoutes(app) {
 		}
 	}
 
-	// 2. Pass Two: Register Routes
+	// 2. Pass Two: Auto-register hooks
+	for (const file of files) {
+		const mod = await import(pathToFileURL(file).href);
+		for (const [key, fn] of Object.entries(mod))
+			if (key.startsWith("autoregister_") && typeof fn === "function") await fn(app);
+	}
+
+	// 3. Pass Three: Register Routes
 	const seen = new Map();
 	for (const file of files) {
 		if (file.endsWith(".schema.js")) continue;

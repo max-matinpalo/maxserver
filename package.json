@@ -1,6 +1,6 @@
 {
 	"name": "maxserver",
-	"version": "0.1.24",
+	"version": "0.1.25",
 	"description": "Node server setup based fastify",
 	"author": "Max Matinpalo",
 	"type": "module",

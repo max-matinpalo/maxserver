@@ -17,6 +17,8 @@ import { setupDevSounds } from "./devSounds.js";
 
 export default async function maxserver(config = {}) {
 
+	console.log("local one running 3");
+
 	const {
 
 		// maxserver options
@@ -71,6 +73,7 @@ export default async function maxserver(config = {}) {
 		console.log('Server running at ', getAddress(this));
 	});
 
+	await setupDevSounds(app);
 	await setupCookie(app);
 	await setupHelmet(app);
 	await setupCors(app);
@@ -79,7 +82,7 @@ export default async function maxserver(config = {}) {
 	await setupStatic(app);
 	await setupDocs(app);
 	await setupRoutes(app);
-	await setupDevSounds(app);
+
 
 	global.createError = function (code, message) {
 		const err = new Error(message);

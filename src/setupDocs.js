@@ -2,7 +2,7 @@ import swagger from "@fastify/swagger";
 import apiReference from "@scalar/fastify-api-reference";
 
 
-
+/*
 const schema = {
 	summary: "OpenAPI Specification",
 	description: "Returns the full OpenAPI 3.0 specification.",
@@ -27,6 +27,7 @@ const schema = {
 		}
 	}
 };
+*/
 
 
 
@@ -53,8 +54,9 @@ export async function setupDocs(app) {
 		},
 	});
 
+	// not needed, the scalar extension provides it by default on /docs/openapi.json
+	// app.get("/openapi.json", {schema}, () => app.swagger());
 
-	app.get("/openapi.json", { schema }, () => app.swagger());
 
 	if (app.maxserver.docs !== false)
 		await app.register(apiReference, {
@@ -67,6 +69,7 @@ export async function setupDocs(app) {
 				telemetry: false,
 				persistAuth: true,
 				showDeveloperTools: "never",
+				//"expandAllModelSections": true,
 				operationsSorter: "alpha",
 				orderSchemaPropertiesBy: "preserve",
 				metaData: {

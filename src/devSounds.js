@@ -20,9 +20,15 @@ export async function setupDevSounds(app) {
 
 	app.addHook('onResponse', async (req, reply) => {
 
-		// Test fix, that sound not plays for static served 😃
+		// Dev sounds only for api requests - not for static served files 😃
 		const ct = String(reply.getHeader('content-type') || '').toLowerCase();
-		if (ct && ct.includes('application/json')) {
+		const disabled = req.routeOptions?.config?.devSound === false;
+		let trigger = ct && ct.includes('application/json') && !disabled;
+
+		// Though this is route is auto registered by scalar, and we can't set sounds false on it...
+		if (req.url === "/docs/openapi.json") return;
+
+		if (trigger) {
 			const code = reply.statusCode;
 			if (code < 400) play(ok);
 			else play(err);
