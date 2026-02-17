@@ -1,6 +1,5 @@
 # maxserver
-Nothing Special.  
-Just a Node server setup based on **Fastify** to speed up backend development.  
+Node server setup based on **Fastify** to speed up backend development.  
 maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 
 - **Auto Routes**: auto imports and registers routes and schemas
@@ -32,7 +31,7 @@ export default server;
 
 ## ⚙️ Configure
 Configs can be passed to the init call to **maxserver()** or set in your .env file.  
-If you define options in env, use all upper case letters.
+If you define options in env, use all upper case letters.  
 Any fastify options can be passed to maxserver() too.
 
 
@@ -40,8 +39,8 @@ Any fastify options can be passed to maxserver() too.
 | :--- | :--- | :--- |
 | `port` | `3000` | Server port |
 | `secret` | *-* | Secret used for jwt and cookies |
-| `cors` | `*` | Allowed CORS origins, default all allowed |
-| `docs` | `true` | Set `false` to disable auto generated docs` |
+| `cors` | `*` | Default all allowed |
+| `docs` | `true` | Set `false` to disable auto generated docs |
 | `mongodb` | *-* | MongoDB URI, if set auto-connects db |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
@@ -50,29 +49,15 @@ Any fastify options can be passed to maxserver() too.
 
 <br>
 
-## 🗂️ Project Structure 
-Our golden rule: **1 route = 1 handler file + 1 schema file**
 
-Example:
+## 🤖 Auto Routing
+Routes are auto registered based on one small comment per file:  
 
 ```
-src/
-	users/
-	teams/
-	forms/
-		hello.js
-		hello.schema.js
-	...
+// METHOD /path 
 ```
 <br>
 
-## 🤖 Auto Routing
-
-To auto-register routes, simple add a comment of the form:  
-**// METHOD /path**  
-**// GET /user**  
-**// POST /feedback/something**  
-...
 
 ```js
 // GET /hello
@@ -87,22 +72,33 @@ export default async function handler(req, rep) {
 }
 ```
 <br>
-  
-And remember to use default export for your handler.
-If you don't want to autoregister some routes, then simply don't add that magic comment 😃
-That's it.
 
-
+Doesn't matter how nested your path is or how many params,  
+It always works this simple and you are free to position your files the way you like.  
+If you don't want to autoregister some files, then simply don't add that magic comment 😃
 <br>
+<br>
+```
+// GET /teams/:teamid  
+// PATCH /forms/:formId/questions/:questionId
+...   
+```
+<br/>
+
+### 3 RULES
+1. Add magic comment
+2. Default export handler
+3. One handler per file 
+
 <br>
 
 
 ## 🧾 Schemas
-Create a sibling file ending with **`.schema.js`**, so it will be auto registered. For example: **hello.js** and **hello.schema.js** 
+Files ending with **`.schema.js`** will be auto registered.  
+For example: **hello.js** and **hello.schema.js**  
 
-Besides the basic validation fields we can set fields like summary and description, which will appear in the docs. Mostly you don't need to write schemas yourself, chat gpt and gemini do it excelently.
-
-
+Besides the basic validation fields we can set fields like `tags`, `summary` and description,  
+which will appear in the docs.
 
 
 ```js
@@ -126,10 +122,42 @@ export default {
 };
 ```
 
-You will find comlete examples in template folder.  
-**‼️ Important use export default**
+**‼️ Important use export default**  
+Some examples in the template folder.
+
+
+### MODELS
+You can also auto register **models** (schemas which are shared between multiple routes).  
+For example `User.schema.js`. It "magically" understand the difference betwen route specific
+schema or generic model, by looking if a sibling file exist or not 😉
 
 <br>
+
+
+
+## 📚 API Docs
+Open in your browser **`localhost:3000/docs`**  
+You should find all your routes well documented.  
+And you can also easily test any route.
+
+<br>
+
+
+
+
+
+## 🔐 Authentication
+JWT header and cookie based auth is preconfigured.  
+To enable auth for a route set in it's schema **auth = true**  
+The authenticated user is available as **`req.userId`**
+
+```js
+// Inside schema
+
+export default {
+	auth: true
+};
+```
 
 ## 🛠️ Route Options
 Though we don't mostly register routes manually, we don't set route options on the register call.  
@@ -147,30 +175,7 @@ export default {
 	...
 ```
 
-
 <br>
-
-## 📚 API Docs
-
-Open in your browser **`localhost:3000/docs`**  
-OpenAPI JSON: **`/openapi.json`**
-
-<br>
-
-
-## 🔐 Authentication
-JWT header and cookie based auth is preconfigured.  
-To enable auth for a route set in it's schema **auth = true**  
-The authenticated user is available as **`req.userId`**
-
-```js
-// Inside schema
-
-export default {
-	auth: true
-};
-```
-
 <br>
 
 ## 🍃 MongoDB
@@ -210,8 +215,28 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 
 <br>
 
+
+
 ## About
 - Dependencies: original fastify packages + scalar/fastify-api-reference
 - The source is simple. Everyone can read, understand and modify if needed.
 
-<br>
+
+## Todo
+- document how to add fastify hooks
+- document how to pass scalar options
+- more example and best practises
+- document project setup with npx
+- npx option, atm devserver macos only
+- unit tests
+
+```
+I am just starting to publish packages on github / npm.  
+Still not sure if it's worth the time 😃
+
+If anyone else than me and bots is using this package,
+just follow me on github and I will improve it.
+
+https://github.com/max-matinpalo
+
+```

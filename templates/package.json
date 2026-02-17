@@ -9,5 +9,20 @@
 	},
 	"type": "module",
 	"private": "true",
-	"dependencies": {}
+	"dependencies": {},
+	"keywords": [
+		"fastify",
+		"backend",
+		"framework",
+		"node-server",
+		"api-server",
+		"auto-routes",
+		"automatic-docs",
+		"scalar",
+		"openapi",
+		"jwt-auth",
+		"mongodb",
+		"minimalist",
+		"zero-boilerplate"
+	]
 }
