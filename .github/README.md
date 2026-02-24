@@ -230,13 +230,4 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 - npx option, atm devserver macos only
 - unit tests
 
-```
-I am just starting to publish packages on github / npm.  
-Still not sure if it's worth the time 😃
 
-If anyone else than me and bots is using this package,
-just follow me on github and I will improve it.
-
-https://github.com/max-matinpalo
-
-```
