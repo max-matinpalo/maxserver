@@ -1,10 +1,11 @@
 {
 	"name": "maxserver",
-	"version": "0.1.31",
+	"version": "0.2.1",
 	"description": "Node server setup based fastify",
 	"author": "Max Matinpalo",
 	"type": "module",
 	"license": "MIT",
+	"types": "index.d.ts",
 	"homepage": "https://github.com/max-matinpalo/maxserver#readme",
 	"repository": {
 		"type": "git",
