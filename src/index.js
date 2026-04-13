@@ -17,7 +17,6 @@ import { setupDevSounds } from "./devSounds.js";
 
 export default async function maxserver(config = {}) {
 
-	console.log("local one running 3");
 
 	const {
 

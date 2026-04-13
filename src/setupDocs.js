@@ -52,6 +52,12 @@ export async function setupDocs(app) {
 				},
 			},
 		},
+		// Only consider for documentation routes which have a schema
+		transform: ({ schema, url }) => {
+			const isDefined = schema && (schema.summary || schema.response || schema.body);
+			if (!isDefined) return { schema: { hide: true }, url };
+			return { schema, url };
+		}
 	});
 
 	// not needed, the scalar extension provides it by default on /docs/openapi.json

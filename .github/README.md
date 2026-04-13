@@ -97,8 +97,9 @@ If you don't want to autoregister some files, then simply don't add that magic c
 Files ending with **`.schema.js`** will be auto registered.  
 For example: **hello.js** and **hello.schema.js**  
 
+Schemas are optional.
 Besides the basic validation fields we can set fields like `tags`, `summary` and description,  
-which will appear in the docs.
+which will appear in the docs. Only if a schema exists the route will be added to the documentation.
 
 
 ```js
@@ -216,6 +217,10 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 <br>
 
 
+
+## Note
+On loading routes - possible side effects execute.
+Means you can eg declare globals.
 
 ## About
 - Dependencies: original fastify packages + scalar/fastify-api-reference

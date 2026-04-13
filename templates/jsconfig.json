@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"checkJs": true,
+		"module": "ES2020",
+		"target": "ES2020",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"strict": false,
+		"noUnusedParameters": false,
+		"noUnusedLocals": false,
+		"noImplicitAny": false,
+		// new attempt to reduce noise
+		"skipLibCheck": true,
+		//"baseUrl": ".",
+		"paths": {
+			"*": [
+				"./src/*"
+			],
+		},
+		"types": [
+			"node",
+			"maxserver"
+		]
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"node_modules",
+	],
+}
