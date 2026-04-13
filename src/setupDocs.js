@@ -85,6 +85,13 @@ export async function setupDocs(app) {
 					preferredSecurityScheme: 'bearerAuth',
 					apiKey: { token: "" }
 				},
+				customCss: `
+				.darklight-reference a[href*="scalar.com"] {
+							 display: none !important;
+				},
+				.text-sidebar-c-2 {
+					display: none !important;
+				}`,
 				...app.maxserver.scalar
 			}
 		});
