@@ -21,14 +21,25 @@ export async function setupHelmet(app) {
 }
 
 
+
 export async function setupCors(app) {
 	const isProd = app.maxserver.env === "production";
-	const origin = app.maxserver.cors ?? "*";
-	if (isProd && origin === "*") {
-		app.log.warn("CORS: allowing all origins (*) in production");
-	}
-	await app.register(cors, { origin });
+	let origin = app.maxserver.cors ?? "*";
+
+	// Fix: Credentials + "*" = Browser Error
+	// If no origin is defined in dev, we should allow the specific requester
+	if (origin === "*" && !isProd)
+		origin = true; // Fastify-cors treats 'true' as "reflect the request origin"
+
+	if (isProd && (origin === "*" || origin === true))
+		app.log.warn("CORS: allowing all origins in production with credentials is risky");
+
+	await app.register(cors, {
+		origin,
+		credentials: true
+	});
 }
+
 
 
 export async function setupCookie(app) {
