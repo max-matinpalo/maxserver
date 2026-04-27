@@ -15,6 +15,9 @@ import { setupDocs } from "./setupDocs.js";
 import { setupRoutes } from "./setupRoutes.js";
 import { setupDevSounds } from "./devSounds.js";
 
+
+
+
 export default async function maxserver(config = {}) {
 
 
@@ -26,7 +29,7 @@ export default async function maxserver(config = {}) {
 		mongodb = process.env.MONGODB,
 		docs = process.env.DOCS !== "false",
 		cors = process.env.CORS || "*",
-		env = process.env.NODE_ENV || "development",
+		env = process.env.NODE_ENV || "development", // should be removed, define via env only
 		routesDir = process.env.ROUTESDIR || "src",
 		scalar = {},
 		openapiInfo,
@@ -69,7 +72,7 @@ export default async function maxserver(config = {}) {
 		const port = this.maxserver.port ?? 3000;
 		const host = this.maxserver.public ? '0.0.0.0' : '127.0.0.1';
 		await this.listen({ port, host });
-		console.log('Server running at ', getAddress(this));
+		console.log('🟢 ', getAddress(this));
 	});
 
 	await setupDevSounds(app);

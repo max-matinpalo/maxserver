@@ -29,7 +29,7 @@ function start() {
 
 function restart() {
 	console.clear();
-	console.log(`devserver restart`);
+	//console.log(`devserver restart`);
 	if (child) child.kill();
 	start();
 }
@@ -41,7 +41,7 @@ fs.watch(".", { recursive: true }, (event, file) => {
 	if (file.startsWith(".")) return;
 	if (!file.endsWith(".js") && !file.endsWith(".json")) return;
 
-	console.log("\nupdated: ", file);
+	//console.log("\nupdated: ", file);
 	restart();
 });
 

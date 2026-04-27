@@ -9,7 +9,7 @@ declare global {
 	var global: typeof globalThis;
 
 	/** Casts a string ID to a MongoDB ObjectId using the global helper [cite: 2026-02-15]. */
-	var oid: (id: string) => import("mongodb").ObjectId;
+	var oid: (id?: string) => import("mongodb").ObjectId;
 
 	/** Access to the global MongoDB database instance [cite: 2026-02-15]. */
 	var db: import("mongodb").Db;
