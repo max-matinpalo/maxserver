@@ -16,7 +16,7 @@ import { setupRoutes } from "./setupRoutes.js";
 import { setupDevSounds } from "./devSounds.js";
 
 
-
+import fastifyWebsocket from "@fastify/websocket";
 
 export default async function maxserver(config = {}) {
 
@@ -74,6 +74,8 @@ export default async function maxserver(config = {}) {
 		await this.listen({ port, host });
 		console.log('🟢 ', getAddress(this));
 	});
+
+	app.register(fastifyWebsocket);
 
 	await setupDevSounds(app);
 	await setupCookie(app);
