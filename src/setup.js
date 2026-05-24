@@ -36,7 +36,8 @@ export async function setupCors(app) {
 
 	await app.register(cors, {
 		origin,
-		credentials: true
+		credentials: true,
+		methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 	});
 }
 
