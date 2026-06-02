@@ -89,10 +89,10 @@ export async function setupStatic(app) {
 }
 
 export async function setupErrorLogger(app) {
-	if (!app.maxserver.errorLogger) return;
+	if (app.maxserver.env !== "development") return;
 
 	app.addHook("onError", async (req, res, error) => {
-		console.log("\n‼️ ERROR ‼️");
+		console.log("\n\x1b[1;31mERROR\x1b[0m");
 
 		const stackLine = error.stack.split("\n")[1];
 		const match = stackLine.match(/([^\s()]+):(\d+):\d+/);

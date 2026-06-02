@@ -48,7 +48,7 @@ export async function setupDocs(app) {
 				// operationsSorter: "alpha",
 				orderSchemaPropertiesBy: "preserve",
 				metaData: {
-					title: "API Docs 👨‍💻",
+					title: "Server",
 				},
 				authentication: {
 					preferredSecurityScheme: 'bearerAuth',

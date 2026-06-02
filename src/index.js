@@ -28,10 +28,9 @@ export default async function maxserver(config = {}) {
 		routesDir = process.env.ROUTESDIR || "src",
 		scalar = {},
 		openapiInfo,
-		sounds,
+		sounds = true,
 		static: isStatic = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
-		errorLogger = process.env.ERROR_LOGGER === "true",
 
 		...fastifyOpts
 	} = config;
@@ -45,8 +44,7 @@ export default async function maxserver(config = {}) {
 	const maxserverConfig = {
 		port, secret, mongodb, docs, cors, env, openapiInfo, routesDir, scalar, sounds,
 		static: isStatic,
-		public: isPublic,
-		errorLogger
+		public: isPublic
 	};
 
 	if (!secret) throw new Error("secret is must have");
