@@ -1,6 +1,5 @@
 # maxserver
 Node server setup based on **Fastify** to speed up backend development.  
-maxserver stands for **maximized simplicity** and **minimum boilerplate**.
 
 - **Auto Routes**: auto imports and registers routes and schemas
 - **Auto Docs**: auto generates docs based on schemas
@@ -123,9 +122,6 @@ export default {
 };
 ```
 
-**‼️ Important use export default**  
-Some examples in the template folder.
-
 
 ### MODELS
 You can also auto register **models** (schemas which are shared between multiple routes).  
@@ -133,6 +129,9 @@ For example `User.schema.js`. It "magically" understand the difference betwen ro
 schema or generic model, by looking if a sibling file exist or not 😉
 
 <br>
+
+**‼️ Important use export default**  
+Some examples in the template folder.
 
 
 
@@ -142,6 +141,20 @@ You should find all your routes well documented.
 And you can also easily test any route.
 
 <br>
+
+
+
+## Global Named Exports
+
+Every named export across your JavaScript files is automatically assigned to the Node.js `global` object on startup. This makes your utility functions, constants, or services instantly accessible anywhere in the application without manual `import` statements. The system safely ignores `default` exports and lifecycle hooks, and it will immediately halt with a clear console error if it detects duplicate variable names across different files.
+
+
+
+
+
+
+
+
 
 
 
@@ -217,10 +230,22 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 <br>
 
 
+## Autoregister Hooks
 
-## Note
-On loading routes - possible side effects execute.
-Means you can eg declare globals.
+Exported functions starting with `autoregister_` automatically execute on startup and receive the Fastify `app` instance. This allows files to self-inject custom hooks, plugins, or configurations locally.
+
+### Example
+```javascript
+// In any standard .js file
+export async function autoregister_custom_auth(app) {
+	app.addHook("onRequest", async (req, reply) => {
+		// Local hook logic here
+	});
+}
+```
+
+
+
 
 ## About
 - Dependencies: original fastify packages + scalar/fastify-api-reference

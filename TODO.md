@@ -12,6 +12,7 @@
 
 - add to docs note that onRouteLoad - files also execute
 
+- add to docs how to auto register
 
 
 
