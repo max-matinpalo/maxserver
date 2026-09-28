@@ -45,3 +45,7 @@ RESPONSE SCHEMAS
 - development: validate responses against schema, log route + ajv errors, still send response
 - production: no response validation
 - response validation uses its own ajv instance without coerceTypes, useDefaults and removeAdditional, so it never changes the response
+
+
+SPEC
+- README.md is the implementation spec, keep it in sync with decisions here
