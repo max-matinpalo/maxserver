@@ -8,7 +8,6 @@ import { createValidators } from "./validate.js";
 import { buildOpenApi, docsRoutes } from "./docs.js";
 import { buildRoutes, fallback, finish } from "./routes.js";
 import { soundsEnabled } from "./devSounds.js";
-import { startWorkers, isWorker } from "./workers.js";
 
 export { createError } from "./errors.js";
 export { signJwt, verifyJwt } from "./jwt.js";
@@ -55,11 +54,10 @@ export default async function maxserver(config = {}) {
 		env = process.env.NODE_ENV || "development",
 		static: staticDir = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
-		workers = Number(process.env.WORKERS || 1),
-		bodyLimit = Number(process.env.BODYLIMIT || 1048576),
 		openapiInfo,
 		scalar = {},
 		sounds = true,
+		...bunOptions
 	} = config;
 
 	if (!secret)
@@ -95,18 +93,16 @@ export default async function maxserver(config = {}) {
 
 	// 5. Server object
 	const server = {
-		config: { port, docs, cors, env, static: staticDir, public: isPublic, workers, bodyLimit },
+		config: { port, docs, cors, env, static: staticDir, public: isPublic, ...bunOptions },
 		bun: null,
 		url: null,
 
 		async start() {
-			if (startWorkers(workers, dev)) return server;
-
 			server.bun = Bun.serve({
+				maxRequestBodySize: 1048576,
+				...bunOptions,
 				port,
 				hostname: isPublic ? "0.0.0.0" : "127.0.0.1",
-				reusePort: isWorker(),
-				maxRequestBodySize: bodyLimit,
 				routes,
 				fetch: fallback(ctx),
 			});

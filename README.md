@@ -37,6 +37,7 @@ export default server;
 ## ⚙️ Configure
 Configs can be passed to the init call to **maxserver()** or set in your .env file.  
 If you define options in env, use all upper case letters.  
+Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to maxserver() too.
 
 
 | Variable | Default | Description |
@@ -48,8 +49,6 @@ If you define options in env, use all upper case letters.
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
 | `routesDir` | *src* | Directory to auto collect routes |
-| `bodyLimit` | `1048576` | Max request body size in bytes (1 MiB, same as v1) |
-| `workers` | `1` | Processes on Linux, one per core. macOS always 1 |
 ---
 
 <br>
@@ -213,6 +212,6 @@ It is updated together with maxserver as things evolve.
 - more example and best practises
 - hooks / middleware and route options (v1 had fastify hooks, autoregister_ and routeOptions)
 - websockets (Bun has them built in, needs exposing through maxserver)
-- plan production deployment and decide what maxserver should include for it (e.g. worker restart delay, clean shutdown on SIGTERM, systemd example)
+- plan production deployment and decide what maxserver should include for it (e.g. multiple processes with systemd instances + reusePort, clean shutdown on SIGTERM, systemd example)
 
 

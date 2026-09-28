@@ -1,5 +1,6 @@
 /// <reference types="bun" />
 
+/** maxserver options, plus any Bun.serve option (reusePort, idleTimeout, tls, maxRequestBodySize, ...) */
 export interface MaxserverConfig {
 	port?: number;
 	secret?: string;
@@ -8,14 +9,15 @@ export interface MaxserverConfig {
 	env?: string;
 	static?: string;
 	public?: boolean;
-	workers?: number;
-	/** Max request body size in bytes, default 1 MiB */
-	bodyLimit?: number;
 	openapiInfo?: { title: string; version: string;[key: string]: unknown };
 	/** Extra Scalar configuration */
 	scalar?: Record<string, unknown>;
 	/** Dev sounds on macOS, default true */
 	sounds?: boolean;
+	/** Passed to Bun.serve, default 1 MiB */
+	maxRequestBodySize?: number;
+	reusePort?: boolean;
+	[key: string]: unknown;
 }
 
 export interface MaxserverServer {

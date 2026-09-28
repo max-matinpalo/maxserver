@@ -93,12 +93,12 @@ SOURCE LAYOUT
 - cookies: no file, Bun built-in
 
 
-WORKERS
-- > 1 on Linux: main process spawns that many copies with Bun.spawn, each Bun.serve with reusePort: true, kernel spreads connections
-- main process respawns crashed workers
-- dev and macOS: always one process (macOS ignores reusePort balancing, tested: all requests go to first process), log a warning if workers > 1
-- no shared memory between workers, keep apps stateless
-- file: src/workers.js
+BUN.SERVE OPTIONS
+- unknown maxserver() options are passed to Bun.serve (like v1 passed them to Fastify)
+- maxserver keeps control of port, hostname, routes, fetch (set after the spread)
+- maxRequestBodySize defaults to 1 MiB (v1 Fastify bodyLimit), overridable
+- multiple processes are not part of maxserver (deployment concern): reusePort is passed through, off by default so a second server on the same port fails loudly
+- macOS: reusePort does not balance (tested: all requests go to the first process)
 
 
 RESPONSE SCHEMAS
