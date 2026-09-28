@@ -1,14 +1,23 @@
 /**
- * Security headers, same as v1 helmet config:
- * helmet defaults without CSP and frameguard, CORP cross-origin.
+ * Security headers for JSON (handler data, errors): the only helmet headers
+ * that matter for JSON. Each header costs Bun time on every response.
+ */
+export const API_HEADERS = {
+	"Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+	"X-Content-Type-Options": "nosniff",
+};
+
+
+/**
+ * Security headers for everything else (static files, /docs, returned Responses),
+ * same as v1 helmet config: helmet defaults without CSP and frameguard, CORP cross-origin.
  */
 export const SECURITY_HEADERS = {
+	...API_HEADERS,
 	"Cross-Origin-Opener-Policy": "same-origin",
 	"Cross-Origin-Resource-Policy": "cross-origin",
 	"Origin-Agent-Cluster": "?1",
 	"Referrer-Policy": "no-referrer",
-	"Strict-Transport-Security": "max-age=31536000; includeSubDomains",
-	"X-Content-Type-Options": "nosniff",
 	"X-DNS-Prefetch-Control": "off",
 	"X-Download-Options": "noopen",
 	"X-Permitted-Cross-Domain-Policies": "none",

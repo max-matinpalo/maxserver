@@ -55,7 +55,8 @@ MUST COVER
 - credentials allowed
 
 9. Security headers
-- on every response, including errors and static files
+- JSON (handler data, errors, 404): only nosniff + HSTS
+- static files, /docs, returned Responses: full v1 helmet set
 
 10. Static
 - serves file with right content type

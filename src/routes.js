@@ -1,7 +1,7 @@
 import { authenticate } from "./jwt.js";
 import { corsHeaders, fixedCorsHeaders, originHeaders, preflight } from "./cors.js";
 import { errorResponse, logError } from "./errors.js";
-import { SECURITY_HEADERS, setHeaders } from "./headers.js";
+import { API_HEADERS, SECURITY_HEADERS, setHeaders } from "./headers.js";
 import { compileRoute, validatePart, checkResponse } from "./validate.js";
 import { serveStatic } from "./static.js";
 
@@ -9,8 +9,8 @@ import { serveStatic } from "./static.js";
 /**
  * Common end of every response: CORS + security headers.
  */
-export function finish(req, response, ctx) {
-	return setHeaders(response, { ...corsHeaders(req, ctx.cors), ...SECURITY_HEADERS });
+export function finish(req, response, ctx, security = SECURITY_HEADERS) {
+	return setHeaders(response, { ...corsHeaders(req, ctx.cors), ...security });
 }
 
 
@@ -19,7 +19,7 @@ export function finish(req, response, ctx) {
  * object much faster than it sets headers one by one.
  */
 export function defaultHeaders(cors) {
-	return new Headers({ ...fixedCorsHeaders(cors), ...SECURITY_HEADERS });
+	return new Headers({ ...fixedCorsHeaders(cors), ...API_HEADERS });
 }
 
 
@@ -182,7 +182,7 @@ function wrap(route, ctx) {
 
 		} catch (err) {
 			logError(err, req, ctx.dev);
-			return finish(req, errorResponse(err, !ctx.dev), ctx);
+			return finish(req, errorResponse(err, !ctx.dev), ctx, API_HEADERS);
 		}
 	};
 }
@@ -217,6 +217,6 @@ export function fallback(ctx) {
 
 		const { pathname } = new URL(req.url);
 		const err = Object.assign(new Error(`Route ${req.method}:${pathname} not found`), { statusCode: 404 });
-		return finish(req, errorResponse(err, !ctx.dev), ctx);
+		return finish(req, errorResponse(err, !ctx.dev), ctx, API_HEADERS);
 	};
 }
