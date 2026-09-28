@@ -34,12 +34,21 @@ CLI
 - bun build flags live only in the CLI, same for every project
 
 
-TEMPLATE PACKAGE.JSON
-- only changes vs v1: main and scripts
-- "main": "setup.js"
-- "dev": "maxserver dev"
-- "build": "maxserver build"
-- "start": "bun dist/setup.js" (run build first)
+TEMPLATE (npx maxserver new <name>)
+- same easy setup as v1: copy templates/, rename dotfiles, fill project name, npm install maxserver@latest, ready to run
+- copy ../maxserver_old/templates, change only what v2 needs
+- keeps: server.js (unchanged), .env, .gitignore, jsconfig.json, .vscode (tasks + snippets), src/ai/BASE
+- keeps hello world routes with schemas: src/Test/hello.js + hello.schema.js (POST /hello), src/Test/welcome.js + welcome.schema.js (GET /welcome)
+- keeps model example: src/Models/user.schema.js
+- .env: remove MONGODB line
+- .gitignore: add setup.js and dist
+- jsconfig.json types: "bun" instead of "node", also installs @types/bun as dev dependency
+- package.json: only main and scripts change
+  - "main": "setup.js"
+  - "dev": "maxserver dev"
+  - "build": "maxserver build"
+  - "start": "bun dist/setup.js" (run build first)
+- command stays "new" (not v1 "maxserver <name>"), so a project name can never clash with dev / build
 
 
 DOCS

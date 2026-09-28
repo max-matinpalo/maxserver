@@ -14,7 +14,7 @@ Requires Bun.
 npm install maxserver
 ```
 
-New project:
+New project, ready to run with hello world routes and schemas:
 ```js
 npx maxserver new myapp
 ```
