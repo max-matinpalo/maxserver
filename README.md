@@ -66,7 +66,7 @@ Routes are auto registered based on one small comment per file:
 ```js
 // GET /hello
 
-export default async function handler(req, rep) {
+export default async function handler(req, res) {
 
 	console.log("GET /hello");
 	return {
@@ -88,6 +88,10 @@ If you don't want to autoregister some files, then simply don't add that magic c
 ...   
 ```
 <br/>
+
+Return data and it is sent as JSON with status 200.  
+Use `res.status(201)` and `res.header(name, value)` to change status or headers.  
+Return a `Response` for anything else (files, redirects), it is sent as is.
 
 ### 3 RULES
 1. Add magic comment
@@ -158,22 +162,6 @@ And you can also easily test any route.
 
 
 
-## Global Named Exports
-
-Every named export across your JavaScript files is automatically assigned to the Node.js `global` object on startup. This makes your utility functions, constants, or services instantly accessible anywhere in the application without manual `import` statements. The system safely ignores `default` exports and lifecycle hooks, and it will immediately halt with a clear console error if it detects duplicate variable names across different files.
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 🔐 Authentication
 JWT header and cookie based auth is preconfigured.  
 To enable auth for a route set in it's schema **auth = true**  
@@ -187,24 +175,13 @@ export default {
 };
 ```
 
-## 🛠️ Route Options
-Though we don't mostly register routes manually, we don't set route options on the register call.  
-If needed, you can wether register that route manually or just set them on the schema.
+Create tokens with **`signJwt`**:
 
 ```js
-// Inside schema
+import { signJwt } from "maxserver";
 
-export default {
-	routeOptions: {
-		config: {
-			preHandler: ...
-		},
-	},
-	...
+const token = await signJwt({ sub: userId }, { expiresIn: "7d" });
 ```
-
-<br>
-<br>
 
 ## 🧰 Error Handling
 
@@ -217,23 +194,6 @@ if (!user) throw createError(404, "User not found");
 Rule of thumb: make the message something you would want to see at 03:00 in logs.
 
 <br>
-
-
-## Autoregister Hooks
-
-Exported functions starting with `autoregister_` automatically execute on startup and receive the Fastify `app` instance. This allows files to self-inject custom hooks, plugins, or configurations locally.
-
-### Example
-```javascript
-// In any standard .js file
-export async function autoregister_custom_auth(app) {
-	app.addHook("onRequest", async (req, reply) => {
-		// Local hook logic here
-	});
-}
-```
-
-
 
 
 ## 🤖 AI Skill
@@ -250,6 +210,8 @@ It is updated together with maxserver as things evolve.
 - MongoDB as optional add-on (removed from basic version)
 - document how to pass scalar options
 - more example and best practises
+- hooks / middleware and route options (v1 had fastify hooks, autoregister_ and routeOptions)
+- websockets (Bun has them built in, needs exposing through maxserver)
 - plan production deployment and decide what maxserver should include for it (e.g. worker restart delay, clean shutdown on SIGTERM, systemd example)
 
 

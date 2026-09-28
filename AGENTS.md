@@ -12,6 +12,17 @@ WHAT STAYS
 - most of api
 
 
+REMOVED VS V1
+- global named exports: shared code is imported normally, hidden origin is bad for AI
+- only globals: ENV, createError
+
+
+HANDLER
+- signature (req, res) as in v1
+- res: plain object collecting status + headers, applied when data is wrapped with Response.json
+- returned Response is sent as is, res ignored
+
+
 SPECS
 - for routing bun built-in routes
 - responses via response.json()
