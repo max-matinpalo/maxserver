@@ -62,6 +62,13 @@ TEMPLATE PACKAGE.JSON
 - "start": "bun dist/setup.js" (run build first)
 
 
+DOCS
+- own OpenAPI 3.1 generator from route schemas + models, no swagger package
+- Scalar UI: standalone browser file (~4.5 MB) copied into maxserver package, served locally at /docs, works offline
+- no npm dependency for Scalar, update the file manually when needed
+- spec at /docs/openapi.json
+
+
 RESPONSE SCHEMAS
 - used for docs (OpenAPI)
 - no response filtering, handlers return exactly what gets sent
