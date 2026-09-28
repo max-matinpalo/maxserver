@@ -33,8 +33,7 @@ test("bundle keeps NODE_ENV as runtime value", async () => {
 	expect((await (await fetch(server.url + "/crash")).json()).message).toBe("Internal Server Error");
 });
 
-test("bundle serves docs with the embedded UI, dist has only bundle and map", async () => {
-	expect((await fetch(server.url + "/docs")).status).toBe(200);
-	expect((await fetch(server.url + "/docs/maxdoc-apidocs.js")).status).toBe(200);
+test("bundle serves the OpenAPI spec, dist has only bundle and map", async () => {
+	expect((await fetch(server.url + "/docs/openapi.json")).status).toBe(200);
 	expect(fs.readdirSync(path.join(FIXTURE, "dist")).sort()).toEqual(["bundle.js", "bundle.js.map"]);
 });

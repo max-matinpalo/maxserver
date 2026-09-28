@@ -43,7 +43,7 @@ test("new refuses an existing directory", () => {
 	expect(r.stderr.toString()).toContain("already exists");
 });
 
-test("fresh project builds, runs and serves /docs", async () => {
+test("fresh project builds, runs and serves its OpenAPI spec", async () => {
 	// Template server.js uses port 3000, tests need a free port
 	const serverJs = path.join(app, "server.js");
 	fs.writeFileSync(serverJs, fs.readFileSync(serverJs, "utf8").replace("port: 3000,", "port: Number(process.env.PORT),"));
@@ -54,7 +54,7 @@ test("fresh project builds, runs and serves /docs", async () => {
 
 	const server = await startServer({ cwd: app, entry: "dist/bundle.js" });
 	expect((await fetch(server.url + "/welcome")).status).toBe(200);
-	expect((await fetch(server.url + "/docs")).status).toBe(200);
+	expect((await fetch(server.url + "/docs/openapi.json")).status).toBe(200);
 	await server.stop();
 }, 30000);
 

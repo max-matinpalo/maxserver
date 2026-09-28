@@ -45,7 +45,7 @@ Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to 
 | `port` | `3000` | Server port |
 | `secret` | *-* | Secret used for jwt and cookies |
 | `cors` | `*` | `*` or comma separated origins, e.g. `https://a.com,https://b.com` |
-| `docs` | `true` | Set `false` to disable auto generated docs |
+| `docs` | `true` | Set `false` to not serve `/docs/openapi.json` |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
 | `routesDir` | *src* | Directory to auto collect routes. Env `ROUTESDIR` only, read by the generator |
@@ -100,7 +100,7 @@ Return a `Response` for anything else (files, redirects), it is sent as is.
 
 Imports are generated into **`setup.js`** (no dynamic imports, so the app bundles normally).  
 It registers all routes, then starts `server.js`. Don't edit it, it is regenerated.  
-`maxserver dev` regenerates it on changes, `maxserver build` generates and bundles to `dist/bundle.js`. Deploy the whole `dist/` folder (bundle, source map, docs UI).
+`maxserver dev` regenerates it on changes, `maxserver build` generates and bundles to `dist/bundle.js`. Deploy the whole `dist/` folder (bundle and source map).
 
 <br>
 
@@ -154,9 +154,8 @@ Some examples in the template folder.
 
 
 ## 📚 API Docs
-Open in your browser **`localhost:3000/docs`**  
-You should find all your routes well documented.  
-And you can also easily test any route.
+The OpenAPI 3.1 spec of all routes is served at **`localhost:3000/docs/openapi.json`**.  
+View it with the maxdoc_apidocs dev tool or any OpenAPI viewer (Scalar, Swagger UI, Postman).
 
 <br>
 

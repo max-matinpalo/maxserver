@@ -28,13 +28,11 @@
 		"src",
 		"bin",
 		"templates",
-		"vendor",
 		"index.d.ts",
 		"SKILL.md"
 	],
 	"scripts": {
-		"test": "bun test ./test",
-		"update-docs-ui": "cd ../maxdoc_apidocs && npm run build && cp dist/maxdoc-apidocs.js dist/maxdoc-apidocs.css ../maxserver/vendor/"
+		"test": "bun test ./test"
 	},
 	"dependencies": {
 		"ajv": "^8",

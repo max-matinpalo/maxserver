@@ -1,7 +1,4 @@
 import path from "node:path";
-// API docs UI from maxdoc_apidocs, embedded as text so apps bundle into one file
-import uiJs from "../vendor/maxdoc-apidocs.js" with { type: "text" };
-import uiCss from "../vendor/maxdoc-apidocs.css" with { type: "text" };
 
 const SECURITY = [{ bearerAuth: [] }, { cookieAuth: [] }];
 const NOT_SCHEMA = ["$id", "auth", "order", "tags", "summary"];
@@ -125,36 +122,13 @@ export function buildOpenApi(routes, models, info) {
 }
 
 
-function escapeHtml(text) {
-	return String(text).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
-}
-
-
 /**
- * Bun routes for /docs, /docs/openapi.json and the maxdoc-apidocs UI files.
+ * Bun route for /docs/openapi.json. No docs UI: view the spec with the
+ * maxdoc_apidocs dev tool or any OpenAPI viewer.
  */
 export function docsRoutes(openapi) {
-	const html = `<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>${escapeHtml(openapi.info?.title || "API")}</title>
-	<link rel="stylesheet" href="/docs/maxdoc-apidocs.css">
-</head>
-<body>
-	<div id="app" data-spec="/docs/openapi.json"></div>
-	<script type="module" src="/docs/maxdoc-apidocs.js"></script>
-</body>
-</html>`;
-
 	const json = JSON.stringify(openapi);
-	const send = (body, type) => () => new Response(body, { headers: { "Content-Type": type } });
-
 	return {
-		"/docs": send(html, "text/html; charset=utf-8"),
-		"/docs/openapi.json": send(json, "application/json"),
-		"/docs/maxdoc-apidocs.js": send(uiJs, "text/javascript; charset=utf-8"),
-		"/docs/maxdoc-apidocs.css": send(uiCss, "text/css; charset=utf-8"),
+		"/docs/openapi.json": () => new Response(json, { headers: { "Content-Type": "application/json" } }),
 	};
 }
