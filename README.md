@@ -196,6 +196,24 @@ Rule of thumb: make the message something you would want to see at 03:00 in logs
 <br>
 
 
+## 🪝 No Hooks
+There are no hooks or middleware. Shared logic before a handler is a normal function call at the top of the handler.  
+Everything that runs for a route is visible in its file, which is easier to follow for humans and even better for AI.
+
+```js
+// GET /teams/:teamId/settings
+import { requireTeamAdmin } from "../Utils/teams.js";
+
+export default async function (req, res) {
+
+	const team = await requireTeamAdmin(req, req.params.teamId);
+	return team.settings;
+}
+```
+
+<br>
+
+
 ## 🤖 AI Skill
 **[SKILL.md](SKILL.md)** is the skill to give AI agents that build apps with maxserver.  
 It is updated together with maxserver as things evolve.
@@ -210,7 +228,6 @@ It is updated together with maxserver as things evolve.
 - MongoDB as optional add-on (removed from basic version)
 - document how to pass scalar options
 - more example and best practises
-- hooks / middleware and route options (v1 had fastify hooks, autoregister_ and routeOptions)
 - websockets (Bun has them built in, needs exposing through maxserver)
 - plan production deployment and decide what maxserver should include for it (e.g. multiple processes with systemd instances + reusePort, clean shutdown on SIGTERM, systemd example)
 

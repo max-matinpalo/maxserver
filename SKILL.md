@@ -24,7 +24,8 @@ Implement the simplest production-ready solution using Bun, MaxServer, and ESM.
 6. Throw errors with the global helper: `throw createError(code, 'Specific failure reason')`.
 7. Return response data directly at the root. Do not add response envelopes or status fields.
 8. Move reusable logic into separate files that export named functions, and import them normally. There are no auto-globals except `createError` and `ENV`.
-9. Set status or headers with `res.status(code)` and `res.header(name, value)`. Return a `Response` only for files or redirects.
+9. No hooks or middleware exist. Put shared logic before a handler (access checks, loading entities) in a helper function and call it at the top of the handler.
+10. Set status or headers with `res.status(code)` and `res.header(name, value)`. Return a `Response` only for files or redirects.
 
 ## Route Schemas
 
