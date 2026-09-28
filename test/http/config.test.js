@@ -17,8 +17,10 @@ describe("production", () => {
 		expect(server.logs()).toContain("secret detail");
 	});
 
-	test("createError message still shown", async () => {
+	test("createError message still shown, 4xx not logged", async () => {
 		expect((await (await fetch(server.url + "/error")).json()).message).toBe("Conflict here");
+		await Bun.sleep(20);
+		expect(server.logs()).not.toContain("Conflict here");
 	});
 
 	test("no response validation", async () => {
