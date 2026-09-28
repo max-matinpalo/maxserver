@@ -8,29 +8,12 @@ GOAL
 - good for AI: predictable file locations, one place per thing, no hidden wiring, clear errors
 
 
-BIG IMPROVEMENTS
-- bun instead of nodejs
-- no fastify
-- no dynamic imports, imports generated at bundle/build time
-
-
-	
-
-
-REMOVED FROM BASIC VERSION
-- MongoDB (no db, no oid globals), add later as optional add-on
-
-
 WHAT STAYS
 - most of api
 
 
-
-
 SPECS
-- bun.serve()
 - for routing bun built-in routes
-- validation ajv v8, schemas compiled once at startup
 - responses via response.json()
 
 
@@ -41,9 +24,6 @@ ROUTE LOADING
 - server.js loaded last with import(), because static imports run before the file body; fixed path, so bundlers follow it
 - server.js stays as in v1, user writes no extra import
 - maxserver() throws clear error if no routes registered (e.g. started with bun server.js)
-- dev: maxserver dev regenerates on src/ changes and runs bun --hot setup.js
-- prod: maxserver build = generate + bun build setup.js -> dist/setup.js, no scanning at start
-- magic comments and file layout stay the same
 
 
 CLI
@@ -87,12 +67,9 @@ SOURCE LAYOUT
 - bin/generate.js: scans src/, writes setup.js
 - templates/: new project template
 - cookies: no file, Bun built-in
-- tests next to risky files (jwt.test.js), bun test
-- dependencies: ajv, ajv-formats only
 
 
 WORKERS
-- option workers (env WORKERS), default 1
 - > 1 on Linux: main process spawns that many copies with Bun.spawn, each Bun.serve with reusePort: true, kernel spreads connections
 - main process respawns crashed workers
 - dev and macOS: always one process (macOS ignores reusePort balancing, tested: all requests go to first process), log a warning if workers > 1
@@ -101,15 +78,13 @@ WORKERS
 
 
 RESPONSE SCHEMAS
-- used for docs (OpenAPI)
-- no response filtering, handlers return exactly what gets sent
-- development: validate responses against schema, log route + ajv errors, still send response
-- production: no response validation
+- dev response validation logs route + ajv errors
 - response validation uses its own ajv instance without coerceTypes, useDefaults and removeAdditional, so it never changes the response
 
 
 SPEC
-- README.md is the implementation spec, keep it in sync with decisions here
+- README.md: user-facing behavior, part of the spec
+- AGENTS.md: implementation decisions only, never repeat what README.md says
 
 
 SKILL

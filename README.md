@@ -48,6 +48,7 @@ If you define options in env, use all upper case letters.
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
 | `routesDir` | *src* | Directory to auto collect routes |
+| `workers` | `1` | Processes on Linux, one per core. macOS always 1 |
 ---
 
 <br>
@@ -241,7 +242,7 @@ It is updated together with maxserver as things evolve.
 
 
 ## About
-- Dependencies: ajv. Runs on Bun.serve(), no fastify
+- Dependencies: ajv, ajv-formats. Runs on Bun.serve(), no fastify
 - The source is simple. Everyone can read, understand and modify if needed.
 
 
