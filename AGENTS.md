@@ -1,89 +1,20 @@
-maxserver v2: Bun server setup with auto routes, validation and docs.
-v1 (Fastify): git tag v1.0.1, locally ../maxserver_old.
+maxserver v2: Bun server setup. v1 (Fastify): git tag v1.0.1.
 
+SPEC
+- The spec is .github/README.md (in .github/ so npm does not ship it).
+- When behavior changes, update .github/README.md in the same change.
+- Test requirements: test/TESTING.md. Run npm test after every change.
 
-WHERE THINGS ARE
-- .github/README.md: user-facing behavior (spec); in .github/ so GitHub shows it but npm does not ship it
-- AGENTS.md: implementation decisions only, never repeat the README
-- test/TESTING.md: test requirements
+RULES
+- Do not repeat here what the code or README shows; explain "why" in code comments.
+- Built for AI agents: predictable file locations, one file per concern, no hidden wiring, clear errors.
+- Dependencies: ajv and ajv-formats only.
+- devdocs/ holds built files: never edit them; change ~/Desktop/maxserver-docs and run npm run update-docs-ui.
 
-
-GOAL
-- must work optimal for AI agents writing and reading the code
-- every decision: check what is good for AI and what is not
-- good for AI: predictable file locations, one place per thing, no hidden wiring, clear errors
-
-
-RULES FOR WORKING HERE
-- keep .github/README.md in sync with every decision
-- no AI skill in this repo: the backend skill is developed separately and not shipped
-- after every finished feature run the full test suite: npm test
-- dependencies: ajv, ajv-formats only
-
-
-SOURCE LAYOUT
-- one file per concern, named exports, index.js only wires them together
-- only globals: ENV, createError (no auto globals from named exports, hidden origin is bad for AI)
-
-
-src/index.js — maxserver(), register(), start
-- config: maxserver() > .env > default
-- unknown options go to Bun.serve (like v1 passed them to Fastify), maxserver keeps port, hostname, routes, fetch
-- maxRequestBodySize default 1 MiB (v1 Fastify bodyLimit)
-- start() prints server.url only
-- multiple processes are a deployment concern, not maxserver: reusePort is passed through, off by default so a second server on the same port fails loudly (macOS does not balance reusePort)
-
-
-src/routes.js — wraps each handler
-- Bun built-in routes, one wrapper per route: auth, parse, validate, handler, response
-- handler (req, res) as in v1: res collects status + headers, data sent with Response.json
-- returned Response sent as is, res ignored
-- JSON body parse blocks __proto__ / constructor.prototype like Fastify
-
-
-src/validate.js — ajv
-- request instance: Fastify defaults (coerceTypes array, useDefaults, removeAdditional), schemas compiled once at start
-- response instance: dev only, no coercion / defaults / removal, so it never changes the response, logs route + ajv errors
-
-
-src/jwt.js, src/cors.js, src/headers.js, src/static.js, src/errors.js
-- jwt: HS256 only, constant time compare, token from Bearer header or token cookie
-- headers: helmet defaults without CSP and frameguard (same as v1 config)
-- static: Bun.file, blocks paths outside root and dotfiles
-- errors: v1 shape { statusCode, error, message }, 5xx message hidden in production
-- errors: one log entry per error: status, method, path, message, app file:line; stack only for 5xx; production logs only 5xx
-
-
-src/docs.js — OpenAPI 3.1 at /docs/openapi.json
-- own generator, no swagger package
-- development only: /docs dev GUI from devdocs/maxserver-docs.js + .css (built by ~/Desktop/maxserver-docs, own repo; refresh with npm run update-docs-ui)
-- devdocs/ files are read with Bun.file, never imported, so production bundles do not contain them
-- production: only /docs/openapi.json
-- start() prints "📚  <url>/docs" in development; maxserver dev opens that link once per run (--no-open: don't)
-- devdocs/ holds built files, not source, so it sits outside src/
-- other servers' specs: run ~/Desktop/maxserver-docs standalone (npm run dev, port 3002)
-
-
-bin/generate.js — writes setup.js
-- static imports of all handlers, schemas, models, then register(), then await import("./server.js")
-- why: v1 used dynamic import() at start, so apps could not be bundled
-- server.js is imported last because static imports run before the file body
-- maxserver() throws a clear error when no routes are registered (bun server.js started directly)
-
-
-bin/cli.js — new, dev, build
-- runs on Node and Bun (npx works), stops with a clear message if Bun is missing
-- dev: generate, watch src/, bun --hot setup.js, open /docs in the browser once
-- build: generate, bun build setup.js --target=bun --outdir=dist --entry-naming=bundle.[ext] --sourcemap=linked
-- output dist/: bundle.js and bundle.js.map; deploy the whole folder
-- why bundle.js: setup.js is the generated input, the output name must not look the same
-- build passes --define process.env.NODE_ENV=globalThis.process.env.NODE_ENV
-- why: bun build inlines "development", a bundled production server would run in dev mode
-- command is "new", not v1 "maxserver <name>", so a project name never clashes with dev / build
-
-
-templates/ — new project
-- v1 template, changed only where v2 needs it
-- package.json: main setup.js, scripts dev / build / start (bun dist/bundle.js)
-- .gitignore adds setup.js and dist; installs @types/bun (editors pick it up automatically)
-- no jsconfig.json: fewer files, handlers need no editor config
+DECIDED AGAINST (do not add back)
+- Globals from named exports; only globals are ENV and createError.
+- Hooks or middleware; shared logic is a helper called in the handler.
+- MongoDB or other integrations in core.
+- Worker processes; multiple processes are a deployment concern (reusePort passes through).
+- Docs UI in production or in bundles.
+- AI skill in this repo; the backend skill is developed separately.

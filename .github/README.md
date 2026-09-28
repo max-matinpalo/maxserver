@@ -40,7 +40,7 @@ export default server;
 ## ⚙️ Configure
 Configs can be passed to the init call to **maxserver()** or set in your .env file.  
 If you define options in env, use all upper case letters.  
-Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to maxserver() too.
+Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to maxserver() too. `maxRequestBodySize` defaults to 1 MiB.
 
 
 | Variable | Default | Description |

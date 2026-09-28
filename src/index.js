@@ -88,6 +88,8 @@ export default async function maxserver(config = {}) {
 		url: null,
 
 		async start() {
+			// Defaults first (1 MiB body limit like v1), then any Bun.serve option,
+			// then what maxserver must control
 			server.bun = Bun.serve({
 				maxRequestBodySize: 1048576,
 				development: dev,
