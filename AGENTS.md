@@ -69,6 +69,27 @@ DOCS
 - spec at /docs/openapi.json
 
 
+SOURCE LAYOUT
+- one file per concern, named exports, index.js only wires them together
+- src/index.js: maxserver(), register(), start with Bun.serve
+- src/routes.js: registered routes -> Bun routes, wraps each handler
+- src/validate.js: ajv + ajv-formats, request and dev response validators
+- src/cors.js: CORS headers + OPTIONS preflight
+- src/headers.js: security headers (replaces helmet)
+- src/jwt.js: HS256 signJwt / verifyJwt, auth check
+- src/static.js: static files via Bun.file, blocks ../ paths
+- src/docs.js: OpenAPI 3.1 generator + /docs page
+- src/errors.js: createError, error responses, dev error log
+- src/devSounds.js, src/getAddress.js: kept from v1
+- src/vendor/scalar.js: bundled Scalar file
+- bin/cli.js: new, dev, build
+- bin/generate.js: scans src/, writes setup.js
+- templates/: new project template
+- cookies: no file, Bun built-in
+- tests next to risky files (jwt.test.js), bun test
+- dependencies: ajv, ajv-formats only
+
+
 RESPONSE SCHEMAS
 - used for docs (OpenAPI)
 - no response filtering, handlers return exactly what gets sent
