@@ -1,4 +1,4 @@
-import { authenticate } from "./jwt.js";
+import { authenticate as authenticateJwt } from "./jwt.js";
 import { corsHeaders, fixedCorsHeaders, originHeaders, preflight } from "./cors.js";
 import { errorResponse, logError } from "./errors.js";
 import { API_HEADERS, SECURITY_HEADERS, setHeaders } from "./headers.js";
@@ -150,8 +150,12 @@ function wrap(route, ctx) {
 	return async function (req) {
 		try {
 
-			// 1. Auth
-			if (schema.auth) authenticate(req, ctx.secret);
+			// 1. Auth: the app's authenticate (its result is req.auth), else the built-in JWT
+			if (schema.auth && ctx.authenticate) {
+				const auth = await ctx.authenticate(req);
+				if (!auth) throw Object.assign(new Error("Unauthorized"), { statusCode: 401 });
+				setProp(req, "auth", auth);
+			} else if (schema.auth) authenticateJwt(req, ctx.secret);
 
 			// 2. Parse (Bun's req.params is kept and validated in place)
 			const body = req.method === "GET" || req.method === "HEAD" ? undefined : await parseBody(req);

@@ -5,6 +5,13 @@ const server = await maxserver({
 	static: "public",
 	openapiInfo: { title: "Fixture API", version: "1.2.3" },
 	reusePort: process.env.TEST_REUSEPORT === "1",
+	...(process.env.TEST_AUTHENTICATE && {
+		authenticate: req => {
+			const auth = req.headers.get("authorization");
+			if (auth === "Bearer forbidden") throw createError(403, "Forbidden here");
+			return auth === "Bearer good" && { userId: "custom" };
+		},
+	}),
 	...(process.env.TEST_ROUTESDIR && { routesDir: process.env.TEST_ROUTESDIR }),
 });
 

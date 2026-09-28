@@ -46,11 +46,12 @@ Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
 | `port` | `3000` | Server port |
-| `secret` | *-* | Secret used for jwt and cookies |
+| `secret` | *-* | Secret used for jwt and cookies; not needed with `authenticate` |
 | `cors` | `*` | `*` or comma separated origins, e.g. `https://a.com,https://b.com` |
 | `docs` | `true` | Set `false` to turn docs off. Development: `/docs` UI + spec. Production: only `/docs/openapi.json` |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
+| `authenticate` | *-* | Your own auth for routes with `auth: true`, instead of jwt. Pass to maxserver() only |
 | `routesDir` | *src* | Directory to auto collect routes. Env `ROUTESDIR` only, read by the generator |
 ---
 
@@ -185,6 +186,14 @@ Create tokens with **`signJwt`**:
 import { signJwt } from "maxserver";
 
 const token = await signJwt({ sub: userId }, { expiresIn: "7d" });
+```
+
+Own auth instead of jwt: pass **`authenticate`** to maxserver(). It runs for routes with **auth = true**, its result is **`req.auth`**. A falsy result is 401, a thrown error keeps its status. The docs then show Bearer auth only.
+
+```js
+const server = await maxserver({
+	authenticate: req => sessions.get(req.headers.get("authorization"))
+});
 ```
 
 ## 🧰 Error Handling

@@ -1,6 +1,5 @@
 import path from "node:path";
 
-const SECURITY = [{ bearerAuth: [] }, { cookieAuth: [] }];
 const NOT_SCHEMA = ["$id", "auth", "order", "tags", "summary"];
 
 
@@ -54,7 +53,7 @@ function parameters(route, schema) {
 }
 
 
-function operation(route) {
+function operation(route, security) {
 	const s = route.schema;
 	const op = {};
 
@@ -73,7 +72,7 @@ function operation(route) {
 			? { description: r.description || "Default Response", content: { "application/json": { schema: fixRefs(r) } } }
 			: { description: "Default Response" };
 
-	if (s.auth) op.security = SECURITY;
+	if (s.auth) op.security = security;
 	return op;
 }
 
@@ -95,16 +94,19 @@ function sortRoutes(routes) {
 
 /**
  * OpenAPI 3.1 document from routes with a schema and all models.
+ * The built-in JWT accepts a Bearer header or a cookie; an app's authenticate only Bearer.
  */
-export function buildOpenApi(routes, models, info) {
+export function buildOpenApi(routes, models, info, customAuth = false) {
+	const securitySchemes = customAuth
+		? { bearerAuth: { type: "http", scheme: "bearer" } }
+		: { bearerAuth: { type: "http", scheme: "bearer" }, cookieAuth: { type: "apiKey", in: "cookie", name: "token" } };
+	const security = Object.keys(securitySchemes).map(name => ({ [name]: [] }));
+
 	const doc = {
 		openapi: "3.1.0",
 		info: info || { title: "API", version: "1.0.0" },
 		components: {
-			securitySchemes: {
-				bearerAuth: { type: "http", scheme: "bearer" },
-				cookieAuth: { type: "apiKey", in: "cookie", name: "token" },
-			},
+			securitySchemes,
 			schemas: {},
 		},
 		paths: {},
@@ -115,7 +117,7 @@ export function buildOpenApi(routes, models, info) {
 	for (const r of sortRoutes(routes.filter(r => r.schema && Object.keys(r.schema).length))) {
 		const p = r.path.replace(/:(\w+)/g, "{$1}");
 		doc.paths[p] ||= {};
-		doc.paths[p][r.method.toLowerCase()] = operation(r);
+		doc.paths[p][r.method.toLowerCase()] = operation(r, security);
 	}
 
 	return doc;

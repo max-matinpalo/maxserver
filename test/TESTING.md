@@ -43,6 +43,8 @@ MUST COVER
 - valid token in header or cookie -> req.userId set
 - missing, bad signature, tampered, expired -> 401
 - alg none and any alg other than HS256 rejected
+- app authenticate option: its result is req.auth, falsy -> 401, thrown status kept,
+  secret not required, docs security Bearer only
 
 7. Errors
 - createError: right status, shape { statusCode, error, message }

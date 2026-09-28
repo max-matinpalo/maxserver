@@ -44,6 +44,7 @@ export default async function maxserver(config = {}) {
 		static: staticDir = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
 		openapiInfo,
+		authenticate,
 		routesDir,
 		...bunOptions
 	} = config;
@@ -51,8 +52,8 @@ export default async function maxserver(config = {}) {
 	if (routesDir !== undefined)
 		throw new Error("maxserver: routesDir is read by the generator, set ROUTESDIR in .env instead");
 
-	if (!secret)
-		throw new Error("maxserver: secret is required, set secret in maxserver() or SECRET in .env");
+	if (!secret && !authenticate)
+		throw new Error("maxserver: secret is required, set secret in maxserver() or SECRET in .env (or pass authenticate)");
 	if (!registry.routes)
 		throw new Error("maxserver: no routes registered. Start with `maxserver dev`, or `maxserver build` and `bun dist/bundle.js` (running server.js directly skips the generated setup.js)");
 
@@ -69,6 +70,7 @@ export default async function maxserver(config = {}) {
 	const ctx = {
 		dev,
 		secret,
+		authenticate,
 		cors: corsConfig,
 		headers: defaultHeaders(corsConfig),
 		static: setupStatic(staticDir),
@@ -78,7 +80,7 @@ export default async function maxserver(config = {}) {
 	// 4. Routes: user routes + docs
 	const routes = buildRoutes(registry.routes, ctx);
 	if (docs) {
-		const openapi = buildOpenApi(registry.routes, models, openapiInfo);
+		const openapi = buildOpenApi(registry.routes, models, openapiInfo, !!authenticate);
 		for (const [path, handler] of Object.entries(await docsRoutes(openapi, dev)))
 			routes[path] = { GET: req => finish(req, handler(), ctx) };
 	}
