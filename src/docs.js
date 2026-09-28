@@ -1,8 +1,7 @@
 import path from "node:path";
-import scalarFile from "../vendor/scalar.js" with { type: "file" };
-
-// Bundled apps: asset path is relative to the bundle
-const SCALAR_PATH = path.resolve(import.meta.dir, scalarFile);
+// API docs UI from maxdoc_apidocs, embedded as text so apps bundle into one file
+import uiJs from "../vendor/maxdoc-apidocs.js" with { type: "text" };
+import uiCss from "../vendor/maxdoc-apidocs.css" with { type: "text" };
 
 const SECURITY = [{ bearerAuth: [] }, { cookieAuth: [] }];
 const NOT_SCHEMA = ["$id", "auth", "order", "tags", "summary"];
@@ -126,47 +125,36 @@ export function buildOpenApi(routes, models, info) {
 }
 
 
-/**
- * Bun routes for /docs, /docs/openapi.json and the bundled Scalar file.
- */
-export function docsRoutes(openapi, scalar = {}) {
-	const config = {
-		url: "/docs/openapi.json",
-		hideSearch: true,
-		hiddenClients: true,
-		hideClientButton: true,
-		telemetry: false,
-		persistAuth: true,
-		showDeveloperTools: "never",
-		orderSchemaPropertiesBy: "preserve",
-		metaData: { title: "Server" },
-		authentication: { preferredSecurityScheme: "bearerAuth" },
-		customCss: `.darklight-reference a[href*="scalar.com"] { display: none !important; }`,
-		...scalar,
-	};
+function escapeHtml(text) {
+	return String(text).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+}
 
+
+/**
+ * Bun routes for /docs, /docs/openapi.json and the maxdoc-apidocs UI files.
+ */
+export function docsRoutes(openapi) {
 	const html = `<!doctype html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>${openapi.info?.title || "API"}</title>
+	<title>${escapeHtml(openapi.info?.title || "API")}</title>
+	<link rel="stylesheet" href="/docs/maxdoc-apidocs.css">
 </head>
 <body>
-	<div id="app"></div>
-	<script src="/docs/scalar.js"></script>
-	<script>Scalar.createApiReference("#app", ${JSON.stringify(config).replace(/</g, "\\u003c")});</script>
+	<div id="app" data-spec="/docs/openapi.json"></div>
+	<script type="module" src="/docs/maxdoc-apidocs.js"></script>
 </body>
 </html>`;
 
 	const json = JSON.stringify(openapi);
-	const scalarJs = Bun.file(SCALAR_PATH);
+	const send = (body, type) => () => new Response(body, { headers: { "Content-Type": type } });
 
 	return {
-		"/docs": () => new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } }),
-		"/docs/openapi.json": () => new Response(json, { headers: { "Content-Type": "application/json" } }),
-		"/docs/scalar.js": () => new Response(scalarJs, {
-			headers: { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=86400" },
-		}),
+		"/docs": send(html, "text/html; charset=utf-8"),
+		"/docs/openapi.json": send(json, "application/json"),
+		"/docs/maxdoc-apidocs.js": send(uiJs, "text/javascript; charset=utf-8"),
+		"/docs/maxdoc-apidocs.css": send(uiCss, "text/css; charset=utf-8"),
 	};
 }

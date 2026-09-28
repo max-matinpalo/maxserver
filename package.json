@@ -33,7 +33,8 @@
 		"SKILL.md"
 	],
 	"scripts": {
-		"test": "bun test ./test"
+		"test": "bun test ./test",
+		"update-docs-ui": "cd ../maxdoc_apidocs && npm run build && cp dist/maxdoc-apidocs.js dist/maxdoc-apidocs.css ../maxserver/vendor/"
 	},
 	"dependencies": {
 		"ajv": "^8",

@@ -54,10 +54,11 @@ src/jwt.js, src/cors.js, src/headers.js, src/static.js, src/errors.js
 - errors: one log entry per error: status, method, path, message, app file:line; stack only for 5xx; production logs only 5xx
 
 
-src/docs.js — OpenAPI 3.1 + Scalar
+src/docs.js — OpenAPI 3.1 + maxdoc-apidocs UI
 - own generator, no swagger package
-- Scalar: vendor/scalar.js, @scalar/api-reference 1.72.1 dist/browser/standalone.js, update manually
-- imported with { type: "file" }: bun build copies it next to the bundle, path resolved from import.meta.dir
+- UI: vendor/maxdoc-apidocs.js + .css, built from ~/Desktop/maxdoc_apidocs; refresh with npm run update-docs-ui
+- /docs is a small HTML page with data-spec="/docs/openapi.json" that loads the two UI files
+- imported with { type: "text" }, so apps still bundle into one bundle.js
 - vendor/ is not source, so outside src/
 
 
@@ -72,7 +73,7 @@ bin/cli.js — new, dev, build
 - runs on Node and Bun (npx works), stops with a clear message if Bun is missing
 - dev: generate, watch src/, bun --hot setup.js
 - build: generate, bun build setup.js --target=bun --outdir=dist --entry-naming=bundle.[ext] --sourcemap=linked
-- output dist/: bundle.js (app), bundle.js.map, scalar-<hash>.js (docs UI); deploy the whole folder
+- output dist/: bundle.js (app, docs UI included) and bundle.js.map; deploy the whole folder
 - why bundle.js: setup.js is the generated input, the output name must not look the same
 - build passes --define process.env.NODE_ENV=globalThis.process.env.NODE_ENV
 - why: bun build inlines "development", a bundled production server would run in dev mode

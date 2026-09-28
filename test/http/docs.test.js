@@ -12,15 +12,24 @@ beforeAll(async () => {
 afterAll(() => server.stop());
 
 
-test("/docs page loads the bundled Scalar file", async () => {
+test("/docs page loads the maxdoc-apidocs UI with the spec url", async () => {
 	const html = await (await fetch(server.url + "/docs")).text();
-	expect(html).toContain('<script src="/docs/scalar.js">');
-	expect(html).toContain("/docs/openapi.json");
+	expect(html).toContain('<script type="module" src="/docs/maxdoc-apidocs.js">');
+	expect(html).toContain('<link rel="stylesheet" href="/docs/maxdoc-apidocs.css">');
+	expect(html).toContain('data-spec="/docs/openapi.json"');
+	expect(html).toContain("<title>Fixture API</title>");
 
-	const js = await fetch(server.url + "/docs/scalar.js");
+	const js = await fetch(server.url + "/docs/maxdoc-apidocs.js");
 	expect(js.status).toBe(200);
 	expect(js.headers.get("content-type")).toContain("javascript");
-	expect((await js.text()).length).toBeGreaterThan(1_000_000);
+	expect((await js.text()).length).toBeGreaterThan(10_000);
+
+	const css = await fetch(server.url + "/docs/maxdoc-apidocs.css");
+	expect(css.headers.get("content-type")).toContain("text/css");
+});
+
+test("no Scalar left", async () => {
+	expect((await fetch(server.url + "/docs/scalar.js")).status).toBe(404);
 });
 
 test("OpenAPI 3.1 with configured info", () => {

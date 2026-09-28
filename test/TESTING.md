@@ -63,7 +63,7 @@ MUST COVER
 - ../ and %2e%2e blocked
 
 11. Docs
-- /docs loads bundled Scalar file
+- /docs loads the embedded maxdoc-apidocs UI with the spec url
 - openapi.json valid OpenAPI 3.1: {id} paths, query params, body, responses
 - models in components, $ref rewritten
 - auth routes have security

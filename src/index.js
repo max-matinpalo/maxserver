@@ -44,7 +44,6 @@ export default async function maxserver(config = {}) {
 		static: staticDir = process.env.STATIC,
 		public: isPublic = process.env.PUBLIC === "true",
 		openapiInfo,
-		scalar = {},
 		routesDir,
 		...bunOptions
 	} = config;
@@ -78,7 +77,7 @@ export default async function maxserver(config = {}) {
 	const routes = buildRoutes(registry.routes, ctx);
 	if (docs) {
 		const openapi = buildOpenApi(registry.routes, models, openapiInfo);
-		for (const [path, handler] of Object.entries(docsRoutes(openapi, scalar)))
+		for (const [path, handler] of Object.entries(docsRoutes(openapi)))
 			routes[path] = { GET: req => finish(req, handler(), ctx) };
 	}
 

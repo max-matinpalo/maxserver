@@ -11,8 +11,6 @@ export interface MaxserverConfig {
 	static?: string;
 	public?: boolean;
 	openapiInfo?: { title: string; version: string;[key: string]: unknown };
-	/** Extra Scalar configuration */
-	scalar?: Record<string, unknown>;
 	/** Passed to Bun.serve, default 1 MiB */
 	maxRequestBodySize?: number;
 	reusePort?: boolean;
