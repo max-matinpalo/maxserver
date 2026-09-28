@@ -1,5 +1,3 @@
-import os from "node:os";
-
 import { createError } from "./errors.js";
 import { configureJwt } from "./jwt.js";
 import { setupCors } from "./cors.js";
@@ -31,14 +29,6 @@ const registry = { routes: null, models: [] };
 export function register({ routes = [], models = [] } = {}) {
 	registry.routes = routes;
 	registry.models = models;
-}
-
-
-function lanIp() {
-	for (const list of Object.values(os.networkInterfaces()))
-		for (const net of list || [])
-			if (net.family === "IPv4" && !net.internal) return net.address;
-	return null;
 }
 
 
@@ -111,9 +101,6 @@ export default async function maxserver(config = {}) {
 
 			server.url = server.bun.url.href.replace(/\/$/, "");
 			console.log("🟢 ", server.url);
-
-			const ip = isPublic && lanIp();
-			if (ip) console.log("🌐 ", `http://${ip}:${server.bun.port}`);
 			return server;
 		},
 
