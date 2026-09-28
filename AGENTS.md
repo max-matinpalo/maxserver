@@ -85,5 +85,6 @@ bin/cli.js — new, dev, build
 templates/ — new project
 - v1 template, changed only where v2 needs it
 - package.json: main setup.js, scripts dev / build / start (bun dist/bundle.js)
-- .gitignore adds setup.js and dist, jsconfig types "bun", installs @types/bun
+- .gitignore adds setup.js and dist; installs @types/bun (editors pick it up automatically)
+- no jsconfig.json: fewer files, handlers need no editor config
 - new copies SKILL.md as AGENTS.md plus CLAUDE.md with "@AGENTS.md", SKILL.md stays the single source
