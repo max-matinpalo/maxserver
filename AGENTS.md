@@ -49,3 +49,8 @@ RESPONSE SCHEMAS
 
 SPEC
 - README.md is the implementation spec, keep it in sync with decisions here
+
+
+SKILL
+- SKILL.md is the skill given to AI agents that build apps with maxserver
+- update it whenever a decision changes how apps are written

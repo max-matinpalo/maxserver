@@ -12,6 +12,12 @@ No Fastify. Runs on `Bun.serve()` with Bun's built-in routes.
 
 <br>
 
+## 🤖 AI Skill
+**[SKILL.md](SKILL.md)** is the skill to give AI agents that build apps with maxserver.  
+Add it to your agent's skills. It is updated together with maxserver as things evolve.
+
+<br>
+
 ## Install
 Requires Bun 1.3+.
 
