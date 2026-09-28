@@ -50,4 +50,4 @@ Implement the simplest production-ready solution using Bun, MaxServer, MongoDB, 
 - Store reusable model schemas in `Models/`, such as `Models/User.schema.js`.
 - Store generic utilities shared by multiple domains in `Utils/`, such as `Utils/example.js`.
 - Never manually import handlers or route schemas.
-- Never edit `.maxserver/routes.js`; it is generated. Read it to see all routes.
+- Never edit `setup.js`; it is generated. Read it to see all routes.

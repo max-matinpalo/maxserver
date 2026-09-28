@@ -24,10 +24,8 @@ npx maxserver new myapp
 ## Setup
 ```js
 import maxserver from "maxserver";
-import routes from "./.maxserver/routes.js";
 
 const server = await maxserver({
-	routes,
 	port: 3000,
 	secret: "your_secret"
 });
@@ -44,7 +42,6 @@ If you define options in env, use all upper case letters.
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
-| `routes` | *-* | Generated routes, see Auto Routing |
 | `port` | `3000` | Server port |
 | `secret` | *-* | Secret used for jwt and cookies |
 | `cors` | `*` | Default all allowed |
@@ -98,8 +95,9 @@ If you don't want to autoregister some files, then simply don't add that magic c
 2. Default export handler
 3. One handler per file 
 
-Imports are generated into **`.maxserver/routes.js`** (no dynamic imports, so the app bundles normally).  
-`maxserver dev` regenerates it on changes, `maxserver build` generates and bundles to `dist/server.js`.
+Imports are generated into **`setup.js`** (no dynamic imports, so the app bundles normally).  
+It registers all routes, then starts `server.js`. Don't edit it, it is regenerated.  
+`maxserver dev` regenerates it on changes, `maxserver build` generates and bundles to `dist/setup.js`.
 
 <br>
 
