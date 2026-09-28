@@ -25,7 +25,7 @@ test("maxserver build bundles into one file with no route imports left", () => {
 });
 
 test("bundle answers requests", async () => {
-	expect(await (await fetch(server.url + "/welcome")).json()).toEqual({ message: "Weclome to maxserver 😉 - Updated" });
+	expect(await (await fetch(server.url + "/welcome")).json()).toEqual({ message: "Welcome to maxserver 😉" });
 });
 
 test("bundle keeps NODE_ENV as runtime value", async () => {

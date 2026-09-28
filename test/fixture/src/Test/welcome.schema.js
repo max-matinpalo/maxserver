@@ -8,7 +8,7 @@ export default {
 			properties: {
 				message: {
 					type: "string",
-					example: "Weclome to maxserver 😉 - Updated"
+					example: "Welcome to maxserver 😉"
 				}
 			},
 			required: ["message"]

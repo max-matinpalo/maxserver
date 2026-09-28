@@ -19,7 +19,7 @@ test("v1 template route GET /welcome -> 200 JSON", async () => {
 	const r = await get("/welcome");
 	expect(r.status).toBe(200);
 	expect(r.headers.get("content-type")).toContain("application/json");
-	expect(await r.json()).toEqual({ message: "Weclome to maxserver 😉 - Updated" });
+	expect(await r.json()).toEqual({ message: "Welcome to maxserver 😉" });
 });
 
 test("v1 template route POST /hello uses body", async () => {
