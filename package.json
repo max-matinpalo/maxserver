@@ -1,7 +1,7 @@
 {
 	"name": "maxserver",
 	"version": "2.0.0",
-	"description": "Bun server setup with auto routes, validation and docs",
+	"description": "Bun server setup",
 	"author": "Max Matinpalo",
 	"type": "module",
 	"license": "MIT",
