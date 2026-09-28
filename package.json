@@ -8,7 +8,7 @@
 	"homepage": "https://github.com/max-matinpalo/maxserver#readme",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/max-matinpalo/maxserver.git"
+		"url": "git+https://github.com/max-matinpalo/maxserver.git"
 	},
 	"bugs": {
 		"url": "https://github.com/max-matinpalo/maxserver/issues"
