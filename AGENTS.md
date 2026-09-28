@@ -80,7 +80,8 @@ SOURCE LAYOUT
 - src/static.js: static files via Bun.file, blocks ../ paths
 - src/docs.js: OpenAPI 3.1 generator + /docs page
 - src/errors.js: createError, error responses, dev error log
-- src/devSounds.js, src/getAddress.js: kept from v1
+- src/devSounds.js: kept from v1
+- no getAddress.js: start() prints server.url, with public: true also the LAN IP (few lines in index.js), no PUBLIC_IP override
 - src/vendor/scalar.js: bundled Scalar file
 - bin/cli.js: new, dev, build
 - bin/generate.js: scans src/, writes setup.js
