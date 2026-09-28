@@ -27,7 +27,7 @@
 	"files": [
 		"src",
 		"bin",
-		"templates",
+		"template",
 		"devdocs",
 		"index.d.ts"
 	],

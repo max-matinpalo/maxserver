@@ -54,7 +54,7 @@ function cmdNew(name, args) {
 
 	// 1. Copy template
 	console.log(`🚀 Setting up "${name}"`);
-	fs.cpSync(path.join(PKG_DIR, "templates"), target, { recursive: true });
+	fs.cpSync(path.join(PKG_DIR, "template"), target, { recursive: true });
 
 	// 2. Dotfiles
 	for (const f of ["env", "gitignore"]) {
