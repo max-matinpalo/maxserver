@@ -2,10 +2,11 @@
 	"name": "__NAME__",
 	"version": "0.1.0",
 	"description": "",
-	"main": "server.js",
+	"main": "setup.js",
 	"scripts": {
-		"start": "node server.js",
-		"dev": "maxserver-watcher"
+		"dev": "maxserver dev",
+		"build": "maxserver build",
+		"start": "bun dist/setup.js"
 	},
 	"type": "module",
 	"private": "true",
