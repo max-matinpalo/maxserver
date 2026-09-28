@@ -19,17 +19,23 @@ Add it to your agent's skills. It is updated together with maxserver as things e
 <br>
 
 ## Install
-Requires Bun 1.3+.
-
-```sh
-bun add maxserver
-```
+Published on npm, install with npm as usual.  
+Bun 1.3+ must be installed, it runs the server.
 
 New project from template:
 
 ```sh
-bunx maxserver init myapp
+npx maxserver new myapp
 ```
+
+Existing project:
+
+```sh
+npm install maxserver
+```
+
+The `maxserver` CLI runs on Node or Bun. It stops with a clear message if Bun is missing.  
+`dev` and `build` start Bun themselves.
 
 <br>
 
@@ -60,7 +66,7 @@ export default server;
 | `maxserver dev` | Generates routes, watches `src/`, regenerates on change, runs `bun --hot server.js` |
 | `maxserver build` | Generates routes, bundles with `bun build` into `dist/server.js` |
 | `bun dist/server.js` | Runs production build, no file scanning at start |
-| `maxserver init <name>` | Creates a new project from the template |
+| `maxserver new <name>` | Creates a new project from the template |
 
 Template `package.json` scripts: `dev`, `build`, `start` mapped to the rows above.
 
@@ -319,7 +325,7 @@ macOS, development only. Success sound for JSON responses < 400, error sound for
 - `routeOptions` removed (Fastify specific).
 - Response schemas no longer filter output.
 - Two magic comments in one file is an error, not a warning.
-- `maxserver init <name>` instead of `maxserver <name>`.
+- `maxserver new <name>` instead of `maxserver <name>`.
 
 <br>
 
