@@ -48,6 +48,7 @@ TEMPLATE (npx maxserver new <name>)
   - "dev": "maxserver dev"
   - "build": "maxserver build"
   - "start": "bun dist/setup.js" (run build first)
+- AI setup: new copies maxserver SKILL.md into the project as AGENTS.md, plus CLAUDE.md containing "@AGENTS.md" (Claude Code reads CLAUDE.md). SKILL.md stays the single source, no copy in templates/
 - command stays "new" (not v1 "maxserver <name>"), so a project name can never clash with dev / build
 
 
