@@ -14,12 +14,8 @@
 		"url": "https://github.com/max-matinpalo/maxserver/issues"
 	},
 	"main": "src/index.js",
-	"types": "index.d.ts",
 	"exports": {
-		".": {
-			"types": "./index.d.ts",
-			"default": "./src/index.js"
-		}
+		".": "./src/index.js"
 	},
 	"bin": {
 		"maxserver": "bin/cli.js"
@@ -28,8 +24,7 @@
 		"src",
 		"bin",
 		"template",
-		"devdocs",
-		"index.d.ts"
+		"devdocs"
 	],
 	"scripts": {
 		"test": "bun test ./test"

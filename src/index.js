@@ -10,7 +10,7 @@ export { createError } from "./errors.js";
 export { signJwt, verifyJwt } from "./jwt.js";
 
 
-// Framework globals, typed in index.d.ts
+// Framework globals
 globalThis.createError = createError;
 globalThis.ENV = {
 	...process.env,
