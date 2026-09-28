@@ -2,7 +2,7 @@ import { test, expect, beforeAll, afterAll } from "bun:test";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { serveStatic } from "./static.js";
+import { serveStatic } from "../../src/static.js";
 
 let base, root;
 

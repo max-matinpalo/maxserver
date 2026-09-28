@@ -1,6 +1,6 @@
 import { test, expect, beforeAll, afterAll } from "bun:test";
 import { createHmac } from "node:crypto";
-import { prepareFixture, startServer } from "./helpers.js";
+import { prepareFixture, startServer } from "../helpers.js";
 
 let server;
 

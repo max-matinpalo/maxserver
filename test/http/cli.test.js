@@ -2,7 +2,7 @@ import { test, expect, beforeAll, afterAll } from "bun:test";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { ROOT, prepareFixture, startServer } from "./helpers.js";
+import { ROOT, prepareFixture, startServer } from "../helpers.js";
 
 const CLI = path.join(ROOT, "bin/cli.js");
 let tmp, app;

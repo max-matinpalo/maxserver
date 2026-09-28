@@ -4,16 +4,13 @@ import { errorResponse, logDevError } from "./errors.js";
 import { SECURITY_HEADERS, setHeaders } from "./headers.js";
 import { compileRoute, validatePart, checkResponse } from "./validate.js";
 import { serveStatic } from "./static.js";
-import { playSound } from "./devSounds.js";
 
 
 /**
- * Common end of every response: CORS + security headers, dev sound.
+ * Common end of every response: CORS + security headers.
  */
 export function finish(req, response, ctx) {
-	const res = setHeaders(response, { ...corsHeaders(req, ctx.cors), ...SECURITY_HEADERS });
-	if (ctx.sounds) playSound(req.url, res);
-	return res;
+	return setHeaders(response, { ...corsHeaders(req, ctx.cors), ...SECURITY_HEADERS });
 }
 
 

@@ -1,5 +1,5 @@
 import path from "node:path";
-import scalarFile from "./vendor/scalar.js" with { type: "file" };
+import scalarFile from "../vendor/scalar.js" with { type: "file" };
 
 // Bundled apps: asset path is relative to the bundle
 const SCALAR_PATH = path.resolve(import.meta.dir, scalarFile);

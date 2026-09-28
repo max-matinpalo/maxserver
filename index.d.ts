@@ -12,8 +12,6 @@ export interface MaxserverConfig {
 	openapiInfo?: { title: string; version: string;[key: string]: unknown };
 	/** Extra Scalar configuration */
 	scalar?: Record<string, unknown>;
-	/** Dev sounds on macOS, default true */
-	sounds?: boolean;
 	/** Passed to Bun.serve, default 1 MiB */
 	maxRequestBodySize?: number;
 	reusePort?: boolean;

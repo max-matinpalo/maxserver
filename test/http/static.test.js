@@ -1,5 +1,5 @@
 import { test, expect, beforeAll, afterAll } from "bun:test";
-import { prepareFixture, startServer, rawGet } from "./helpers.js";
+import { prepareFixture, startServer, rawGet } from "../helpers.js";
 
 let server;
 

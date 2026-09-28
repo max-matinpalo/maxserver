@@ -1,6 +1,6 @@
 import { test, expect } from "bun:test";
 import { createHmac } from "node:crypto";
-import { signJwt, verifyJwt, configureJwt } from "./jwt.js";
+import { signJwt, verifyJwt, configureJwt } from "../../src/jwt.js";
 
 configureJwt("unit_secret");
 

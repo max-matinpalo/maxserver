@@ -84,9 +84,9 @@ SOURCE LAYOUT
 - src/static.js: static files via Bun.file, blocks ../ paths
 - src/docs.js: OpenAPI 3.1 generator + /docs page
 - src/errors.js: createError, error responses, dev error log
-- src/devSounds.js: kept from v1
 - no getAddress.js: start() prints server.url, with public: true also the LAN IP (few lines in index.js), no PUBLIC_IP override
-- src/vendor/scalar.js: bundled Scalar file
+- vendor/scalar.js: bundled Scalar file (not source, so outside src/)
+- test/: whole test suite, see test/TESTING.md
 - bin/cli.js: new, dev, build
 - bin/generate.js: scans src/, writes setup.js
 - templates/: new project template
@@ -117,5 +117,5 @@ SKILL
 
 
 TESTING
-- test suite requirements in TESTING.md
-- whenever a new feature is finished, run the full test suite (bun test)
+- all tests and test instructions in test/, requirements in test/TESTING.md
+- whenever a new feature is finished, run the full test suite (npm test)

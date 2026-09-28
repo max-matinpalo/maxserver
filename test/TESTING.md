@@ -1,9 +1,10 @@
 TESTING
-- runner: bun test, no extra dependencies, one command runs all
+- runner: bun test, no extra dependencies, one command runs all: npm test
+- everything test related lives in test/: http/, unit/, fixture/, helpers.js, this file
 - fast: whole suite under ~10 s, no network, no external services
 - every test server on port 0 (free port)
-- main style: HTTP tests, real server with fixture app in test/fixture/, real requests
-- unit tests only for risky logic (jwt, generator, OpenAPI conversion, static path guard), next to the file: jwt.test.js
+- main style: HTTP tests in test/http/, real server with fixture app in test/fixture/, real requests
+- unit tests only for risky logic (jwt, generator, OpenAPI conversion, static path guard) in test/unit/
 - test names describe behavior, e.g. "expired token -> 401"
 - fixture includes v1 template routes (Test/hello, welcome) to guard v1 compatibility
 
@@ -81,4 +82,4 @@ MUST COVER
 
 
 NOT TESTED
-- dev sounds (disabled in tests), watcher restart timing, performance benchmarks
+- watcher restart timing, performance benchmarks

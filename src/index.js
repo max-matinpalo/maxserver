@@ -7,7 +7,6 @@ import { setupStatic } from "./static.js";
 import { createValidators } from "./validate.js";
 import { buildOpenApi, docsRoutes } from "./docs.js";
 import { buildRoutes, fallback, finish } from "./routes.js";
-import { soundsEnabled } from "./devSounds.js";
 
 export { createError } from "./errors.js";
 export { signJwt, verifyJwt } from "./jwt.js";
@@ -56,7 +55,6 @@ export default async function maxserver(config = {}) {
 		public: isPublic = process.env.PUBLIC === "true",
 		openapiInfo,
 		scalar = {},
-		sounds = true,
 		...bunOptions
 	} = config;
 
@@ -79,7 +77,6 @@ export default async function maxserver(config = {}) {
 		secret,
 		cors: setupCors(cors, !dev),
 		static: setupStatic(staticDir),
-		sounds: soundsEnabled({ sounds, dev }),
 		ajvs: createValidators(models),
 	};
 

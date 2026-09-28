@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { buildOpenApi } from "./docs.js";
+import { buildOpenApi } from "../../src/docs.js";
 
 const models = [{ $id: "User", auth: true, tags: ["User"], summary: "x", type: "object", properties: { name: { type: "string" } } }];
 

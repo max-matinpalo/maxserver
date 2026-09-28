@@ -26,15 +26,14 @@
 	},
 	"files": [
 		"src",
-		"!src/**/*.test.js",
 		"bin",
-		"!bin/**/*.test.js",
 		"templates",
+		"vendor",
 		"index.d.ts",
 		"SKILL.md"
 	],
 	"scripts": {
-		"test": "bun test"
+		"test": "bun test ./test"
 	},
 	"dependencies": {
 		"ajv": "^8",

@@ -2,7 +2,7 @@ import { test, expect, beforeEach, afterEach } from "bun:test";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { collect, generate } from "./generate.js";
+import { collect, generate } from "../../bin/generate.js";
 
 let root;
 

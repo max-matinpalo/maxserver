@@ -1,7 +1,7 @@
 import { test, expect, beforeAll, afterAll } from "bun:test";
 import fs from "node:fs";
 import path from "node:path";
-import { FIXTURE, ROOT, prepareFixture, startServer } from "./helpers.js";
+import { FIXTURE, ROOT, prepareFixture, startServer } from "../helpers.js";
 
 let server;
 
