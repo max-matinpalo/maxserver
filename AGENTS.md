@@ -3,8 +3,8 @@ v1 (Fastify): git tag v1.0.1, locally ../maxserver_old.
 
 
 WHERE THINGS ARE
-- README.md: user-facing behavior (spec)
-- AGENTS.md: implementation decisions only, never repeat README.md
+- .github/README.md: user-facing behavior (spec); in .github/ so GitHub shows it but npm does not ship it
+- AGENTS.md: implementation decisions only, never repeat the README
 - test/TESTING.md: test requirements
 - SKILL.md: skill for AI agents building apps with maxserver
 
@@ -16,7 +16,7 @@ GOAL
 
 
 RULES FOR WORKING HERE
-- keep README.md and SKILL.md in sync with every decision
+- keep .github/README.md and SKILL.md in sync with every decision
 - after every finished feature run the full test suite: npm test
 - dependencies: ajv, ajv-formats only
 

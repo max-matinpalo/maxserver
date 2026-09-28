@@ -219,7 +219,7 @@ export default async function (req, res) {
 
 
 ## 🤖 AI Skill
-**[SKILL.md](SKILL.md)** is the skill to give AI agents that build apps with maxserver.  
+**[SKILL.md](../SKILL.md)** is the skill to give AI agents that build apps with maxserver.  
 It is updated together with maxserver as things evolve.
 
 
