@@ -18,11 +18,11 @@ afterAll(() => fs.rmSync(tmp, { recursive: true, force: true }));
 
 
 test("new copies template and renames dotfiles", () => {
-	for (const f of [".env", ".gitignore", ".vscode/tasks.json", "src/.vscode/tasks.json", "jsconfig.json", "server.js",
+	for (const f of [".env", ".gitignore", "jsconfig.json", "server.js",
 		"src/Test/hello.js", "src/Test/hello.schema.js", "src/Test/welcome.js", "src/Test/welcome.schema.js", "src/Models/user.schema.js"])
 		expect(`${f} ${fs.existsSync(path.join(app, f))}`).toBe(`${f} true`);
 
-	for (const f of ["env", "gitignore", "vscode"]) expect(fs.existsSync(path.join(app, f))).toBe(false);
+	for (const f of ["env", "gitignore"]) expect(fs.existsSync(path.join(app, f))).toBe(false);
 });
 
 test("new fills project name and v2 scripts", () => {

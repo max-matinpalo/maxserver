@@ -61,13 +61,6 @@ function cmdNew(name, args) {
 		if (fs.existsSync(src)) fs.renameSync(src, path.join(target, "." + f));
 	}
 
-	const vscode = path.join(target, "vscode");
-	if (fs.existsSync(vscode)) {
-		fs.mkdirSync(path.join(target, "src"), { recursive: true });
-		fs.cpSync(vscode, path.join(target, "src", ".vscode"), { recursive: true });
-		fs.renameSync(vscode, path.join(target, ".vscode"));
-	}
-
 	// 3. Project name
 	const pkgPath = path.join(target, "package.json");
 	fs.writeFileSync(pkgPath, fs.readFileSync(pkgPath, "utf8").replace(/__NAME__/g, path.basename(name)));
