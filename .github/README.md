@@ -218,11 +218,6 @@ export default async function (req, res) {
 <br>
 
 
-## 🤖 AI Skill
-**[SKILL.md](../SKILL.md)** is the skill to give AI agents that build apps with maxserver.  
-It is updated together with maxserver as things evolve.
-
-
 ## About
 - Dependencies: ajv, ajv-formats. Runs on Bun.serve(), no fastify
 - The source is simple. Everyone can read, understand and modify if needed.

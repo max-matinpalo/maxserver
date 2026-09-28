@@ -66,11 +66,7 @@ function cmdNew(name, args) {
 	const pkgPath = path.join(target, "package.json");
 	fs.writeFileSync(pkgPath, fs.readFileSync(pkgPath, "utf8").replace(/__NAME__/g, path.basename(name)));
 
-	// 4. AI setup: skill as AGENTS.md, CLAUDE.md imports it
-	fs.copyFileSync(path.join(PKG_DIR, "SKILL.md"), path.join(target, "AGENTS.md"));
-	fs.writeFileSync(path.join(target, "CLAUDE.md"), "@AGENTS.md\n");
-
-	// 5. Install
+	// 4. Install
 	if (!args.includes("--no-install")) {
 		console.log("📦 Installing maxserver");
 		execSync("npm install maxserver@latest && npm install -D @types/bun", { cwd: target, stdio: "inherit" });

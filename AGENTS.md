@@ -6,7 +6,6 @@ WHERE THINGS ARE
 - .github/README.md: user-facing behavior (spec); in .github/ so GitHub shows it but npm does not ship it
 - AGENTS.md: implementation decisions only, never repeat the README
 - test/TESTING.md: test requirements
-- SKILL.md: skill for AI agents building apps with maxserver
 
 
 GOAL
@@ -16,7 +15,8 @@ GOAL
 
 
 RULES FOR WORKING HERE
-- keep .github/README.md and SKILL.md in sync with every decision
+- keep .github/README.md in sync with every decision
+- no AI skill in this repo: the backend skill is developed separately and not shipped
 - after every finished feature run the full test suite: npm test
 - dependencies: ajv, ajv-formats only
 
@@ -87,4 +87,3 @@ templates/ — new project
 - package.json: main setup.js, scripts dev / build / start (bun dist/bundle.js)
 - .gitignore adds setup.js and dist; installs @types/bun (editors pick it up automatically)
 - no jsconfig.json: fewer files, handlers need no editor config
-- new copies SKILL.md as AGENTS.md plus CLAUDE.md with "@AGENTS.md", SKILL.md stays the single source

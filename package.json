@@ -29,8 +29,7 @@
 		"bin",
 		"templates",
 		"devdocs",
-		"index.d.ts",
-		"SKILL.md"
+		"index.d.ts"
 	],
 	"scripts": {
 		"test": "bun test ./test",

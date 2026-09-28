@@ -32,9 +32,9 @@ test("new fills project name and v2 scripts", () => {
 	expect(pkg.scripts).toEqual({ dev: "maxserver dev", build: "maxserver build", start: "bun dist/bundle.js" });
 });
 
-test("new adds AI setup: SKILL.md as AGENTS.md, CLAUDE.md imports it", () => {
-	expect(fs.readFileSync(path.join(app, "AGENTS.md"), "utf8")).toBe(fs.readFileSync(path.join(ROOT, "SKILL.md"), "utf8"));
-	expect(fs.readFileSync(path.join(app, "CLAUDE.md"), "utf8")).toBe("@AGENTS.md\n");
+test("new adds no AI files, the skill is not part of maxserver", () => {
+	expect(fs.existsSync(path.join(app, "AGENTS.md"))).toBe(false);
+	expect(fs.existsSync(path.join(app, "CLAUDE.md"))).toBe(false);
 });
 
 test("new refuses an existing directory", () => {
