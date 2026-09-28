@@ -56,12 +56,12 @@ src/jwt.js, src/cors.js, src/headers.js, src/static.js, src/errors.js
 
 src/docs.js — OpenAPI 3.1 at /docs/openapi.json
 - own generator, no swagger package
-- development only: /docs dev GUI from vendor/maxdoc-apidocs.js + .css (built by ~/Desktop/maxdoc_apidocs, own repo; refresh with npm run update-docs-ui)
+- development only: /docs dev GUI from vendor/maxserver-docs.js + .css (built by ~/Desktop/maxserver-docs, own repo; refresh with npm run update-docs-ui)
 - vendor files are read with Bun.file, never imported, so production bundles do not contain them
 - production: only /docs/openapi.json
 - start() prints "📚  <url>/docs" in development; maxserver dev opens that link once per run (--no-open: don't)
 - vendor/ is not source, so outside src/
-- other servers' specs: run ~/Desktop/maxdoc_apidocs standalone (npm run dev, port 3002)
+- other servers' specs: run ~/Desktop/maxserver-docs standalone (npm run dev, port 3002)
 
 
 bin/generate.js — writes setup.js

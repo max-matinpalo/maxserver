@@ -15,13 +15,13 @@ afterAll(() => server.stop());
 test("development: /docs dev GUI loads the spec, its files are served", async () => {
 	const html = await (await fetch(server.url + "/docs")).text();
 	expect(html).toContain('data-spec="/docs/openapi.json"');
-	expect(html).toContain('<script type="module" src="/docs/maxdoc-apidocs.js">');
+	expect(html).toContain('<script type="module" src="/docs/maxserver-docs.js">');
 	expect(html).toContain("<title>Fixture API</title>");
 
-	const js = await fetch(server.url + "/docs/maxdoc-apidocs.js");
+	const js = await fetch(server.url + "/docs/maxserver-docs.js");
 	expect(js.headers.get("content-type")).toContain("javascript");
 	expect((await js.text()).length).toBeGreaterThan(10_000);
-	expect((await fetch(server.url + "/docs/maxdoc-apidocs.css")).headers.get("content-type")).toContain("text/css");
+	expect((await fetch(server.url + "/docs/maxserver-docs.css")).headers.get("content-type")).toContain("text/css");
 });
 
 test("development: docs link printed for maxserver dev to open", () => {
@@ -32,7 +32,7 @@ test("production: only /docs/openapi.json, no dev GUI", async () => {
 	const prod = await startServer({ env: { NODE_ENV: "production" } });
 	expect((await fetch(prod.url + "/docs/openapi.json")).status).toBe(200);
 	expect((await fetch(prod.url + "/docs")).status).toBe(404);
-	expect((await fetch(prod.url + "/docs/maxdoc-apidocs.js")).status).toBe(404);
+	expect((await fetch(prod.url + "/docs/maxserver-docs.js")).status).toBe(404);
 	expect(prod.logs()).not.toContain("📚");
 	await prod.stop();
 });

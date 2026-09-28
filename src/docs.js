@@ -122,10 +122,10 @@ export function buildOpenApi(routes, models, info) {
 }
 
 
-// Dev GUI files (built by ~/Desktop/maxdoc_apidocs). Read from disk, never
+// Dev GUI files (built by ~/Desktop/maxserver-docs). Read from disk, never
 // imported, so production bundles stay free of them.
 const UI_DIR = path.resolve(import.meta.dir, "../vendor");
-const UI_FILES = { "maxdoc-apidocs.js": "text/javascript; charset=utf-8", "maxdoc-apidocs.css": "text/css; charset=utf-8" };
+const UI_FILES = { "maxserver-docs.js": "text/javascript; charset=utf-8", "maxserver-docs.css": "text/css; charset=utf-8" };
 
 
 function escapeHtml(text) {
@@ -144,7 +144,7 @@ export async function docsRoutes(openapi, dev) {
 	};
 
 	// 1. Production, or bundled app without the files: spec only
-	if (!dev || !(await Bun.file(path.join(UI_DIR, "maxdoc-apidocs.js")).exists())) return routes;
+	if (!dev || !(await Bun.file(path.join(UI_DIR, "maxserver-docs.js")).exists())) return routes;
 
 	// 2. Development: page + UI files
 	const html = `<!doctype html>
@@ -153,11 +153,11 @@ export async function docsRoutes(openapi, dev) {
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>${escapeHtml(openapi.info?.title || "API")}</title>
-	<link rel="stylesheet" href="/docs/maxdoc-apidocs.css">
+	<link rel="stylesheet" href="/docs/maxserver-docs.css">
 </head>
 <body>
 	<div id="app" data-spec="/docs/openapi.json"></div>
-	<script type="module" src="/docs/maxdoc-apidocs.js"></script>
+	<script type="module" src="/docs/maxserver-docs.js"></script>
 </body>
 </html>`;
 
