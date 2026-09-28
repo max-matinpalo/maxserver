@@ -250,5 +250,6 @@ It is updated together with maxserver as things evolve.
 - MongoDB as optional add-on (removed from basic version)
 - document how to pass scalar options
 - more example and best practises
+- plan production deployment and decide what maxserver should include for it (e.g. worker restart delay, clean shutdown on SIGTERM, systemd example)
 
 
