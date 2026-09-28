@@ -225,10 +225,4 @@ It is updated together with maxserver as things evolve.
 
 
 ## Todo
-- MongoDB as optional add-on (removed from basic version)
-- document how to pass scalar options
-- more example and best practises
-- websockets (Bun has them built in, needs exposing through maxserver)
-- plan production deployment and decide what maxserver should include for it (e.g. multiple processes with systemd instances + reusePort, clean shutdown on SIGTERM, systemd example)
-
-
+- api for websockets (Bun has them built in, needs exposing through maxserver)
