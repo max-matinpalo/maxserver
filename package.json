@@ -1,0 +1,46 @@
+{
+	"name": "maxserver",
+	"version": "2.0.0",
+	"description": "Bun server setup with auto routes, validation and docs",
+	"author": "Max Matinpalo",
+	"type": "module",
+	"license": "MIT",
+	"homepage": "https://github.com/max-matinpalo/maxserver#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/max-matinpalo/maxserver.git"
+	},
+	"bugs": {
+		"url": "https://github.com/max-matinpalo/maxserver/issues"
+	},
+	"main": "src/index.js",
+	"types": "index.d.ts",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"default": "./src/index.js"
+		}
+	},
+	"bin": {
+		"maxserver": "bin/cli.js"
+	},
+	"files": [
+		"src",
+		"!src/**/*.test.js",
+		"bin",
+		"!bin/**/*.test.js",
+		"templates",
+		"index.d.ts",
+		"SKILL.md"
+	],
+	"scripts": {
+		"test": "bun test"
+	},
+	"dependencies": {
+		"ajv": "^8",
+		"ajv-formats": "^3"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	}
+}

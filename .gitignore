@@ -1,0 +1,4 @@
+node_modules
+test/fixture/node_modules
+test/fixture/setup.js
+test/fixture/dist
