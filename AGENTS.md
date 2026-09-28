@@ -91,6 +91,15 @@ SOURCE LAYOUT
 - dependencies: ajv, ajv-formats only
 
 
+WORKERS
+- option workers (env WORKERS), default 1
+- > 1 on Linux: main process spawns that many copies with Bun.spawn, each Bun.serve with reusePort: true, kernel spreads connections
+- main process respawns crashed workers
+- dev and macOS: always one process (macOS ignores reusePort balancing, tested: all requests go to first process), log a warning if workers > 1
+- no shared memory between workers, keep apps stateless
+- file: src/workers.js
+
+
 RESPONSE SCHEMAS
 - used for docs (OpenAPI)
 - no response filtering, handlers return exactly what gets sent
