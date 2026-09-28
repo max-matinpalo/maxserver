@@ -28,13 +28,13 @@
 		"src",
 		"bin",
 		"templates",
-		"vendor",
+		"devdocs",
 		"index.d.ts",
 		"SKILL.md"
 	],
 	"scripts": {
 		"test": "bun test ./test",
-		"update-docs-ui": "cd ../maxserver-docs && npm run build && cp dist/maxserver-docs.js dist/maxserver-docs.css ../maxserver/vendor/"
+		"update-docs-ui": "cd ../maxserver-docs && npm run build && cp dist/maxserver-docs.js dist/maxserver-docs.css ../maxserver/devdocs/"
 	},
 	"dependencies": {
 		"ajv": "^8",

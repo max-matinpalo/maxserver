@@ -124,7 +124,7 @@ export function buildOpenApi(routes, models, info) {
 
 // Dev GUI files (built by ~/Desktop/maxserver-docs). Read from disk, never
 // imported, so production bundles stay free of them.
-const UI_DIR = path.resolve(import.meta.dir, "../vendor");
+const UI_DIR = path.resolve(import.meta.dir, "../devdocs");
 const UI_FILES = { "maxserver-docs.js": "text/javascript; charset=utf-8", "maxserver-docs.css": "text/css; charset=utf-8" };
 
 
