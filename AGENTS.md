@@ -106,3 +106,8 @@ SPEC
 SKILL
 - SKILL.md is the skill given to AI agents that build apps with maxserver
 - update it whenever a decision changes how apps are written
+
+
+TESTING
+- test suite requirements in TESTING.md
+- whenever a new feature is finished, run the full test suite (bun test)
