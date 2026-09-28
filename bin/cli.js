@@ -12,6 +12,7 @@ import { spawn, spawnSync, execSync } from "node:child_process";
 import { generate } from "./generate.js";
 
 const PKG_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const VERSION = JSON.parse(fs.readFileSync(path.join(PKG_DIR, "package.json"), "utf8")).version;
 
 const USAGE = `
 maxserver new <name>   create a new project
@@ -68,8 +69,14 @@ function cmdNew(name, args) {
 
 	// 4. Install
 	if (!args.includes("--no-install")) {
-		console.log("📦 Installing maxserver");
-		execSync("npm install maxserver@latest && npm install -D @types/bun", { cwd: target, stdio: "inherit" });
+		// The same version as this CLI, not @latest
+		const install = `npm install maxserver@${VERSION} && npm install -D @types/bun`;
+		console.log(`📦 Installing maxserver@${VERSION}`);
+		try {
+			execSync(install, { cwd: target, stdio: "inherit" });
+		} catch {
+			fail(`Install failed (see npm's message above). The project is in ${name}/, finish it with:\n\n\tcd ${name}\n\t${install}\n`);
+		}
 	}
 
 	if (!hasBun()) console.warn("⚠️  Bun is not installed, install it before running: https://bun.sh");
