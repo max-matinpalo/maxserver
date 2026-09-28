@@ -105,3 +105,28 @@ test("dev: matching response is not logged", async () => {
 	await Bun.sleep(20);
 	expect(server.logs()).not.toContain("Response mismatch POST /items");
 });
+
+test("prototype poisoning in JSON body -> 400", async () => {
+	for (const body of ['{"name":"a","__proto__":{"isAdmin":true}}', '{"name":"a","constructor":{"prototype":{"isAdmin":true}}}']) {
+		const r = await post("/items", body);
+		expect(r.status).toBe(400);
+		expect((await r.json()).message).toBe("Object contains forbidden prototype property");
+	}
+});
+
+test("normal constructor key in JSON body is allowed", async () => {
+	const r = await post("/text", '{"constructor":"x"}');
+	expect(r.status).toBe(200);
+});
+
+test("query keys like __proto__ and toString are plain values", async () => {
+	const q = await (await get("/items?q=x&toString=a&__proto__=b")).json();
+	expect(q.toString).toBe("a");
+	expect(q.__proto__).toBe("b");
+});
+
+test("multiple set-cookie headers are all sent, own content-type kept", async () => {
+	const r = await get("/cookies");
+	expect(r.headers.getSetCookie()).toEqual(["a=1", "b=2"]);
+	expect(r.headers.get("content-type")).toBe("application/vnd.test+json");
+});

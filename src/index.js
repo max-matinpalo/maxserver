@@ -55,8 +55,12 @@ export default async function maxserver(config = {}) {
 		public: isPublic = process.env.PUBLIC === "true",
 		openapiInfo,
 		scalar = {},
+		routesDir,
 		...bunOptions
 	} = config;
+
+	if (routesDir !== undefined)
+		throw new Error("maxserver: routesDir is read by the generator, set ROUTESDIR in .env instead");
 
 	if (!secret)
 		throw new Error("maxserver: secret is required, set secret in maxserver() or SECRET in .env");
@@ -97,6 +101,7 @@ export default async function maxserver(config = {}) {
 		async start() {
 			server.bun = Bun.serve({
 				maxRequestBodySize: 1048576,
+				development: dev,
 				...bunOptions,
 				port,
 				hostname: isPublic ? "0.0.0.0" : "127.0.0.1",

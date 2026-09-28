@@ -5,6 +5,7 @@ const server = await maxserver({
 	static: "public",
 	openapiInfo: { title: "Fixture API", version: "1.2.3" },
 	reusePort: process.env.TEST_REUSEPORT === "1",
+	...(process.env.TEST_ROUTESDIR && { routesDir: process.env.TEST_ROUTESDIR }),
 });
 
 await server.start();

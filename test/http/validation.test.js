@@ -80,3 +80,8 @@ test("model property $ref validates query", async () => {
 	expect((await get("/items?q=x&owner=nope")).status).toBe(400);
 	expect((await get("/items?q=x&owner=a@b.co")).status).toBe(200);
 });
+
+test("header schema names are case-insensitive", async () => {
+	expect((await fetch(server.url + "/apikey")).status).toBe(400);
+	expect((await fetch(server.url + "/apikey", { headers: { "X-Api-Key": "k" } })).status).toBe(200);
+});

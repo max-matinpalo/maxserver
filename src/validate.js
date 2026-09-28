@@ -27,8 +27,21 @@ export function createValidators(models = []) {
  * Fastify shorthand: params / querystring / headers may list properties directly.
  */
 function normalize(part, schema) {
-	if (part === "body" || schema.type || schema.properties || schema.$ref) return schema;
-	return { type: "object", properties: schema };
+	if (part !== "body" && !schema.type && !schema.properties && !schema.$ref)
+		schema = { type: "object", properties: schema };
+	return part === "headers" ? lowercaseHeaders(schema) : schema;
+}
+
+
+/**
+ * Request header names are lowercase, so schema names must be too (as in Fastify).
+ */
+function lowercaseHeaders(schema) {
+	const out = { ...schema };
+	if (schema.properties)
+		out.properties = Object.fromEntries(Object.entries(schema.properties).map(([k, v]) => [k.toLowerCase(), v]));
+	if (schema.required) out.required = schema.required.map(k => k.toLowerCase());
+	return out;
 }
 
 

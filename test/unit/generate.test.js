@@ -111,3 +111,11 @@ test("ROUTESDIR: other routes directory", () => {
 	write("api/hello.js", route("GET", "/hello"));
 	expect(collect(root, "api").routes[0].file).toBe("api/hello.js");
 });
+
+test("quotes and backslashes in file names give valid setup.js", async () => {
+	write('src/we"ird\\name.js', route("GET", "/weird"));
+	generate(root);
+	const code = fs.readFileSync(path.join(root, "setup.js"), "utf8");
+	expect(code).toContain(JSON.stringify('./src/we"ird\\name.js'));
+	expect(() => new Bun.Transpiler().transformSync(code)).not.toThrow();
+});

@@ -48,7 +48,7 @@ Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to 
 | `docs` | `true` | Set `false` to disable auto generated docs |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
-| `routesDir` | *src* | Directory to auto collect routes |
+| `routesDir` | *src* | Directory to auto collect routes. Env `ROUTESDIR` only, read by the generator |
 ---
 
 <br>

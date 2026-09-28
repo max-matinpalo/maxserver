@@ -46,7 +46,13 @@ export async function serveStatic(req, root) {
 	if (rel.split(path.sep).some(p => p.startsWith("."))) return null;
 
 	// 3. Directory -> index.html
-	if (fs.statSync(file, { throwIfNoEntry: false })?.isDirectory()) file = path.join(file, "index.html");
+	let stat;
+	try {
+		stat = fs.statSync(file, { throwIfNoEntry: false });
+	} catch {
+		return null;
+	}
+	if (stat?.isDirectory()) file = path.join(file, "index.html");
 
 	const bunFile = Bun.file(file);
 	if (!(await bunFile.exists())) return null;

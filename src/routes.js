@@ -20,7 +20,7 @@ export function finish(req, response, ctx) {
 function parseQuery(url) {
 	const query = {};
 	for (const [k, v] of new URL(url).searchParams) {
-		if (!(k in query)) query[k] = v;
+		if (!Object.hasOwn(query, k)) setProp(query, k, v);
 		else if (Array.isArray(query[k])) query[k].push(v);
 		else query[k] = [query[k], v];
 	}
@@ -30,6 +30,19 @@ function parseQuery(url) {
 
 function badRequest(message) {
 	return Object.assign(new Error(message), { statusCode: 400 });
+}
+
+
+/**
+ * Blocks prototype poisoning like Fastify: __proto__ and constructor.prototype keys -> 400.
+ */
+function safeParse(text) {
+	const risky = text.includes("__proto__") || text.includes("constructor");
+	return JSON.parse(text, risky ? (key, value) => {
+		if (key === "__proto__" || (key === "constructor" && value && typeof value === "object" && "prototype" in value))
+			throw badRequest("Object contains forbidden prototype property");
+		return value;
+	} : undefined);
 }
 
 
@@ -44,9 +57,9 @@ async function parseBody(req) {
 		const text = await req.text();
 		if (!text) throw badRequest("Body cannot be empty when content-type is set to 'application/json'");
 		try {
-			return JSON.parse(text);
-		} catch {
-			throw badRequest("Body is not valid JSON");
+			return safeParse(text);
+		} catch (err) {
+			throw err.statusCode ? err : badRequest("Body is not valid JSON");
 		}
 	}
 	if (type.startsWith("text/")) return await req.text();
@@ -67,7 +80,11 @@ function createRes() {
 		statusCode: 200,
 		headers: new Headers(),
 		status(code) { res.statusCode = code; return res; },
-		header(name, value) { res.headers.set(name, value); return res; },
+		header(name, value) {
+			if (name.toLowerCase() === "set-cookie") res.headers.append(name, value);
+			else res.headers.set(name, value);
+			return res;
+		},
 	};
 	return res;
 }
@@ -81,9 +98,7 @@ function toResponse(data, res) {
 		return new Response(null, { status, headers: res.headers });
 	}
 
-	const response = Response.json(data, { status: res.statusCode });
-	for (const [k, v] of res.headers) response.headers.set(k, v);
-	return response;
+	return Response.json(data, { status: res.statusCode, headers: res.headers });
 }
 
 

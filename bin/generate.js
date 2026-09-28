@@ -81,6 +81,9 @@ export function collect(root, dir = "src") {
 }
 
 
+const str = JSON.stringify;
+
+
 /**
  * setup.js source code.
  */
@@ -90,15 +93,15 @@ export function render({ routes, models }) {
 	const routeList = [];
 
 	models.forEach((m, i) => {
-		imports.push(`import m${i} from "./${m.file}";`);
-		modelList.push(`\t\t{ file: "${m.file}", schema: m${i} },`);
+		imports.push(`import m${i} from ${str("./" + m.file)};`);
+		modelList.push(`\t\t{ file: ${str(m.file)}, schema: m${i} },`);
 	});
 
 	routes.forEach((r, i) => {
-		imports.push(`import h${i} from "./${r.file}";`);
-		if (r.schema) imports.push(`import s${i} from "./${r.schema}";`);
+		imports.push(`import h${i} from ${str("./" + r.file)};`);
+		if (r.schema) imports.push(`import s${i} from ${str("./" + r.schema)};`);
 		const schema = r.schema ? `, schema: s${i}` : "";
-		routeList.push(`\t\t{ method: "${r.method}", path: "${r.path}", file: "${r.file}", handler: h${i}${schema} },`);
+		routeList.push(`\t\t{ method: "${r.method}", path: ${str(r.path)}, file: ${str(r.file)}, handler: h${i}${schema} },`);
 	});
 
 	return [

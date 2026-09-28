@@ -6,7 +6,10 @@ const METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
  * "*" | "https://a.com,https://b.com" | ["https://a.com"] | true
  */
 export function setupCors(cors = "*", production) {
-	if (cors === true) return { any: true, reflect: true };
+	if (cors === true) {
+		if (production) console.warn("⚠️  CORS: reflecting all origins in production with credentials is risky");
+		return { any: true, reflect: true };
+	}
 
 	const list = Array.isArray(cors)
 		? cors

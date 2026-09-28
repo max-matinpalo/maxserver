@@ -91,3 +91,8 @@ test("body larger than 1 MiB -> 413", async () => {
 	expect(r.status).toBe(413);
 	await server.stop();
 });
+
+test("routesDir in maxserver() -> clear error, it is env only", async () => {
+	const server = await startServer({ env: { TEST_ROUTESDIR: "api" }, expectUrl: false });
+	expect(server.logs()).toContain("maxserver: routesDir is read by the generator");
+});

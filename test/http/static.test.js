@@ -43,3 +43,11 @@ test("paths outside the static dir are blocked: ../, %2e%2e, ..%2f", async () =>
 		expect(`${p} ${raw.includes("outside secret")}`).toBe(`${p} false`);
 	}
 });
+
+test("file used as folder or too long name -> 404 with security headers, not 500", async () => {
+	for (const p of ["/style.css/x", "/" + "a".repeat(300)]) {
+		const r = await fetch(server.url + p);
+		expect(`${p.slice(0, 20)} ${r.status}`).toBe(`${p.slice(0, 20)} 404`);
+		expect(r.headers.get("x-content-type-options")).toBe("nosniff");
+	}
+});
