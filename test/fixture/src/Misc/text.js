@@ -1,5 +1,5 @@
 // POST /text
 
 export default async function (req, res) {
-	return { body: req.body };
+	return { body: req.body, query: req.query };
 }

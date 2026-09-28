@@ -82,4 +82,11 @@ MUST COVER
 
 
 NOT TESTED
-- watcher restart timing, performance benchmarks
+- watcher restart timing
+
+
+BENCHMARK
+- npm run bench (Linux, needs wrk): maxserver vs plain Bun and plain Node, test/bench/
+- GET /hello and POST /hello with a small JSON body, production bundle
+- server pinned to one physical core, wrk on the others, median of 3 rounds
+- run it after changes to the request path (src/routes.js, cors.js, headers.js)

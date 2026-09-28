@@ -4,3 +4,6 @@ test/fixture/setup.js
 test/fixture/dist
 .DS_Store
 bun.lock
+test/bench/app/node_modules
+test/bench/app/setup.js
+test/bench/app/dist

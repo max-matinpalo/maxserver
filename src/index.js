@@ -4,7 +4,7 @@ import { setupCors } from "./cors.js";
 import { setupStatic } from "./static.js";
 import { createValidators } from "./validate.js";
 import { buildOpenApi, docsRoutes } from "./docs.js";
-import { buildRoutes, fallback, finish } from "./routes.js";
+import { buildRoutes, defaultHeaders, fallback, finish } from "./routes.js";
 
 export { createError } from "./errors.js";
 export { signJwt, verifyJwt } from "./jwt.js";
@@ -64,11 +64,13 @@ export default async function maxserver(config = {}) {
 	// 3. Shared context for all requests
 	const dev = env !== "production";
 	configureJwt(secret);
+	const corsConfig = setupCors(cors, !dev);
 
 	const ctx = {
 		dev,
 		secret,
-		cors: setupCors(cors, !dev),
+		cors: corsConfig,
+		headers: defaultHeaders(corsConfig),
 		static: setupStatic(staticDir),
 		ajvs: createValidators(models),
 	};

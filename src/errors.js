@@ -45,7 +45,7 @@ export function errorResponse(err, production) {
 function appLocation(err) {
 	const cwd = process.cwd() + "/";
 	for (const line of String(err?.stack || "").split("\n").slice(1)) {
-		const match = line.match(/(?:file:\/\/)?(\/[^\s()]+):(\d+):\d+/);
+		const match = line.match(/(?:file:\/\/)?(\/[^()]+):(\d+):\d+\)?$/);
 		if (match && match[1].startsWith(cwd) && !match[1].includes("/node_modules/"))
 			return `${match[1].slice(cwd.length)}:${match[2]}`;
 	}

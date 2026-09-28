@@ -54,7 +54,11 @@ test("returning nothing -> 204", async () => {
 test("params, query and body are filled", async () => {
 	expect((await (await get("/items/3")).json()).id).toBe(3);
 	expect((await (await get("/items?q=x")).json()).q).toBe("x");
-	expect(await (await post("/text", "hello", "text/plain")).json()).toEqual({ body: "hello" });
+	expect(await (await post("/text", "hello", "text/plain")).json()).toEqual({ body: "hello", query: {} });
+});
+
+test("query without schema: parsed on use, repeated keys -> array", async () => {
+	expect((await (await post("/text?a=1&a=2&b=x", "hi", "text/plain")).json()).query).toEqual({ a: ["1", "2"], b: "x" });
 });
 
 test("invalid JSON -> 400", async () => {

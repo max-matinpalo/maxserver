@@ -21,17 +21,28 @@ export function setupCors(cors = "*", production) {
  * CORS headers for a request, as in v1 (@fastify/cors with credentials).
  */
 export function corsHeaders(req, cors) {
-	const origin = req.headers.get("origin");
+	return { ...fixedCorsHeaders(cors), ...originHeaders(req, cors) };
+}
+
+
+/**
+ * CORS headers that are the same for every request.
+ */
+export function fixedCorsHeaders(cors) {
 	const headers = { "Access-Control-Allow-Credentials": "true" };
-
-	// 1. Allowed origin
 	if (cors.any && !cors.reflect) headers["Access-Control-Allow-Origin"] = "*";
-	else if (origin && (cors.any || cors.list.includes(origin))) {
-		headers["Access-Control-Allow-Origin"] = origin;
-		headers["Vary"] = "Origin";
-	}
-
 	return headers;
+}
+
+
+/**
+ * CORS headers for the request's origin (reflected or listed), null if none.
+ */
+export function originHeaders(req, cors) {
+	if (cors.any && !cors.reflect) return null;
+	const origin = req.headers.get("origin");
+	if (!origin || !(cors.any || cors.list.includes(origin))) return null;
+	return { "Access-Control-Allow-Origin": origin, "Vary": "Origin" };
 }
 
 

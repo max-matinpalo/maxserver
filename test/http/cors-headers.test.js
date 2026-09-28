@@ -25,6 +25,17 @@ describe("dev, cors *", () => {
 		expect(r.headers.get("vary")).toContain("Origin");
 	});
 
+	test("handler headers keep CORS and security headers", async () => {
+		const r = await fetch(server.url + "/items", {
+			method: "POST",
+			headers: { origin: "http://a.com", "content-type": "application/json" },
+			body: JSON.stringify({ name: "x" }),
+		});
+		expect(r.headers.get("x-created")).toBe("1");
+		expect(r.headers.get("access-control-allow-origin")).toBe("http://a.com");
+		for (const [k, v] of Object.entries(SECURITY)) expect(r.headers.get(k)).toBe(v);
+	});
+
 	test("preflight answered with methods and requested headers", async () => {
 		const r = await fetch(server.url + "/items", {
 			method: "OPTIONS",

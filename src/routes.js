@@ -1,5 +1,5 @@
 import { authenticate } from "./jwt.js";
-import { corsHeaders, preflight } from "./cors.js";
+import { corsHeaders, fixedCorsHeaders, originHeaders, preflight } from "./cors.js";
 import { errorResponse, logError } from "./errors.js";
 import { SECURITY_HEADERS, setHeaders } from "./headers.js";
 import { compileRoute, validatePart, checkResponse } from "./validate.js";
@@ -15,16 +15,41 @@ export function finish(req, response, ctx) {
 
 
 /**
+ * Headers of every handler response, built once: Bun copies a Headers
+ * object much faster than it sets headers one by one.
+ */
+export function defaultHeaders(cors) {
+	return new Headers({ ...fixedCorsHeaders(cors), ...SECURITY_HEADERS });
+}
+
+
+/**
  * Query string as object, repeated keys become arrays (like Fastify).
  */
 function parseQuery(url) {
 	const query = {};
-	for (const [k, v] of new URL(url).searchParams) {
+	const i = url.indexOf("?");
+	if (i < 0) return query;
+	for (const [k, v] of new URLSearchParams(url.slice(i + 1))) {
 		if (!Object.hasOwn(query, k)) setProp(query, k, v);
 		else if (Array.isArray(query[k])) query[k].push(v);
 		else query[k] = [query[k], v];
 	}
 	return query;
+}
+
+
+/**
+ * req.query parsed on first use, because reading req.url is slow in Bun.
+ */
+function lazyQuery(req) {
+	let query;
+	Object.defineProperty(req, "query", {
+		get: () => query ??= parseQuery(req.url),
+		set: value => { query = value; },
+		configurable: true,
+		enumerable: true,
+	});
 }
 
 
@@ -50,8 +75,6 @@ function safeParse(text) {
  * Parses the body: JSON and text, else left unread.
  */
 async function parseBody(req) {
-	if (req.method === "GET" || req.method === "HEAD") return undefined;
-
 	const type = (req.headers.get("content-type") || "").toLowerCase();
 	if (type.includes("application/json")) {
 		const text = await req.text();
@@ -74,13 +97,15 @@ function setProp(obj, key, value) {
 
 /**
  * Handler response object: collects status and headers.
+ * Headers are a copy of the defaults, made only when a handler sets one.
  */
-function createRes() {
+function createRes(ctx) {
 	const res = {
 		statusCode: 200,
-		headers: new Headers(),
+		headers: null,
 		status(code) { res.statusCode = code; return res; },
 		header(name, value) {
+			res.headers ||= new Headers(ctx.headers);
 			if (name.toLowerCase() === "set-cookie") res.headers.append(name, value);
 			else res.headers.set(name, value);
 			return res;
@@ -90,15 +115,27 @@ function createRes() {
 }
 
 
-function toResponse(data, res) {
-	if (data instanceof Response) return data;
+/**
+ * Handler result -> Response with default, handler and CORS origin headers.
+ */
+function toResponse(data, res, req, ctx) {
+	if (data instanceof Response) return finish(req, data, ctx);
 
-	if (data === undefined) {
-		const status = res.statusCode === 200 ? 204 : res.statusCode;
-		return new Response(null, { status, headers: res.headers });
+	// 1. Headers: the prebuilt defaults unless something is added
+	let headers = res.headers || ctx.headers;
+	const origin = originHeaders(req, ctx.cors);
+	if (origin) {
+		if (headers === ctx.headers) headers = new Headers(headers);
+		for (const [k, v] of Object.entries(origin)) headers.set(k, v);
 	}
 
-	return Response.json(data, { status: res.statusCode, headers: res.headers });
+	// 2. Body
+	if (data === undefined) {
+		const status = res.statusCode === 200 ? 204 : res.statusCode;
+		return new Response(null, { status, headers });
+	}
+
+	return Response.json(data, { status: res.statusCode, headers });
 }
 
 
@@ -111,44 +148,42 @@ function wrap(route, ctx) {
 	const name = `${route.method} ${route.path}`;
 
 	return async function (req) {
-		let response;
 		try {
 
 			// 1. Auth
 			if (schema.auth) authenticate(req, ctx.secret);
 
-			// 2. Parse
-			const params = { ...req.params };
-			const query = parseQuery(req.url);
-			const body = await parseBody(req);
+			// 2. Parse (Bun's req.params is kept and validated in place)
+			const body = req.method === "GET" || req.method === "HEAD" ? undefined : await parseBody(req);
 
 			// 3. Validate (may coerce, add defaults, remove extras)
-			if (v.request.params) validatePart(v.request.params, "params", params);
-			if (v.request.querystring) validatePart(v.request.querystring, "querystring", query);
+			if (v.request.params) validatePart(v.request.params, "params", req.params);
+			if (v.request.querystring) {
+				const query = parseQuery(req.url);
+				validatePart(v.request.querystring, "querystring", query);
+				setProp(req, "query", query);
+			} else lazyQuery(req);
 			if (v.request.headers) validatePart(v.request.headers, "headers", Object.fromEntries(req.headers));
 			if (v.request.body) validatePart(v.request.body, "body", body);
 
-			setProp(req, "params", params);
-			setProp(req, "query", query);
 			setProp(req, "body", body);
 
 			// 4. Handler
-			const res = createRes();
+			const res = createRes(ctx);
 			const data = await route.handler(req, res);
-			response = toResponse(data, res);
+			const response = toResponse(data, res, req, ctx);
 
 			// 5. Development: check response against schema
 			if (ctx.dev && !(data instanceof Response)) {
 				const problem = checkResponse(v.response, response.status, data);
 				if (problem) console.warn(`⚠️  Response mismatch ${name} ${response.status} (${route.file}): ${problem}`);
 			}
+			return response;
 
 		} catch (err) {
 			logError(err, req, ctx.dev);
-			response = errorResponse(err, !ctx.dev);
+			return finish(req, errorResponse(err, !ctx.dev), ctx);
 		}
-
-		return finish(req, response, ctx);
 	};
 }
 

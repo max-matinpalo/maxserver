@@ -12,6 +12,7 @@ export const FIXTURE = path.join(ROOT, "test", "fixture");
 export function prepareFixture(dir = FIXTURE) {
 	const link = path.join(dir, "node_modules", "maxserver");
 	if (!fs.existsSync(link)) {
+		fs.rmSync(link, { force: true }); // broken link after the repo moved
 		fs.mkdirSync(path.dirname(link), { recursive: true });
 		fs.symlinkSync(ROOT, link, "dir");
 	}

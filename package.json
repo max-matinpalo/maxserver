@@ -27,7 +27,8 @@
 		"devdocs"
 	],
 	"scripts": {
-		"test": "bun test ./test"
+		"test": "bun test ./test",
+		"bench": "bun test/bench/run.js"
 	},
 	"dependencies": {
 		"ajv": "^8",
