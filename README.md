@@ -4,7 +4,7 @@ Built to work optimal for AI agents.
 
 - **Auto Routes**: auto imports and registers routes and schemas
 - **Auto Docs**: auto generates docs based on schemas
-- **Preconfigures essentials**: jwt auth, cors, helmet
+- **Preconfigures essentials**: jwt auth, cors, security headers
 
 <br><br>
 
@@ -248,11 +248,7 @@ It is updated together with maxserver as things evolve.
 
 ## Todo
 - MongoDB as optional add-on (removed from basic version)
-- document how to add fastify hooks
 - document how to pass scalar options
 - more example and best practises
-- document project setup with npx
-- npx option, atm devserver macos only
-- unit tests
 
 
