@@ -43,6 +43,7 @@ CLI
 - dev: generate setup.js, watch src/, bun --hot setup.js
 - build: generate setup.js, bun build setup.js --target=bun --outdir=dist --sourcemap=linked
 - bun build flags live only in the CLI, same for every project
+- build passes --define process.env.NODE_ENV=globalThis.process.env.NODE_ENV: bun build would otherwise inline "development" and a bundled production server would run in dev mode
 
 
 TEMPLATE (npx maxserver new <name>)
@@ -67,6 +68,8 @@ DOCS
 - own OpenAPI 3.1 generator from route schemas + models, no swagger package
 - Scalar UI: standalone browser file (~4.5 MB) copied into maxserver package, served locally at /docs, works offline
 - no npm dependency for Scalar, update the file manually when needed
+- current file: @scalar/api-reference 1.72.1, dist/browser/standalone.js
+- imported with { type: "file" }, bun build copies it next to the bundle, path resolved from import.meta.dir
 - spec at /docs/openapi.json
 
 

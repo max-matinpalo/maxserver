@@ -48,6 +48,7 @@ If you define options in env, use all upper case letters.
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
 | `routesDir` | *src* | Directory to auto collect routes |
+| `bodyLimit` | `1048576` | Max request body size in bytes (1 MiB, same as v1) |
 | `workers` | `1` | Processes on Linux, one per core. macOS always 1 |
 ---
 
