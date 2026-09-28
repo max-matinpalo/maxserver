@@ -35,5 +35,11 @@ test("bundle keeps NODE_ENV as runtime value", async () => {
 
 test("bundle serves the OpenAPI spec, dist has only bundle and map", async () => {
 	expect((await fetch(server.url + "/docs/openapi.json")).status).toBe(200);
+	expect((await fetch(server.url + "/docs")).status).toBe(404);
 	expect(fs.readdirSync(path.join(FIXTURE, "dist")).sort()).toEqual(["bundle.js", "bundle.js.map"]);
+});
+
+test("dev GUI code is not in the production bundle", () => {
+	const code = fs.readFileSync(path.join(FIXTURE, "dist/bundle.js"), "utf8");
+	expect(code).not.toContain("Send the request to see the response");
 });

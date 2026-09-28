@@ -63,7 +63,7 @@ MUST COVER
 - ../ and %2e%2e blocked
 
 11. Docs
-- /docs/openapi.json served, no docs UI page
+- development: /docs dev GUI (vendor files) + docs link printed; production and bundles: only /docs/openapi.json
 - openapi.json valid OpenAPI 3.1: {id} paths, query params, body, responses
 - models in components, $ref rewritten
 - auth routes have security

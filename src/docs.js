@@ -122,13 +122,48 @@ export function buildOpenApi(routes, models, info) {
 }
 
 
+// Dev GUI files (built by ~/Desktop/maxdoc_apidocs). Read from disk, never
+// imported, so production bundles stay free of them.
+const UI_DIR = path.resolve(import.meta.dir, "../vendor");
+const UI_FILES = { "maxdoc-apidocs.js": "text/javascript; charset=utf-8", "maxdoc-apidocs.css": "text/css; charset=utf-8" };
+
+
+function escapeHtml(text) {
+	return String(text).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+}
+
+
 /**
- * Bun route for /docs/openapi.json. No docs UI: view the spec with the
- * maxdoc_apidocs dev tool or any OpenAPI viewer.
+ * Bun routes: /docs/openapi.json always; in development also the /docs
+ * dev GUI with its two files, when they exist.
  */
-export function docsRoutes(openapi) {
+export async function docsRoutes(openapi, dev) {
 	const json = JSON.stringify(openapi);
-	return {
+	const routes = {
 		"/docs/openapi.json": () => new Response(json, { headers: { "Content-Type": "application/json" } }),
 	};
+
+	// 1. Production, or bundled app without the files: spec only
+	if (!dev || !(await Bun.file(path.join(UI_DIR, "maxdoc-apidocs.js")).exists())) return routes;
+
+	// 2. Development: page + UI files
+	const html = `<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>${escapeHtml(openapi.info?.title || "API")}</title>
+	<link rel="stylesheet" href="/docs/maxdoc-apidocs.css">
+</head>
+<body>
+	<div id="app" data-spec="/docs/openapi.json"></div>
+	<script type="module" src="/docs/maxdoc-apidocs.js"></script>
+</body>
+</html>`;
+
+	routes["/docs"] = () => new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+	for (const [name, type] of Object.entries(UI_FILES))
+		routes[`/docs/${name}`] = () => new Response(Bun.file(path.join(UI_DIR, name)), { headers: { "Content-Type": type } });
+
+	return routes;
 }

@@ -15,7 +15,8 @@ const PKG_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 
 const USAGE = `
 maxserver new <name>   create a new project
-maxserver dev          generate setup.js, watch src/, run bun --hot
+maxserver dev          generate setup.js, watch src/, run bun --hot,
+                       open /docs in the browser (--no-open: don't)
 maxserver build        generate setup.js, bundle to dist/bundle.js
 `;
 
@@ -82,6 +83,17 @@ function cmdNew(name, args) {
 
 // ---------- dev ----------
 
+/**
+ * Opens a URL in the default browser.
+ */
+function openBrowser(url) {
+	const cmd = process.platform === "darwin" ? ["open", url]
+		: process.platform === "win32" ? ["cmd", "/c", "start", "", url]
+		: ["xdg-open", url];
+	spawn(cmd[0], cmd.slice(1), { stdio: "ignore", detached: true }).on("error", () => { }).unref();
+}
+
+
 function tryGenerate() {
 	try {
 		generate();
@@ -93,16 +105,25 @@ function tryGenerate() {
 }
 
 
-function cmdDev() {
+function cmdDev(args) {
 	requireBun();
 	loadEnv();
 	const dir = process.env.ROUTESDIR || "src";
 	let child = null;
+	let opened = args.includes("--no-open");
 
-	// 1. Start bun --hot once setup.js is valid
+	// 1. Start bun --hot once setup.js is valid; open the docs once per run
 	const start = () => {
 		if (child || !tryGenerate()) return;
-		child = spawn("bun", ["--hot", "setup.js"], { stdio: "inherit" });
+		child = spawn("bun", ["--hot", "setup.js"], { stdio: ["inherit", "pipe", "inherit"] });
+		child.stdout.on("data", chunk => {
+			process.stdout.write(chunk);
+			const docs = !opened && String(chunk).match(/📚\s+(http\S+)/);
+			if (docs) {
+				opened = true;
+				openBrowser(docs[1]);
+			}
+		});
 		child.on("exit", code => {
 			child = null;
 			if (code) console.error(`❌ server exited with code ${code}, waiting for changes`);
@@ -151,7 +172,7 @@ function cmdBuild() {
 const [cmd, ...args] = process.argv.slice(2);
 
 if (cmd === "new") cmdNew(args[0], args.slice(1));
-else if (cmd === "dev") cmdDev();
+else if (cmd === "dev") cmdDev(args);
 else if (cmd === "build") cmdBuild();
 else {
 	console.log(USAGE);

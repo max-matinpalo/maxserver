@@ -77,7 +77,7 @@ export default async function maxserver(config = {}) {
 	const routes = buildRoutes(registry.routes, ctx);
 	if (docs) {
 		const openapi = buildOpenApi(registry.routes, models, openapiInfo);
-		for (const [path, handler] of Object.entries(docsRoutes(openapi)))
+		for (const [path, handler] of Object.entries(await docsRoutes(openapi, dev)))
 			routes[path] = { GET: req => finish(req, handler(), ctx) };
 	}
 
@@ -100,6 +100,7 @@ export default async function maxserver(config = {}) {
 
 			server.url = server.bun.url.href.replace(/\/$/, "");
 			console.log("🟢 ", server.url);
+			if (routes["/docs"]) console.log("📚 ", `${server.url}/docs`);
 			return server;
 		},
 

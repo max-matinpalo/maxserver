@@ -17,7 +17,10 @@ npm install maxserver
 New project, ready to run with hello world routes and schemas:
 ```js
 npx maxserver new myapp
+cd myapp
+npm run dev
 ```
+`npm run dev` opens the API docs in your browser, where you can test every route.
 <br>
 
 ## Setup
@@ -45,7 +48,7 @@ Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to 
 | `port` | `3000` | Server port |
 | `secret` | *-* | Secret used for jwt and cookies |
 | `cors` | `*` | `*` or comma separated origins, e.g. `https://a.com,https://b.com` |
-| `docs` | `true` | Set `false` to not serve `/docs/openapi.json` |
+| `docs` | `true` | Set `false` to turn docs off. Development: `/docs` UI + spec. Production: only `/docs/openapi.json` |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
 | `routesDir` | *src* | Directory to auto collect routes. Env `ROUTESDIR` only, read by the generator |
@@ -154,8 +157,10 @@ Some examples in the template folder.
 
 
 ## 📚 API Docs
-The OpenAPI 3.1 spec of all routes is served at **`localhost:3000/docs/openapi.json`**.  
-View it with the maxdoc_apidocs dev tool or any OpenAPI viewer (Scalar, Swagger UI, Postman).
+`npm run dev` opens **`localhost:3000/docs`** in your browser (`maxserver dev --no-open` to skip).  
+All routes are documented, and **Test Request** sends real requests to your server.
+
+The docs UI runs in development only. Production serves just the OpenAPI 3.1 spec at `/docs/openapi.json`.
 
 <br>
 

@@ -56,8 +56,12 @@ src/jwt.js, src/cors.js, src/headers.js, src/static.js, src/errors.js
 
 src/docs.js — OpenAPI 3.1 at /docs/openapi.json
 - own generator, no swagger package
-- no docs UI in maxserver: it stays simple, the UI is a dev tool
-- view the spec with the maxdoc_apidocs dev tool (~/Desktop/maxdoc_apidocs, own repo) or any OpenAPI viewer
+- development only: /docs dev GUI from vendor/maxdoc-apidocs.js + .css (built by ~/Desktop/maxdoc_apidocs, own repo; refresh with npm run update-docs-ui)
+- vendor files are read with Bun.file, never imported, so production bundles do not contain them
+- production: only /docs/openapi.json
+- start() prints "📚  <url>/docs" in development; maxserver dev opens that link once per run (--no-open: don't)
+- vendor/ is not source, so outside src/
+- other servers' specs: run ~/Desktop/maxdoc_apidocs standalone (npm run dev, port 3002)
 
 
 bin/generate.js — writes setup.js
@@ -69,7 +73,7 @@ bin/generate.js — writes setup.js
 
 bin/cli.js — new, dev, build
 - runs on Node and Bun (npx works), stops with a clear message if Bun is missing
-- dev: generate, watch src/, bun --hot setup.js
+- dev: generate, watch src/, bun --hot setup.js, open /docs in the browser once
 - build: generate, bun build setup.js --target=bun --outdir=dist --entry-naming=bundle.[ext] --sourcemap=linked
 - output dist/: bundle.js and bundle.js.map; deploy the whole folder
 - why bundle.js: setup.js is the generated input, the output name must not look the same
