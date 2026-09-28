@@ -5,7 +5,6 @@ Built to work optimal for AI agents.
 - **Auto Routes**: auto imports and registers routes and schemas
 - **Auto Docs**: auto generates docs based on schemas
 - **Preconfigures essentials**: jwt auth, cors, helmet
-- **Auto Connect MongoDB** (optional)
 
 <br><br>
 
@@ -46,7 +45,6 @@ If you define options in env, use all upper case letters.
 | `secret` | *-* | Secret used for jwt and cookies |
 | `cors` | `*` | Default all allowed |
 | `docs` | `true` | Set `false` to disable auto generated docs |
-| `mongodb` | *-* | MongoDB URI, if set auto-connects db |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
 | `routesDir` | *src* | Directory to auto collect routes |
@@ -207,31 +205,6 @@ export default {
 <br>
 <br>
 
-## 🍃 MongoDB
-Set option **`MONGODB`** your mongodbURI and it will auto-connect at server start and you get:
-
-- global **`db`** (connected database handle)
-- global **`oid(string)`** (string → MongoDB `ObjectId`)
-
-| Global | What it is | Why it exists |
-| :--- | :--- | :--- |
-| `db` | MongoDB database handle | Use it directly in handlers |
-| `oid(id)` | string → `ObjectId` | Saves you from importing everywhere `ObjectId` |
-
-### Example
-
-```js
-// Inside route handlers
-
-export default async function (req, res) {
-
-	await db.collection("feedback").insertOne(...)
-}
-```
-
-
-<br>
-
 ## 🧰 Error Handling
 
 Use `createError(code, message)` to stop immediately with a clean HTTP error.
@@ -268,11 +241,12 @@ It is updated together with maxserver as things evolve.
 
 
 ## About
-- Dependencies: ajv, mongodb. Runs on Bun.serve(), no fastify
+- Dependencies: ajv. Runs on Bun.serve(), no fastify
 - The source is simple. Everyone can read, understand and modify if needed.
 
 
 ## Todo
+- MongoDB as optional add-on (removed from basic version)
 - document how to add fastify hooks
 - document how to pass scalar options
 - more example and best practises

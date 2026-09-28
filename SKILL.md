@@ -1,11 +1,11 @@
 ---
 name: maxserver
-description: Implement, modify, or review Bun server code built with MaxServer, MongoDB, and ESM. Apply these conventions only to MaxServer backend work.
+description: Implement, modify, or review Bun server code built with MaxServer and ESM. Apply these conventions only to MaxServer backend work.
 ---
 
 # MaxServer
 
-Implement the simplest production-ready solution using Bun, MaxServer, MongoDB, and ESM.
+Implement the simplest production-ready solution using Bun, MaxServer, and ESM.
 
 ## Routes
 
@@ -13,7 +13,6 @@ Implement the simplest production-ready solution using Bun, MaxServer, MongoDB, 
 - Create one handler file and one schema file per route.
 - Name them `[routeName].js` and `[routeName].schema.js`.
 - Do not manually import handlers or route schemas; MaxServer auto-registers them.
-- Access MongoDB through the global `db` variable with `db.collection(...)`.
 
 ## Handlers
 
@@ -23,9 +22,8 @@ Implement the simplest production-ready solution using Bun, MaxServer, MongoDB, 
 4. Put one empty line before the handler function and before every step comment.
 5. Access the authenticated user through `req.user` or `req.userId`.
 6. Throw errors with the global helper: `throw createError(code, 'Specific failure reason')`.
-7. Cast string IDs for MongoDB operations with the global `oid(string)` helper.
-8. Return response data directly at the root. Do not add response envelopes or status fields.
-9. Move reusable logic into separate files that export named functions.
+7. Return response data directly at the root. Do not add response envelopes or status fields.
+8. Move reusable logic into separate files that export named functions.
 
 ## Route Schemas
 

@@ -17,6 +17,10 @@ BIG IMPROVEMENTS
 	
 
 
+REMOVED FROM BASIC VERSION
+- MongoDB (no db, no oid globals), add later as optional add-on
+
+
 WHAT STAYS
 - most of api
 
