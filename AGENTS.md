@@ -46,6 +46,22 @@ ROUTE LOADING
 - magic comments and file layout stay the same
 
 
+CLI
+- one bin "maxserver" with commands: new <name>, dev, build (replaces v1 maxserver + maxserver-watcher)
+- CLI runs on Node or Bun (npx works), stops with clear message if Bun missing
+- dev: generate setup.js, watch src/, bun --hot setup.js
+- build: generate setup.js, bun build setup.js --target=bun --outdir=dist --sourcemap=linked
+- bun build flags live only in the CLI, same for every project
+
+
+TEMPLATE PACKAGE.JSON
+- only changes vs v1: main and scripts
+- "main": "setup.js"
+- "dev": "maxserver dev"
+- "build": "maxserver build"
+- "start": "bun dist/setup.js" (run build first)
+
+
 RESPONSE SCHEMAS
 - used for docs (OpenAPI)
 - no response filtering, handlers return exactly what gets sent
