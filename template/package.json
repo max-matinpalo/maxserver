@@ -9,6 +9,6 @@
 		"start": "bun dist/bundle.js"
 	},
 	"type": "module",
-	"private": "true",
+	"private": true,
 	"dependencies": {}
 }
