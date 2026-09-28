@@ -4,7 +4,8 @@
 export interface MaxserverConfig {
 	port?: number;
 	secret?: string;
-	cors?: string | string[] | true;
+	/** "*" or comma separated origins */
+	cors?: string;
 	docs?: boolean;
 	env?: string;
 	static?: string;

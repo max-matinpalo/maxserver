@@ -2,18 +2,10 @@ const METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
 
 
 /**
- * Normalizes the cors option.
- * "*" | "https://a.com,https://b.com" | ["https://a.com"] | true
+ * Normalizes the cors option: "*" or "https://a.com,https://b.com"
  */
 export function setupCors(cors = "*", production) {
-	if (cors === true) {
-		if (production) console.warn("⚠️  CORS: reflecting all origins in production with credentials is risky");
-		return { any: true, reflect: true };
-	}
-
-	const list = Array.isArray(cors)
-		? cors
-		: String(cors).split(",").map(s => s.trim()).filter(Boolean);
+	const list = String(cors).split(",").map(s => s.trim()).filter(Boolean);
 
 	if (list.includes("*")) {
 		if (production)

@@ -44,7 +44,7 @@ Any Bun.serve options (e.g. `reusePort`, `idleTimeout`, `tls`) can be passed to 
 | :--- | :--- | :--- |
 | `port` | `3000` | Server port |
 | `secret` | *-* | Secret used for jwt and cookies |
-| `cors` | `*` | Default all allowed |
+| `cors` | `*` | `*` or comma separated origins, e.g. `https://a.com,https://b.com` |
 | `docs` | `true` | Set `false` to disable auto generated docs |
 | `public` | `false` | Set `true` to expose the server publicly (binds to `0.0.0.0`) |
 | `static` | *-* | If set, serves this directory statically |
