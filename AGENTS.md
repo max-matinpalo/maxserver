@@ -2,6 +2,12 @@
 - The current old version is ../maxserver_old.
 
 
+GOAL
+- must work optimal for AI agents writing and reading the code
+- every decision: check what is good for AI and what is not
+- good for AI: predictable file locations, one place per thing, no hidden wiring, clear errors
+
+
 BIG IMPROVEMENTS
 - bun instead of nodejs
 - no fastify
