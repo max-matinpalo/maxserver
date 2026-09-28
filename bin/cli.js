@@ -16,7 +16,7 @@ const PKG_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const USAGE = `
 maxserver new <name>   create a new project
 maxserver dev          generate setup.js, watch src/, run bun --hot
-maxserver build        generate setup.js, bundle to dist/setup.js
+maxserver build        generate setup.js, bundle to dist/bundle.js
 `;
 
 
@@ -136,12 +136,13 @@ function cmdBuild() {
 		"build", "setup.js",
 		"--target=bun",
 		"--outdir=dist",
+		"--entry-naming=bundle.[ext]",
 		"--sourcemap=linked",
 		"--define", "process.env.NODE_ENV=globalThis.process.env.NODE_ENV",
 	], { stdio: "inherit" });
 
 	if (result.status !== 0) process.exit(result.status || 1);
-	console.log("✅ Built dist/setup.js, run: bun dist/setup.js");
+	console.log("✅ Built dist/bundle.js, run: bun dist/bundle.js");
 }
 
 

@@ -71,7 +71,9 @@ bin/generate.js — writes setup.js
 bin/cli.js — new, dev, build
 - runs on Node and Bun (npx works), stops with a clear message if Bun is missing
 - dev: generate, watch src/, bun --hot setup.js
-- build: generate, bun build setup.js --target=bun --outdir=dist --sourcemap=linked
+- build: generate, bun build setup.js --target=bun --outdir=dist --entry-naming=bundle.[ext] --sourcemap=linked
+- output dist/: bundle.js (app), bundle.js.map, scalar-<hash>.js (docs UI); deploy the whole folder
+- why bundle.js: setup.js is the generated input, the output name must not look the same
 - build passes --define process.env.NODE_ENV=globalThis.process.env.NODE_ENV
 - why: bun build inlines "development", a bundled production server would run in dev mode
 - command is "new", not v1 "maxserver <name>", so a project name never clashes with dev / build
@@ -79,6 +81,6 @@ bin/cli.js — new, dev, build
 
 templates/ — new project
 - v1 template, changed only where v2 needs it
-- package.json: main setup.js, scripts dev / build / start (bun dist/setup.js)
+- package.json: main setup.js, scripts dev / build / start (bun dist/bundle.js)
 - .gitignore adds setup.js and dist, jsconfig types "bun", installs @types/bun
 - new copies SKILL.md as AGENTS.md plus CLAUDE.md with "@AGENTS.md", SKILL.md stays the single source

@@ -18,7 +18,7 @@ MUST COVER
 - clear errors: two comments in one file, duplicate route, missing default export
 
 2. Bundling
-- maxserver build, then run dist/setup.js, answers requests
+- maxserver build, then run dist/bundle.js, answers requests
 
 3. Handlers
 - returned data -> 200 JSON

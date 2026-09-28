@@ -12,16 +12,16 @@ beforeAll(async () => {
 	const build = Bun.spawnSync(["node", path.join(ROOT, "bin/cli.js"), "build"], { cwd: FIXTURE });
 	if (build.exitCode !== 0) throw new Error(build.stderr.toString() + build.stdout.toString());
 
-	server = await startServer({ entry: "dist/setup.js", env: { NODE_ENV: "production" } });
+	server = await startServer({ entry: "dist/bundle.js", env: { NODE_ENV: "production" } });
 }, 30000);
 
 afterAll(() => server?.stop());
 
 
 test("maxserver build bundles into one file with no route imports left", () => {
-	const code = fs.readFileSync(path.join(FIXTURE, "dist/setup.js"), "utf8");
+	const code = fs.readFileSync(path.join(FIXTURE, "dist/bundle.js"), "utf8");
 	expect(code).not.toMatch(/from "\.\.?\/src\//);
-	expect(fs.existsSync(path.join(FIXTURE, "dist/setup.js.map"))).toBe(true);
+	expect(fs.existsSync(path.join(FIXTURE, "dist/bundle.js.map"))).toBe(true);
 });
 
 test("bundle answers requests", async () => {

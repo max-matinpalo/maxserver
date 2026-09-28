@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "maxserver dev",
 		"build": "maxserver build",
-		"start": "bun dist/setup.js"
+		"start": "bun dist/bundle.js"
 	},
 	"type": "module",
 	"private": "true",

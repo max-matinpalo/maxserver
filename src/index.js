@@ -55,7 +55,7 @@ export default async function maxserver(config = {}) {
 	if (!secret)
 		throw new Error("maxserver: secret is required, set secret in maxserver() or SECRET in .env");
 	if (!registry.routes)
-		throw new Error("maxserver: no routes registered. Start with `maxserver dev`, or `maxserver build` and `bun dist/setup.js` (running server.js directly skips the generated setup.js)");
+		throw new Error("maxserver: no routes registered. Start with `maxserver dev`, or `maxserver build` and `bun dist/bundle.js` (running server.js directly skips the generated setup.js)");
 
 	// 2. Models need an $id to be referenced
 	for (const m of registry.models)

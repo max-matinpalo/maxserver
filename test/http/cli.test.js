@@ -29,7 +29,7 @@ test("new fills project name and v2 scripts", () => {
 	const pkg = JSON.parse(fs.readFileSync(path.join(app, "package.json"), "utf8"));
 	expect(pkg.name).toBe("myapp");
 	expect(pkg.main).toBe("setup.js");
-	expect(pkg.scripts).toEqual({ dev: "maxserver dev", build: "maxserver build", start: "bun dist/setup.js" });
+	expect(pkg.scripts).toEqual({ dev: "maxserver dev", build: "maxserver build", start: "bun dist/bundle.js" });
 });
 
 test("new adds AI setup: SKILL.md as AGENTS.md, CLAUDE.md imports it", () => {
@@ -52,7 +52,7 @@ test("fresh project builds, runs and serves /docs", async () => {
 	const build = Bun.spawnSync(["node", CLI, "build"], { cwd: app });
 	expect(build.exitCode).toBe(0);
 
-	const server = await startServer({ cwd: app, entry: "dist/setup.js" });
+	const server = await startServer({ cwd: app, entry: "dist/bundle.js" });
 	expect((await fetch(server.url + "/welcome")).status).toBe(200);
 	expect((await fetch(server.url + "/docs")).status).toBe(200);
 	await server.stop();

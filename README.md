@@ -100,7 +100,7 @@ Return a `Response` for anything else (files, redirects), it is sent as is.
 
 Imports are generated into **`setup.js`** (no dynamic imports, so the app bundles normally).  
 It registers all routes, then starts `server.js`. Don't edit it, it is regenerated.  
-`maxserver dev` regenerates it on changes, `maxserver build` generates and bundles to `dist/setup.js`.
+`maxserver dev` regenerates it on changes, `maxserver build` generates and bundles to `dist/bundle.js`. Deploy the whole `dist/` folder (bundle, source map, docs UI).
 
 <br>
 
