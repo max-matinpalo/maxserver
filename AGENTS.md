@@ -51,6 +51,7 @@ src/jwt.js, src/cors.js, src/headers.js, src/static.js, src/errors.js
 - headers: helmet defaults without CSP and frameguard (same as v1 config)
 - static: Bun.file, blocks paths outside root and dotfiles
 - errors: v1 shape { statusCode, error, message }, 5xx message hidden in production
+- errors: one log entry per error: status, method, path, message, app file:line; stack only for 5xx; production logs only 5xx
 
 
 src/docs.js — OpenAPI 3.1 + Scalar

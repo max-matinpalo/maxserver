@@ -1,6 +1,6 @@
 import { authenticate } from "./jwt.js";
 import { corsHeaders, preflight } from "./cors.js";
-import { errorResponse, logDevError } from "./errors.js";
+import { errorResponse, logError } from "./errors.js";
 import { SECURITY_HEADERS, setHeaders } from "./headers.js";
 import { compileRoute, validatePart, checkResponse } from "./validate.js";
 import { serveStatic } from "./static.js";
@@ -144,7 +144,7 @@ function wrap(route, ctx) {
 			}
 
 		} catch (err) {
-			if (ctx.dev) logDevError(err);
+			logError(err, req, ctx.dev);
 			response = errorResponse(err, !ctx.dev);
 		}
 

@@ -85,11 +85,26 @@ test("createError -> right status and { statusCode, error, message }", async () 
 	expect(await r.json()).toEqual({ statusCode: 409, error: "Conflict", message: "Conflict here" });
 });
 
-test("unknown error in development -> 500 with message, file and line logged", async () => {
+test("unknown error in development -> 500 with message, logged once with request, file:line and stack", async () => {
 	const r = await get("/crash");
 	expect(r.status).toBe(500);
 	expect((await r.json()).message).toBe("secret detail");
-	expect(server.logs()).toContain("src/Misc/crash.js -> line");
+	await Bun.sleep(20);
+	expect(server.logs()).toContain("❌ 500 GET /crash  secret detail  (src/Misc/crash.js:4)");
+	expect(server.logs().split("secret detail").length - 1).toBe(1);
+	expect(server.logs()).toContain("at ");
+});
+
+test("createError in development -> one line pointing at the handler, no stack", async () => {
+	await get("/error");
+	await Bun.sleep(20);
+	expect(server.logs()).toContain("❌ 409 GET /error  Conflict here  (src/Misc/error.js:4)");
+});
+
+test("validation error in development -> one line without maxserver internals", async () => {
+	await get("/items/abc");
+	await Bun.sleep(20);
+	expect(server.logs()).toContain("❌ 400 GET /items/abc  params/id must be integer\n");
 });
 
 test("dev: response mismatch is logged, response still sent unchanged", async () => {
