@@ -6,7 +6,6 @@ SPEC
 - Test requirements: test/TESTING.md. Run npm test after every change.
 
 RULES
-- Do not repeat here what the code or README shows; explain "why" in code comments.
 - Built for AI agents: predictable file locations, one file per concern, no hidden wiring, clear errors.
-- Dependencies: ajv and ajv-formats only.
-- devdocs/ holds built files: never edit them; change ~/Desktop/maxserver-docs and run npm run update-docs-ui.
+- devdocs/ holds the API docs GUI (/docs in development), built in the separate maxserver-docs repo. Never edit it here.
+  To update it, ask the user where the maxserver-docs repo is, run npm run build there, and copy dist/maxserver-docs.js and .css into devdocs/.

@@ -32,8 +32,7 @@
 		"index.d.ts"
 	],
 	"scripts": {
-		"test": "bun test ./test",
-		"update-docs-ui": "cd ../maxserver-docs && npm run build && cp dist/maxserver-docs.js dist/maxserver-docs.css ../maxserver/devdocs/"
+		"test": "bun test ./test"
 	},
 	"dependencies": {
 		"ajv": "^8",
