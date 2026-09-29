@@ -159,7 +159,8 @@ Some examples in the template folder.
 
 ## 📚 API Docs
 `npm run dev` opens **`localhost:3000/docs`** in your browser (`maxserver dev --no-open` to skip).  
-All routes are documented, and **Test Request** sends real requests to your server.
+All routes are documented, and **Test Request** sends real requests to your server.  
+An app with an MCP endpoint: type its path, like `/mcp`, in the **MCP** field. The docs list its tools as ChatGPT does (`tools/list`), test them with `tools/call`, and render their `ui://` views.
 
 The docs UI runs in development only. Production serves just the OpenAPI 3.1 spec at `/docs/openapi.json`.
 
