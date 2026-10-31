@@ -22,20 +22,29 @@ function statusOf(err) {
 }
 
 
+function isPlainObject(value) {
+	if (!value || typeof value !== "object") return false;
+	const proto = Object.getPrototypeOf(value);
+	return proto === Object.prototype || proto === null;
+}
+
+
 /**
  * Turns any thrown error into a JSON response.
- * Shape as in v1 (Fastify): { statusCode, error, message }
+ * Shape as in v1 (Fastify): { statusCode, code?, error, message, vars? }
+ * code only when a string, vars only when a plain object; both hidden with the message for 5xx in production.
  */
 export function errorResponse(err, production) {
 	const code = statusOf(err);
+	const hidden = code >= 500 && production;
 
-	let message = err?.message || STATUS_CODES[code];
-	if (code >= 500 && production) message = STATUS_CODES[code];
+	const body = { statusCode: code };
+	if (!hidden && typeof err?.code === "string") body.code = err.code;
+	body.error = STATUS_CODES[code] || "Error";
+	body.message = hidden ? STATUS_CODES[code] : err?.message || STATUS_CODES[code];
+	if (!hidden && isPlainObject(err?.vars)) body.vars = err.vars;
 
-	return Response.json(
-		{ statusCode: code, error: STATUS_CODES[code] || "Error", message },
-		{ status: code }
-	);
+	return Response.json(body, { status: code });
 }
 
 

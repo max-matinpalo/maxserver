@@ -89,6 +89,17 @@ test("createError -> right status and { statusCode, error, message }", async () 
 	expect(await r.json()).toEqual({ statusCode: 409, error: "Conflict", message: "Conflict here" });
 });
 
+test("string err.code and plain err.vars -> in body, other Error properties not", async () => {
+	const r = await get("/error-code");
+	expect(r.status).toBe(422);
+	expect(await r.json()).toEqual({ statusCode: 422, code: "ITEMS_LIMIT", error: "Unprocessable Entity", message: "Too many items", vars: { max: 5 } });
+});
+
+test("numeric err.code and non-plain err.vars -> left out", async () => {
+	const r = await get("/error-numeric");
+	expect(await r.json()).toEqual({ statusCode: 409, error: "Conflict", message: "Numeric code" });
+});
+
 test("unknown error in development -> 500 with message, logged once with request, file:line and stack", async () => {
 	const r = await get("/crash");
 	expect(r.status).toBe(500);

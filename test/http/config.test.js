@@ -17,6 +17,17 @@ describe("production", () => {
 		expect(server.logs()).toContain("secret detail");
 	});
 
+	test("5xx: code and vars hidden with the message", async () => {
+		const r = await fetch(server.url + "/crash-code");
+		expect(await r.json()).toEqual({ statusCode: 500, error: "Internal Server Error", message: "Internal Server Error" });
+	});
+
+	test("4xx: code and vars still shown", async () => {
+		const body = await (await fetch(server.url + "/error-code")).json();
+		expect(body.code).toBe("ITEMS_LIMIT");
+		expect(body.vars).toEqual({ max: 5 });
+	});
+
 	test("createError message still shown, 4xx not logged", async () => {
 		expect((await (await fetch(server.url + "/error")).json()).message).toBe("Conflict here");
 		await Bun.sleep(20);
