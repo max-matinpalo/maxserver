@@ -49,7 +49,7 @@ MUST COVER
 7. Errors
 - createError: right status, shape { statusCode, error, message }
 - unknown error -> 500, message hidden in production
-- string err.code and plain err.vars in body, numeric code and other properties not; 5xx in production: code kept, vars hidden
+- string err.code in body (also 5xx in production), numeric code and other properties not
 
 8. CORS
 - preflight answered

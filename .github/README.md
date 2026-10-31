@@ -207,13 +207,12 @@ if (!user) throw createError(404, "User not found");
 
 Rule of thumb: make the message something you would want to see at 03:00 in logs.
 
-Response: `{ statusCode, error, message }`. A string `err.code` and a plain object `err.vars` are added for clients (e.g. i18n keys and placeholders); other Error properties never are. For 5xx in production, message and vars are hidden; code stays (as in Fastify).
+Response: `{ statusCode, error, message }`. A string `err.code` is added (as in Fastify, e.g. for i18n keys); other Error properties never are. For 5xx in production the message is hidden, code stays.
 
 ```js
 const err = createError(422, "Too many items");
 err.code = "ITEMS_LIMIT";
-err.vars = { max: 5 };
-throw err; // { statusCode: 422, code: "ITEMS_LIMIT", error: "Unprocessable Entity", message: "Too many items", vars: { max: 5 } }
+throw err; // { statusCode: 422, code: "ITEMS_LIMIT", error: "Unprocessable Entity", message: "Too many items" }
 ```
 
 <br>
