@@ -17,9 +17,9 @@ describe("production", () => {
 		expect(server.logs()).toContain("secret detail");
 	});
 
-	test("5xx: code and vars hidden with the message", async () => {
+	test("5xx: string code kept, message and vars hidden", async () => {
 		const r = await fetch(server.url + "/crash-code");
-		expect(await r.json()).toEqual({ statusCode: 500, error: "Internal Server Error", message: "Internal Server Error" });
+		expect(await r.json()).toEqual({ statusCode: 500, code: "ECONNREFUSED", error: "Internal Server Error", message: "Internal Server Error" });
 	});
 
 	test("4xx: code and vars still shown", async () => {
